@@ -1,0 +1,59 @@
+/********** ë©”ì„¸ì§€ ìœˆë„ìš° ****************/
+.__messageWindowJS__ {zoom:1;border-radius:5px; background-color:#C3DBFC; padding:1px 1px 1px 1px; -webkit-border-radius:5px; -moz-border-radius:5px; border:1px solid #3a92ca; box-shadow:0px 0px 15px #aaaaaa; -webkit-box-shadow:0px 0px 15px #aaaaaa; -moz-box-shadow:0px 0px 15px #aaaaaa}
+.__messageWindowJS__:after {content:""; clear:both; display:block;visibility:hidden; height:0;}
+.__messageWindowJS__  > .title{zoom:1;height:17px; padding:7px 10px 7px 7px;background-color:#C3DBFC; position:relative; }
+.__messageWindowJS__  > .title:after{content:""; clear:both; display:block;visibility:hidden; height:0; }
+.__messageWindowJS__  > .title  > .titleName {float:left; color:#437ecf; }
+/*.__messageWindowJS__  > .title .closeImg{float:left; margin:2px 0px 0px 10px; background:url("/common/img/img_close02.gif") no-repeat 0px 0px; cursor:pointer; width:14px; height:11px;}*/
+.__messageWindowJS__  > .title .closeImg{cursor:pointer; position:absolute; }
+.__messageWindowJS__  > .content{background-color:#C3DBFC; padding:0px 10px 10px 10px; min-width:100px; }
+.__messageWindowJS__  > .content > .text{padding:30px 20px 30px 20px;background-color:#ffffff;}
+.__messageWindowJS__  > .content > .buttonsWrap{zoom:1;background-color:#eeeeee;   padding:10px 20px 10px 20px;}
+.__messageWindowJS__  > .content > .buttonsWrap:after {content:""; clear:both; display:block;visibility:hidden; height:0;}
+.__messageWindowJS__  > .content > .buttonsWrap > .buttons{float: right;position: relative; left: -50%; }
+.__messageWindowJS__  > .content > .buttonsWrap > .buttons > .button {float: left; position: relative; left: 50%; margin:0px 5px 0px 0px; }
+.__messageWindowJS__  > .content > .buttonsWrap > .buttons > .button:last-child {margin:0px 0px 0px 0px;}
+
+/********** ë³´í†µ ìœˆë„ìš° ****************/
+
+.__nomalWindowJS__ {zoom:1;background-color:#ffffff; padding:0px;  border:1px solid #445A70; border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px;  }
+.__nomalWindowJS__:after {content:""; clear:both; display:block;visibility:hidden; height:0;}
+/*== ì´ì „ ==
+.__nomalWindowJS__  > .windowJS_title{ zoom:1;height:17px; padding:7px 7px 7px 7px;background-color:#66809A; }
+.__nomalWindowJS__  > .windowJS_title{ zoom:1;height:20px; padding:7px 7px 7px 7px;background-color:#1B6CBE; }*/
+.__nomalWindowJS__  > .windowJS_title{ zoom:1;height:20px; padding:7px 7px 7px 7px;background-color:#0c90ac; }
+.__nomalWindowJS__  > .windowJS_title:after  {content:""; clear:both; display:block;visibility:hidden; height:0;}
+/*== ì´ì „ ==
+.__nomalWindowJS__  > .windowJS_title  > .titleName {color:#ffffff;float:left; }*/
+.__nomalWindowJS__  > .windowJS_title  > .titleName {color:#ffffff;float:left; font-size:15px;}
+/*.__messageWindowJS__  > .title .closeImg{float:left; margin:2px 0px 0px 10px; background:url("/common/img/img_close02.gif") no-repeat 0px 0px; cursor:pointer; width:14px; height:11px;}*/
+.__nomalWindowJS__  > .windowJS_title > .closeImg{cursor:pointer; position:absolute; }
+.__nomalWindowJS__  > .content{ padding:0px; min-width:100px; min-height:100px; }
+.__nomalWindowJS__  > .content ._window_JS_textField_wrap_{margin:0px 0px 7px 0px;}
+.__nomalWindowJS__  > .content ._window_JS_radio_wrap_{margin:0px 0px 7px 0px;}
+.__nomalWindowJS__  > .content ._window_JS_radio_wrap_ div { margin:0px 0px 7px 0px;}
+.__nomalWindowJS__  > .content ._window_JS_radio_wrap_ .radio{vertical-align:middle;}
+.__nomalWindowJS__  > .content > .text{background-color:#ffffff;padding:10px 10px 10px 10px; }
+.__nomalWindowJS__  > .content > .buttonsWrap{zoom:1; padding:7px 10px 7px 10px;}
+.__nomalWindowJS__  > .content > .buttonsWrap:after {content:""; clear:both; display:block;visibility:hidden; height:0;}
+.__nomalWindowJS__  > .content > .buttonsWrap > .buttons{float: right;position: relative; left: -50%; }
+.__nomalWindowJS__  > .content > .buttonsWrap > .buttons > .button {float: left; position: relative; left: 50%; margin:0px 5px 0px 0px; }
+.__nomalWindowJS__  > .content > .buttonsWrap > .buttons > .button:last-child {margin:0px 0px 0px 0px;}
+
+/** ë©”ë‰´ ìž‘ì€ ìŠ¤íƒ€ì¼ **/
+.__WindowJS_menu_small__ {zoom:1;background-color:#ffffff; padding:0px;  border:1px solid #445A70; }
+.__WindowJS_menu_small__:after {content:""; clear:both; display:block;visibility:hidden; height:0;}
+.__WindowJS_menu_small__  > .windowJS_title{ zoom:1;height:17px; padding:5px 5px 5px 5px; }
+.__WindowJS_menu_small__  > .content{background-color:#ffffff; padding:0px; min-width:100px; min-height:30px;}
+
+
+/* === ì´ì „ íŒŒëž‘ìƒ‰
+.__nomalWindowJS__ {zoom:1;background-color:#C3DBFC; padding:1px 1px 1px 1px;  border:1px solid #3372BF; }
+.__nomalWindowJS__:after {content:""; clear:both; display:block;visibility:hidden; height:0;}
+.__nomalWindowJS__  > .title{ zoom:1;height:17px; padding:7px 10px 7px 7px;background-color:#C3DBFC; }
+.__nomalWindowJS__  > .title:after  {content:""; clear:both; display:block;visibility:hidden; height:0;}
+.__nomalWindowJS__  > .title  > .titleName {color:#437ecf;float:left; }
+.__nomalWindowJS__  > .title > .closeImg{cursor:pointer; position:absolute; }
+.__nomalWindowJS__  > .content{background-color:#ffffff; padding:1px 1px 1px 1px; min-width:100px; }
+.__nomalWindowJS__  > .content > .text{background-color:#ffffff;padding:10px 10px 10px 10px; }
+*/

@@ -1,0 +1,54 @@
+type User {
+  id: ID! @id
+  email: String @unique
+  name: String!
+  password: String
+}
+
+type Country {
+  id: ID! @id
+  id_number: Int @unique
+  iso_numeric: Int @unique
+  iso_alpha_2: String
+  iso_alpha_3: String
+  name_en: String! 
+  name_kr: String
+  dial_number: String 
+}
+
+type Club {
+  id: ID! @id
+  id_number: Int @unique
+  name: String
+  name_origin: String
+  sw_lat: String
+  sw_lng: String
+  ne_lat: String
+  ne_lng: String
+  address1: String
+  address2: String
+  contry: Country
+  course: [Course]
+}
+
+type Course {
+  id: ID! @id
+  club: Club!
+  seq_no: Int
+  name: String!
+}
+
+type Hole {
+  id: ID! @id
+  seq_no: Int
+  course: Course
+}
+
+type Geodata {
+  id: ID! @id
+  course: Course
+  lat: String
+  lng: String
+  alt: String
+}
+ 

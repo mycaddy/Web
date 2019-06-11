@@ -1,0 +1,1 @@
+chrome-extension://oiplkfaidhjklglajdpfehoagkmlcakh/js/screenshot.js

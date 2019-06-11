@@ -1,0 +1,46 @@
+/*==ì´ì „
+.suggest {background-color:#ffffff; border:1px solid #6DA0E7; overflow:hidden; padding:5px; z-index:8000;}
+.suggest .childWrap {overflow:auto; width:100%; height:100%;}
+.suggest .childWrap table {width:100%;}
+.suggest .childWrap table thead {}
+.suggest .childWrap table thead th {background-color:#EEF7FF; border:1px solid #b7c6eb; padding:2px 2px;}
+.suggest .childWrap table tbody span {cursor:pointer; color:#777777;}
+.suggest .childWrap table tbody span:hover {text-decoration:underline;}
+.suggest .childWrap table tbody span strong {color:#cc0000;}*/
+.suggest {background-color:#ffffff; border:1px solid #CCCCCC; overflow:hidden; padding:5px; z-index:8000;}
+.suggest .childWrap {overflow:auto; width:100%; height:100%;}
+.suggest .childWrap table {width:100%;}
+.suggest .childWrap table thead {}
+.suggest .childWrap table thead th {background-color:#E3EEF2; border:1px solid #98D2DD; padding:3px 2px;}
+.suggest .childWrap table tbody tr td {padding:4px 2px; background-color:#FFFFFF; cursor:pointer;}
+.suggest .childWrap table tbody tr:hover td{background-color:#48C3D3;}
+.suggest .childWrap table tbody tr:hover td span{color:#FFFFFF;}
+.suggest .childWrap table tbody tr.arrowSelect td{background-color:#48C3D3;}
+.suggest .childWrap table tbody tr.arrowSelect  td span{color:#FFFFFF;}
+.suggest .childWrap table tbody tr td span {cursor:pointer; color:#777777;}
+/*.suggest .childWrap table tbody tr td span:hover {text-decoration:underline;}*/
+.suggest .childWrap table tbody td span strong {color:#cc0000;}
+
+.suggest_big {background-color:#ffffff; border:1px solid #6DA0E7; overflow:hidden; padding:5px; z-index:8000;}
+.suggest_big .childWrap {overflow:auto; width:100%; height:100%;}
+.suggest_big .childWrap table {width:100%;}
+.suggest_big .childWrap table thead {}
+.suggest_big .childWrap table thead th {background-color:#EEF7FF; border:1px solid #b7c6eb; padding:2px 2px;}
+/*&.suggest .childWrap table th.code {width:35%;}
+.suggest .childWrap table th.name {width:66%;}*/
+.suggest_big .childWrap table tbody td {padding:3px 0px;}
+.suggest_big .childWrap table tbody span {cursor:pointer; color:#777777; font-size:14px;}
+.suggest_big .childWrap table tbody span:hover {text-decoration:underline;}
+.suggest_big .childWrap table tbody span strong {color:#cc0000;}
+
+.headerSeachSuggest {background-color:#ffffff; border:1px solid #6DA0E7; overflow:hidden; padding:5px; z-index:8000;}
+.headerSeachSuggest .childWrap {overflow:auto; width:100%; height:100%;}
+.headerSeachSuggest .childWrap table {width:100%;}
+.headerSeachSuggest .childWrap table thead {}
+.headerSeachSuggest .childWrap table thead th {background-color:#EEF7FF; border:1px solid #b7c6eb; padding:2px 2px;}
+/*&.suggest .childWrap table th.code {width:35%;}
+.suggest .childWrap table th.name {width:66%;}*/
+.headerSeachSuggest .childWrap table tbody td {padding:3px 0px;}
+.headerSeachSuggest .childWrap table tbody span {cursor:pointer; color:#777777; font-size:12px;}
+.headerSeachSuggest .childWrap table tbody span:hover {text-decoration:underline;}
+.headerSeachSuggest .childWrap table tbody span strong {color:#cc0000;}
