@@ -2,49 +2,33 @@ version: '3'
 services:
   prisma:
     image: prismagraphql/prisma:1.34
-    env_file: .env
     restart: always
     ports:
-    - "${PRISMA_PORT_OUT:-4466}:${PRISMA_PORT:-4466}"
+      - '4466:4466'
     environment:
       PRISMA_CONFIG: |
-        port: ${PRISMA_PORT:-4466}
-        # uncomment the next line and provide the env var PRISMA_MANAGEMENT_API_SECRET=my-secret to activate cluster security
-        # managementApiSecret: 559988
+        port: 4466
         databases:
           default:
             connector: postgres
             host: postgres
-            user: ${POSTGRES_USER:-prisma}
-            password: ${POSTGRES_PASSWORD:-prisma}
-            rawAccess: true
-            port: "${POSTGRES_PORT:-5432}"
-            migrations: true
+            port: 5432
+            user: prisma
+            password: prisma
   postgres:
-    image: postgres
+    image: postgres:10.3
     restart: always
-    env_file: .env
-    # Uncomment the next two lines to connect to your your database from outside the Docker environment, e.g. using a database GUI like Postico
-    ports:
-      - "${PORTGRES_PORT_OUT:-5432}:${PORTGRESS_PORT:-5432}"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-prisma}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-prisma}
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
     volumes:
       - postgres:/var/lib/postgresql/data
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    env_file: .env
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-prisma}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-prisma}
-      # PGADMIN_ENABLE_TLS: 1
-    ports:
-      - "${PGADMIN_PORT_OUT:-5050}:80"
-      # TLS
-      # - "${PGADMIN_PORT:-5443}:8443"
-
+  pgadmin4:
+          image: dpage/pgadmin4
+          ports:
+              - 5050:80
+          environment:
+              PGADMIN_DEFAULT_EMAIL: mycaddy  
+              PGADMIN_DEFAULT_PASSWORD: mycaddy_v10
 volumes:
-  postgres:
-    external: true
+  postgres: ~

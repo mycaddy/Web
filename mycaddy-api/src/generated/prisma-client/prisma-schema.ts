@@ -43,6 +43,8 @@ type Club {
   address2: String
   contry: Country
   course(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ClubConnection {
@@ -111,6 +113,10 @@ enum ClubOrderByInput {
   address1_DESC
   address2_ASC
   address2_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type ClubPreviousValues {
@@ -124,6 +130,8 @@ type ClubPreviousValues {
   ne_lng: String
   address1: String
   address2: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ClubSubscriptionPayload {
@@ -334,6 +342,22 @@ input ClubWhereInput {
   course_every: CourseWhereInput
   course_some: CourseWhereInput
   course_none: CourseWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [ClubWhereInput!]
   OR: [ClubWhereInput!]
   NOT: [ClubWhereInput!]
@@ -591,6 +615,8 @@ type Course {
   club: Club!
   seq_no: Int
   name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type CourseConnection {
@@ -634,12 +660,18 @@ enum CourseOrderByInput {
   seq_no_DESC
   name_ASC
   name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type CoursePreviousValues {
   id: ID!
   seq_no: Int
   name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input CourseScalarWhereInput {
@@ -679,6 +711,22 @@ input CourseScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [CourseScalarWhereInput!]
   OR: [CourseScalarWhereInput!]
   NOT: [CourseScalarWhereInput!]
@@ -809,6 +857,22 @@ input CourseWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [CourseWhereInput!]
   OR: [CourseWhereInput!]
   NOT: [CourseWhereInput!]
@@ -818,12 +882,16 @@ input CourseWhereUniqueInput {
   id: ID
 }
 
+scalar DateTime
+
 type Geodata {
   id: ID!
   course: Course
   lat: String
   lng: String
   alt: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type GeodataConnection {
@@ -854,6 +922,10 @@ enum GeodataOrderByInput {
   lng_DESC
   alt_ASC
   alt_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type GeodataPreviousValues {
@@ -861,6 +933,8 @@ type GeodataPreviousValues {
   lat: String
   lng: String
   alt: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type GeodataSubscriptionPayload {
@@ -952,6 +1026,22 @@ input GeodataWhereInput {
   alt_not_starts_with: String
   alt_ends_with: String
   alt_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [GeodataWhereInput!]
   OR: [GeodataWhereInput!]
   NOT: [GeodataWhereInput!]
@@ -965,6 +1055,8 @@ type Hole {
   id: ID!
   seq_no: Int
   course: Course
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type HoleConnection {
@@ -989,11 +1081,17 @@ enum HoleOrderByInput {
   id_DESC
   seq_no_ASC
   seq_no_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type HolePreviousValues {
   id: ID!
   seq_no: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type HoleSubscriptionPayload {
@@ -1047,6 +1145,22 @@ input HoleWhereInput {
   seq_no_gt: Int
   seq_no_gte: Int
   course: CourseWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [HoleWhereInput!]
   OR: [HoleWhereInput!]
   NOT: [HoleWhereInput!]
@@ -1149,7 +1263,9 @@ type User {
   id: ID!
   email: String
   name: String!
-  password: String
+  password: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserConnection {
@@ -1162,7 +1278,7 @@ input UserCreateInput {
   id: ID
   email: String
   name: String!
-  password: String
+  password: String!
 }
 
 type UserEdge {
@@ -1179,13 +1295,19 @@ enum UserOrderByInput {
   name_DESC
   password_ASC
   password_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   email: String
   name: String!
-  password: String
+  password: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -1275,6 +1397,22 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

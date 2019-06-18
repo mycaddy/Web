@@ -2,7 +2,9 @@ type User {
   id: ID! @id
   email: String @unique
   name: String!
-  password: String
+  password: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Country {
@@ -29,6 +31,8 @@ type Club {
   address2: String
   contry: Country
   course: [Course]
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Course {
@@ -36,12 +40,16 @@ type Course {
   club: Club!
   seq_no: Int
   name: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Hole {
   id: ID! @id
   seq_no: Int
   course: Course
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Geodata {
@@ -50,5 +58,7 @@ type Geodata {
   lat: String
   lng: String
   alt: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
  
