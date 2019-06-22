@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { SampleConsumer } from '../snippet4test/context/sample'
 
 class Sends extends Component {
  
@@ -11,7 +12,8 @@ class Sends extends Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    this.props.setValue(this.state.input)
   }
 
   render() {
@@ -24,4 +26,14 @@ class Sends extends Component {
   }
 }
 
-export default Sends
+const SendsContainer = () => (
+  <SampleConsumer>
+    {
+      ({state, actions}) => (
+        <Sends value={state.value} setValue={actions.setValue} /> 
+      )
+    }
+  </SampleConsumer>
+)
+ 
+export default SendsContainer
