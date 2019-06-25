@@ -13,6 +13,18 @@ const navigationConfig = [
         'url': '/example'
       },
       {
+        'id'   : 'club',
+        'title': 'Club',
+        'type' : 'item',
+        'icon' : 'check_box',
+        'url'  : '/apps/club',
+        'badge': {
+            'title': 3,
+            'bg'   : 'rgb(255, 111, 0)',
+            'fg'   : '#FFFFFF'
+        }
+      },      
+      {
         'id'   : 'todo',
         'title': 'To-Do',
         'type' : 'item',
@@ -23,7 +35,7 @@ const navigationConfig = [
             'bg'   : 'rgb(255, 111, 0)',
             'fg'   : '#FFFFFF'
         }
-    },
+      },
     ]
   }
 ];
