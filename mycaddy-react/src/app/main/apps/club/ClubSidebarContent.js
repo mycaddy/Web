@@ -43,7 +43,6 @@ function ClubSidebarContent(props) {
     <FuseAnimate animation="transition.slideUpIn" delay={400}>
 
       <div className="flex-auto border-l-1 border-solid">
-
         <div className="p-24">
           <Button
             onClick={() => {
@@ -56,7 +55,6 @@ function ClubSidebarContent(props) {
             ADD CLUB / 클럽 추가
           </Button>
         </div>
-
         <div className={classes.listWrapper}>
 
           <List>

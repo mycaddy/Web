@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
-import { Icon, MenuItem, TextField } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Icon, Button, MenuItem, TextField } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
+import countries from '../../../../@fake-db/db/countries.json'
+import ContryHeader from './ClubHeader.js';
+
 
 function ClubSidebarHeader() {
   const [selectedAccount, setSelectedCount] = useState('creapond');
 
+  useEffect(() => {
+   console.log('useEffect', countries) 
+  })
+  
+
   function handleAccountChange(ev) {
     setSelectedCount(ev.target.value);
   }
+
+  const selectData = {
+    'creapond'    : 'johndoe@creapond.com',
+    'withinpixels': 'johndoe@withinpixels.com'
+  };
 
   return (
     <div className="flex flex-col justify-center h-full p-24">
@@ -20,6 +33,23 @@ function ClubSidebarHeader() {
           <span className="text-24">Club</span>
         </FuseAnimate>
       </div>
+      <FuseAnimate animation="transition.slideUpIn" delay={300}>
+        <TextField
+          id="account-selection"
+          select
+          label="Countries"
+          value={selectedAccount}
+          onChange={handleAccountChange}
+          placeholder="Select Account"
+          margin="normal"
+        >
+          {countries.map((country) =>(
+            <MenuItem key={country.ISO3166_1_numeric} value={country.ISO3166_1_numeric}>
+            {country.display_name}
+            </MenuItem>
+          ))}
+      </TextField>
+    </FuseAnimate>
 
     </div>
   );

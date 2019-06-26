@@ -20,13 +20,14 @@ export function getClubs(params) {
   const request = axios.get('/api/club-app/clubs', { params });
 
   return (dispatch) =>
-    request.then((response) =>
+    request.then((response) => {
+      // console.log(response.data)
       dispatch({
         type: GET_CLUBS,
         routeParams: params,
         payload: response.data
       })
-    );
+    });
 }
 
 export function updateClubs() {
