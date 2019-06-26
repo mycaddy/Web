@@ -53,8 +53,8 @@ function ClubSidebarContent(props) {
             color="primary"
             className="w-full"
           >
-            ADD TASK
-                  </Button>
+            ADD CLUB / 클럽 추가
+          </Button>
         </div>
 
         <div className={classes.listWrapper}>

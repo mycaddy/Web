@@ -12,10 +12,10 @@ const ContryHeader = (props) => {
   return (
     <ThemeProvider theme={mainTheme}>
       <div className="flex flex-1">
-        <Paper className="flext items-center w-full h-48 sm:h-56 p-16 pl-4 md:pl-16 rounded-8 " elevation={1}>
+        <Paper className="flex items-center w-full h-48 sm:h-56 p-16 pl-4 md:pl-16 rounded-8 " elevation={1}>
           <Hidden lgUp>
             <IconButton
-              onclick={(ev) => props.pageLayout.current.toggleLeftSidebar()}
+              onClick={(ev) => props.pageLayout.current.toggleLeftSidebar()}
               aria-label="open left sidebar"
             >
               <Icon>menu</Icon>
@@ -23,7 +23,6 @@ const ContryHeader = (props) => {
           </Hidden>
           
           <Icon color="action">search</Icon>
-
           <Input
             placeholder="Serach"
             className="pl-16"
