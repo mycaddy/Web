@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Button, MenuItem, TextField } from '@material-ui/core';
+import Select from 'react-select'
+import { Icon, Box } from '@material-ui/core';
 import { FuseAnimate } from '@fuse';
 import countries from '../../../../@fake-db/db/countries.json'
-import ContryHeader from './ClubHeader.js';
 
+const suggetions = countries.map(country => ({
+  value: country.ISO3166_1_numeric,
+  label: country.display_name
+}))
 
 function ClubSidebarHeader() {
   const [selectedAccount, setSelectedCount] = useState('creapond');
 
   useEffect(() => {
-   console.log('useEffect', countries) 
+   console.log('useEffect', suggetions) 
   })
   
 
@@ -34,6 +38,12 @@ function ClubSidebarHeader() {
         </FuseAnimate>
       </div>
       <FuseAnimate animation="transition.slideUpIn" delay={300}>
+        <Box id="select-box" elevation={200}>
+          <Select 
+            options={suggetions}
+          />
+        </Box>
+        {/** 
         <TextField
           id="account-selection"
           select
@@ -48,8 +58,9 @@ function ClubSidebarHeader() {
             {country.display_name}
             </MenuItem>
           ))}
-      </TextField>
-    </FuseAnimate>
+        </TextField>
+        */}
+      </FuseAnimate>
 
     </div>
   );

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-select": "^3.0.4",
+    "react-virtualized-select": "^3.1.3"
+  }
+}
