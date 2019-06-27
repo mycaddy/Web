@@ -11,12 +11,11 @@ const suggetions = countries.map(country => ({
 
 function ClubSidebarHeader() {
   const [selectedAccount, setSelectedCount] = useState('creapond');
-
+  
   useEffect(() => {
-   console.log('useEffect', suggetions) 
+   // console.log('useEffect', suggetions) 
   })
   
-
   function handleAccountChange(ev) {
     setSelectedCount(ev.target.value);
   }
