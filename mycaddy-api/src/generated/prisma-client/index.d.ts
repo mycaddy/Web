@@ -2457,9 +2457,4 @@ export const models: Model[] = [
  * Type Defs
  */
 
-export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
-  typeDefs,
-  models,
-  endpoint: `http://localhost:4466`
-});
-export const prisma = new Prisma();
+export const prisma: Prisma;

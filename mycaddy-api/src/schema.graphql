@@ -1,0 +1,80 @@
+### types >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+scalar DateTime
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< types
+
+### Query >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+type Query {
+  
+
+}
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Query
+
+### Mutation >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Mutation
+
+
+### From datamodel.prisma >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+type User {
+  id: ID!
+  email: String
+  name: String!
+  password: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Country {
+  id: ID!
+  id_number: Int
+  iso_numeric: Int
+  iso_alpha_2: String
+  iso_alpha_3: String
+  name_en: String! 
+  name_kr: String
+  dial_number: String 
+}
+
+type Club {
+  id: ID!
+  id_number: Int
+  name: String
+  name_origin: String
+  sw_lat: String
+  sw_lng: String
+  ne_lat: String
+  ne_lng: String
+  address1: String
+  address2: String
+  contry: Country
+  course: [Course]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Course {
+  id: ID!
+  club: Club!
+  seq_no: Int
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Hole {
+  id: ID!
+  seq_no: Int
+  course: Course
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Geodata {
+  id: ID!
+  course: Course
+  lat: String
+  lng: String
+  alt: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+ ### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< datamodel.prisma
