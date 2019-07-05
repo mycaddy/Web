@@ -4,15 +4,21 @@ import { FuseUtils } from '@fuse'
 import { ExampleConfig } from 'app/main/example/ExampleConfig'
 import { pagesConfigs } from 'app/main/pages/pagesConfigs'
 import { LoginConfig } from 'app/main/login/LoginConfig'
-// import { TodoAppConfig } from 'app/main/apps/todo/TodoAppConfig'
+import { appsConfigs } from "app/main/apps/appsConfigs";
+
+import { GolfCourceAppConfig } from "app/main/apps/golf-course/GolfCourceAppConfig";
+
+
+import { TodoAppConfig } from 'app/main/apps/todo/TodoAppConfig'
 import { clubAppConfig } from 'app/main/apps/club/ClubAppConfig'
+import { ECommerceAppConfig } from "app/main/apps/e-commerce/ECommerceAppConfig";
+
+
 
 const routeConfigs = [
   ...pagesConfigs,
   LoginConfig,
-  // TodoAppConfig,
-  clubAppConfig,
-  ExampleConfig
+  ...appsConfigs,
 ];
 
 const routes = [

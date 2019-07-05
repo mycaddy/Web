@@ -11,6 +11,8 @@ import ClubHeader from './ClubHeader'
 import ClubSidebarHeader from './ClubSidebarHeader'
 import ClubSidebarContent from './ClubSidebarContent'
 
+import ContactsList from './ContactsList'
+
 function ClubApp(props) {
   const dispatch = useDispatch()
   const pageLayout = useRef(null)
@@ -20,10 +22,15 @@ function ClubApp(props) {
     dispatch(Actions.getFilters())
     dispatch(Actions.getFolders())
     dispatch(Actions.getLabels())
+
+    dispatch(Actions.getContacts(props.match.params))
+    dispatch(Actions.getUserData())
+
   }, [dispatch])
 
   useEffect(() => {
     dispatch(Actions.getClubs(props.match.params))
+    dispatch(Actions.getContacts(props.match.params))
   }, [dispatch, props.match.params])
 
   return (
@@ -35,7 +42,7 @@ function ClubApp(props) {
         }}
         header={<ClubHeader pageLayout={pageLayout} />}
         contentToolbar={<ClubToolbar />}
-        content={<ClubList />}
+        content={<ContactsList />}
         leftSidebarHeader={<ClubSidebarHeader />}
         leftSidebarContent={<ClubSidebarContent />}
         ref={pageLayout}

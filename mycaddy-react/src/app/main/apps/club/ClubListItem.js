@@ -36,7 +36,6 @@ function ClubListItem(props) {
       dense
       button
     >
-
       <Checkbox
         tabIndex={-1}
         disableRipple

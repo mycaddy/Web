@@ -1,9 +1,16 @@
 import React from 'react'
-import { Icon, List, ListItem, ListItemText, ListSubheader, Button } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { Icon, List, ListItem, ListItemText, ListSubheader, Button, Box, FormLabel } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Actions from './store/actions'
 import { FuseAnimate, NavLinkAdapter } from '@fuse'
+import countries from '../../../../@fake-db/db/countries.json'
+import Select from 'react-select'
+
+const suggetions = countries.map(country => ({
+  value: country.ISO3166_1_numeric,
+  label: country.display_name
+}))
 
 const useStyles = makeStyles(theme => ({
   listItem: {
@@ -28,7 +35,7 @@ const useStyles = makeStyles(theme => ({
       height: 16,
       marginRight: 16
     }
-  }
+  },
 }));
 
 function ClubSidebarContent(props) {
@@ -38,23 +45,50 @@ function ClubSidebarContent(props) {
   const filters = useSelector(({ clubApp }) => clubApp.filters);
 
   const classes = useStyles(props);
+  const theme = useTheme()
+  const selectStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? theme.palette.action.active : theme.palette.secondary[200],
+      background: theme.palette.secondary[200]
+    }),
+    singleValue: (provided, state) => ({
+      ...provided,
+      color: theme.palette.action.active
+    })
+    ,
+    control: (provided, state) => ({
+      ...provided,
+      background: theme.palette.secondary[200]
+    }),
+  }
+  
+
 
   return (
     <FuseAnimate animation="transition.slideUpIn" delay={400}>
 
       <div className="flex-auto border-l-1 border-solid">
         <div className="p-24">
+          <Box id="select-box">
+            <FormLabel component="legend" className="pb-3">Clubs</FormLabel>
+            <Select
+              options={suggetions}
+              styles={selectStyles}
+            />
+          </Box>
           <Button
             onClick={() => {
               dispatch(Actions.openNewClubDialog());
             }}
             variant="contained"
             color="primary"
-            className="w-full"
+            className="w-full mt-2"
           >
             ADD CLUB / 클럽 추가
           </Button>
         </div>
+        {/** 
         <div className={classes.listWrapper}>
 
           <List>
@@ -109,6 +143,7 @@ function ClubSidebarContent(props) {
             ))}
           </List>
         </div>
+        */}
       </div>
     </FuseAnimate>
   );
