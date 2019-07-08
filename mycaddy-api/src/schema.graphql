@@ -4,13 +4,53 @@ scalar DateTime
 
 ### Query >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 type Query {
-  
+  countries(filter: String, skip: Int, first: Int, oderBy: CountryOrderByInput): Countries!
+}
 
+enum CountryOrderByInput {
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type Countries {
+  count: Int!
+  data: [Country!]!
+}
+
+type Clubs {
+  count: Int!
+  data: [Club]!
+}
+
+type Courses {
+  count: Int!
+  data: [Course]!
+}
+
+type Holes {
+  count: Int!
+  data: [Hole]!
 }
 ### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Query
 
 ### Mutation >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+type Mutation {
+  signUp(email: String!, password: String!, name: String!): AuthPayload
+  signIn(email: String!, password: String!): AuthPayload
+  addCountry(iso_alpha2: String!, iso_alpha_3: String!, name_en: String!, name_kr: String!, dial_number: String!): Country!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
 ### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Mutation
+
+### Subscription >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+### <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Subscription
 
 
 ### From datamodel.prisma >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
