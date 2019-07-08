@@ -11,6 +11,12 @@ import AppContext from './AppContext';
 import routes from './fuse-configs/routesConfig';
 import { create } from 'jss';
 import { StylesProvider, jssPreset, createGenerateClassName } from '@material-ui/styles';
+import ApolloClient from "apollo-boost"
+import { ApolloProvider } from "react-apollo";
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000"
+})
 
 const jss = create({
   ...jssPreset(),
@@ -28,17 +34,19 @@ const App = () => {
       }}
     >
       <StylesProvider jss={jss} generateClassName={generateClassName}>
-        <Provider store={store}>
-          <Auth>
-            <Router history={history}>
-              <FuseAuthorization>
-                <FuseTheme>
-                  <FuseLayout />
-                </FuseTheme>
-              </FuseAuthorization>
-            </Router>
-          </Auth>
-        </Provider>
+        <ApolloProvider client={client} >
+          <Provider store={store}>
+            <Auth>
+              <Router history={history}>
+                <FuseAuthorization>
+                  <FuseTheme>
+                    <FuseLayout />
+                  </FuseTheme>
+                </FuseAuthorization>
+              </Router>
+            </Auth>
+          </Provider>
+        </ApolloProvider>
       </StylesProvider>
     </AppContext.Provider>
   );
