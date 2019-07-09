@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "batch-country": "babel-node ./src/batch/countries.js",
     "start-ts": "ts-node-dev --no-notify --respawn --transpileOnly ./src"
   },
   "author": "",

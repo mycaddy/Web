@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList } from '@material-ui/core';
-import * as Actions from './store/actions';
+// import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 function CountryMultiSelectMenu(props) {
   const dispatch = useDispatch();
-  const selectedContactIds = useSelector(({ contactsApp }) => contactsApp.contacts.selectedContactIds);
+  //const selectedContactIds = useSelector(({ contactsApp }) => contactsApp.contacts.selectedContactIds);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -36,7 +36,7 @@ function CountryMultiSelectMenu(props) {
         <MenuList>
           <MenuItem
             onClick={() => {
-              dispatch(Actions.removeCountry(selectedContactIds));
+              // dispatch(Actions.removeCountry(selectedContactIds));
               closeSelectedCountryMenu();
             }}
           >
@@ -47,7 +47,7 @@ function CountryMultiSelectMenu(props) {
           </MenuItem>
           <MenuItem
             onClick={() => {
-              dispatch(Actions.setCountryStarred(selectedContactIds));
+              // dispatch(Actions.setCountryStarred(selectedContactIds));
               closeSelectedCountryMenu();
             }}
           >
@@ -58,7 +58,7 @@ function CountryMultiSelectMenu(props) {
           </MenuItem>
           <MenuItem
             onClick={() => {
-              dispatch(Actions.setCountryUnstarred(selectedContactIds));
+              // dispatch(Actions.setCountryUnstarred(selectedContactIds));
               closeSelectedCountryMenu();
             }}
           >

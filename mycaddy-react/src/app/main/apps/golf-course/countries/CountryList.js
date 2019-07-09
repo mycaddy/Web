@@ -4,35 +4,76 @@ import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 import { useQuery } from "react-apollo-hooks";
-
+import countries from '../../../../../@fake-db/db/countries.json'
 // import * as Actions from './store/actions';
 import CountryMultiSelectMenu from './CountryMultiSelectMenu';
 
+const testData = [
+  {
+    'id': '5725a680b3249760ea21de52',
+    'name': 'Abbott',
+    'lastName': 'Keitch',
+    'avatar': 'assets/images/avatars/Abbott.jpg',
+    'nickname': 'Royalguard',
+    'company': 'Saois',
+    'jobTitle': 'Digital Archivist',
+    'email': 'abbott@withinpixels.com',
+    'phone': '+1-202-555-0175',
+    'address': '933 8th Street Stamford, CT 06902',
+    'birthday': undefined,
+    'notes': ''
+  },
+  {
+    'id': '5725a680606588342058356d',
+    'name': 'Arnold',
+    'lastName': 'Matlock',
+    'avatar': 'assets/images/avatars/Arnold.jpg',
+    'nickname': 'Wanderer',
+    'company': 'Laotcone',
+    'jobTitle': 'Graphic Artist',
+    'email': 'arnold@withinpixels.com',
+    'phone': '+1-202-555-0141',
+    'address': '906 Valley Road Michigan City, IN 46360',
+    'birthday': undefined,
+    'notes': ''
+  },
+  {
+    'id': '5725a68009e20d0a9e9acf2a',
+    'name': 'Barrera',
+    'lastName': 'Bradbury',
+    'avatar': 'assets/images/avatars/Barrera.jpg',
+    'nickname': 'Jackal',
+    'company': 'Unizim',
+    'jobTitle': 'Graphic Designer',
+    'email': 'barrera@withinpixels.com',
+    'phone': '+1-202-555-0196',
+    'address': '183 River Street Passaic, NJ 07055',
+    'birthday': undefined,
+    'notes': ''
+  },
+]
+
+const country_data = countries.map((country,index) => ({
+  id: index,
+  id_number: index,
+  iso_numeric: country.ISO3166_1_numeric,
+  iso_alpha_2: country.ISO3166_1_Alpha_2,
+  iso_alpha_3: country.ISO3166_1_Alpha_3,
+  name_en: country.display_name,
+  name_kr: '',
+  dial_number: country.Dial 
+}))
+
+
+
+
 function CountryList(props) {
-  console.log('ContatcList Props', props)
-
-  const dispatch = useDispatch();
-  const contacts = useSelector(({ clubApp }) => clubApp.contacts.entities);
-  const selectedContactIds = useSelector(({ clubApp }) => clubApp.contacts.selectedContactIds);
-  const searchText = useSelector(({ clubApp }) => clubApp.contacts.searchText);
-  const user = useSelector(({ clubApp }) => clubApp.user);
-
+  
   const [filteredData, setFilteredData] = useState(null);
 
   useEffect(() => {
-    function getFilteredArray(entities, searchText) {
-      const arr = Object.keys(entities).map((id) => entities[id]);
-      if (searchText.length === 0) {
-        return arr;
-      }
-      return FuseUtils.filterArrayByString(arr, searchText);
-    }
-
-    if (contacts) {
-      setFilteredData(getFilteredArray(contacts, searchText));
-    }
-  }, [contacts, searchText]);
-
+    setFilteredData(country_data)
+  }, [])
 
   if (!filteredData) {
     return null;
@@ -43,7 +84,7 @@ function CountryList(props) {
       <div className="flex flex-1 items-center justify-center h-full">
         <Typography color="textSecondary" variant="h5">
           There are no contacts!
-                </Typography>
+        </Typography>
       </div>
     );
   }
@@ -57,7 +98,8 @@ function CountryList(props) {
             className: "cursor-pointer",
             onClick: (e, handleOriginal) => {
               if (rowInfo) {
-                dispatch(Actions.openEditContactDialog(rowInfo.original));
+                console.log('getTrProps!')
+                // dispatch(Actions.openEditContactDialog(rowInfo.original));
               }
             }
           }
@@ -71,10 +113,10 @@ function CountryList(props) {
                   event.stopPropagation();
                 }}
                 onChange={(event) => {
-                  event.target.checked ? dispatch(Actions.selectAllContacts()) : dispatch(Actions.deSelectAllContacts());
+                  // event.target.checked ? dispatch(Actions.selectAllContacts()) : dispatch(Actions.deSelectAllContacts());
                 }}
-                checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
-                indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+                //checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
+                //indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
               />
             ),
             accessor: "",
@@ -83,8 +125,8 @@ function CountryList(props) {
                 onClick={(event) => {
                   event.stopPropagation();
                 }}
-                checked={selectedContactIds.includes(row.value.id)}
-                onChange={() => dispatch(Actions.toggleInSelectedContacts(row.value.id))}
+                //checked={selectedContactIds.includes(row.value.id)}
+                onChange={() => console.log('Cell row click')}
               />
               )
             },
@@ -94,11 +136,11 @@ function CountryList(props) {
           },
           {
             Header: () => (
-              selectedContactIds.length > 0 && (
+              (
                 <CountryMultiSelectMenu />
               )
             ),
-            accessor: "avatar",
+            accessor: "name_en",
             Cell: row => (
               <Avatar className="mr-8" alt={row.original.name} src={row.value} />
             ),
@@ -107,35 +149,30 @@ function CountryList(props) {
             sortable: false
           },
           {
-            Header: "First Name",
-            accessor: "name",
+            Header: "Name",
+            accessor: "name_en",
             filterable: true,
             className: "font-bold"
           },
           {
-            Header: "Last Name",
-            accessor: "lastName",
+            Header: "ISO3166_1_numeric",
+            accessor: "iso_numeric",
             filterable: true,
             className: "font-bold"
           },
           {
-            Header: "Company",
-            accessor: "company",
+            Header: "ISO3166_1_Alpha_2",
+            accessor: "iso_alpha_2",
             filterable: true
           },
           {
-            Header: "Job Title",
-            accessor: "jobTitle",
+            Header: "ISO3166_1_Alpha_3",
+            accessor: "iso_alpha_3",
             filterable: true
           },
           {
-            Header: "Email",
-            accessor: "email",
-            filterable: true
-          },
-          {
-            Header: "Phone",
-            accessor: "phone",
+            Header: "DIAL",
+            accessor: "dial_number",
             filterable: true
           },
           {
@@ -146,19 +183,15 @@ function CountryList(props) {
                 <IconButton
                   onClick={(ev) => {
                     ev.stopPropagation();
-                    dispatch(Actions.toggleStarredContact(row.original.id))
+                    // dispatch(Actions.toggleStarredContact(row.original.id))
                   }}
                 >
-                  {user.starred && user.starred.includes(row.original.id) ? (
-                    <Icon>star</Icon>
-                  ) : (
-                      <Icon>star_border</Icon>
-                    )}
+                  (<Icon>star_border</Icon>)
                 </IconButton>
                 <IconButton
                   onClick={(ev) => {
                     ev.stopPropagation();
-                    dispatch(Actions.removeContact(row.original.id));
+                    // dispatch(Actions.removeContact(row.original.id));
                   }}
                 >
                   <Icon>delete</Icon>
