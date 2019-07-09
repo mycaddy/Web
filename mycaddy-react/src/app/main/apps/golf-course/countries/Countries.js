@@ -3,6 +3,7 @@ import { FusePageCarded } from '@fuse';
 import withReducer from 'app/store/withReducer';
 
 import CountriesHeader from "./CountriesHeader";
+import CountryList from "./CountryList";
 
 function Countries() {
   return (
@@ -13,6 +14,9 @@ function Countries() {
       }}
       header={
         <CountriesHeader />
+      }
+      content={
+        <CountryList />
       }
     />
   )

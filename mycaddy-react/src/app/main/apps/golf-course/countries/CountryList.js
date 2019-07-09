@@ -3,10 +3,12 @@ import { Avatar, Checkbox, Icon, IconButton, Typography } from '@material-ui/cor
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
-import * as Actions from './store/actions';
+import { useQuery } from "react-apollo-hooks";
+
+// import * as Actions from './store/actions';
 import CountryMultiSelectMenu from './CountryMultiSelectMenu';
 
-function ContactsList(props) {
+function CountryList(props) {
   console.log('ContatcList Props', props)
 
   const dispatch = useDispatch();
@@ -93,7 +95,7 @@ function ContactsList(props) {
           {
             Header: () => (
               selectedContactIds.length > 0 && (
-                <ContactsMultiSelectMenu />
+                <CountryMultiSelectMenu />
               )
             ),
             accessor: "avatar",
@@ -172,4 +174,4 @@ function ContactsList(props) {
   );
 }
 
-export default ContactsList;
+export default CountryList;

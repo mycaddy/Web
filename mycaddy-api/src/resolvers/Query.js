@@ -6,7 +6,7 @@ async function countries(parent, args, context) {
           { name_kr_contains: args.filter }
         ]
       }
-    }).aggeregate().count()
+    }).aggregate().count()
 
   const data = await context.prisma.countries({
       where: {

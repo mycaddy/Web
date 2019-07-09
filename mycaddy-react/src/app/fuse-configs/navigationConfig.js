@@ -7,7 +7,7 @@ const navigationConfig = [
     'url': '/apps/golf-course',
     'children': [
       {
-        'id': 'golf-course-clubs',
+        'id': 'golf-course-countries',
         'title': 'Countries',
         'type': 'item',
         'url': '/apps/golf-course/countries',
