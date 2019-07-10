@@ -20,8 +20,8 @@ async function country_data_dump(data) {
 }
 */
 
-async function country_data_dump(data) {
-  for (const country of data) {
+async function country_data_dump_mycaddy() {
+  for (const country of countries_bak) {
     const newContry = await prisma.createCountry({
       // iso_numeric: country.ISO3166_1_numeric,
       // iso_alpha_2: country.ISO3166_1_Alpha_2,
@@ -36,17 +36,6 @@ async function country_data_dump(data) {
 
 async function country_data_update_with(data) {
   for (const country of data) {
-    /** 
-    try {
-      const result = await prisma.country(
-        { name_en: country.display_name }
-      )
-      console.log(result)  
-    }
-    catch(e) {
-      console.log(e)
-    }
-    */
     try {
       const result = await prisma.updateCountry({
         data: {
@@ -68,5 +57,10 @@ async function country_data_update_with(data) {
   
 }
 
-country_data_update_with(countries_iso)// .catch(e => console.log(e))
+const batch_all = async() => {
+  await country_data_dump_mycaddy()
+  await country_data_update_with(countries_iso)// .catch(e => console.log(e))
+}
+
+batch_all()
 
