@@ -4,14 +4,26 @@ scalar DateTime
 
 ### Query >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 type Query {
-  countries(filter: String, skip: Int, first: Int, oderBy: CountryOrderByInput): Countries!
+  countries(filter: String, skip: Int, first: Int, orderBy: CountryOrderByInput): Countries!
 }
 
 enum CountryOrderByInput {
-  name_ASC
-  name_DESC
-  createdAt_ASC
-  createdAt_DESC
+  id_ASC
+  id_DESC
+  id_number_ASC
+  id_number_DESC
+  iso_numeric_ASC
+  iso_numeric_DESC
+  iso_alpha_2_ASC
+  iso_alpha_2_DESC
+  iso_alpha_3_ASC
+  iso_alpha_3_DESC
+  name_en_ASC
+  name_en_DESC
+  name_kr_ASC
+  name_kr_DESC
+  dial_number_ASC
+  dial_number_DESC
 }
 
 type Countries {
@@ -39,7 +51,16 @@ type Holes {
 type Mutation {
   signUp(email: String!, password: String!, name: String!): AuthPayload
   signIn(email: String!, password: String!): AuthPayload
-  addCountry(iso_alpha2: String!, iso_alpha_3: String!, name_en: String!, name_kr: String!, dial_number: String!): Country!
+  addCountry(
+    id_number: Int
+    iso_numeric: String, 
+    iso_alpha2: String, 
+    iso_alpha_3: String, 
+    name_en: String!, 
+    name_kr: String!, 
+    dial_number: String!
+  ): Country!
+  removeCountry(id: String!): Country!
 }
 
 type AuthPayload {

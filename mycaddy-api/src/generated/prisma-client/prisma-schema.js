@@ -372,7 +372,7 @@ input ClubWhereUniqueInput {
 type Country {
   id: ID!
   id_number: Int
-  iso_numeric: Int
+  iso_numeric: String
   iso_alpha_2: String
   iso_alpha_3: String
   name_en: String!
@@ -389,7 +389,7 @@ type CountryConnection {
 input CountryCreateInput {
   id: ID
   id_number: Int
-  iso_numeric: Int
+  iso_numeric: String
   iso_alpha_2: String
   iso_alpha_3: String
   name_en: String!
@@ -429,7 +429,7 @@ enum CountryOrderByInput {
 type CountryPreviousValues {
   id: ID!
   id_number: Int
-  iso_numeric: Int
+  iso_numeric: String
   iso_alpha_2: String
   iso_alpha_3: String
   name_en: String!
@@ -457,7 +457,7 @@ input CountrySubscriptionWhereInput {
 
 input CountryUpdateDataInput {
   id_number: Int
-  iso_numeric: Int
+  iso_numeric: String
   iso_alpha_2: String
   iso_alpha_3: String
   name_en: String
@@ -467,7 +467,7 @@ input CountryUpdateDataInput {
 
 input CountryUpdateInput {
   id_number: Int
-  iso_numeric: Int
+  iso_numeric: String
   iso_alpha_2: String
   iso_alpha_3: String
   name_en: String
@@ -477,7 +477,7 @@ input CountryUpdateInput {
 
 input CountryUpdateManyMutationInput {
   id_number: Int
-  iso_numeric: Int
+  iso_numeric: String
   iso_alpha_2: String
   iso_alpha_3: String
   name_en: String
@@ -522,14 +522,20 @@ input CountryWhereInput {
   id_number_lte: Int
   id_number_gt: Int
   id_number_gte: Int
-  iso_numeric: Int
-  iso_numeric_not: Int
-  iso_numeric_in: [Int!]
-  iso_numeric_not_in: [Int!]
-  iso_numeric_lt: Int
-  iso_numeric_lte: Int
-  iso_numeric_gt: Int
-  iso_numeric_gte: Int
+  iso_numeric: String
+  iso_numeric_not: String
+  iso_numeric_in: [String!]
+  iso_numeric_not_in: [String!]
+  iso_numeric_lt: String
+  iso_numeric_lte: String
+  iso_numeric_gt: String
+  iso_numeric_gte: String
+  iso_numeric_contains: String
+  iso_numeric_not_contains: String
+  iso_numeric_starts_with: String
+  iso_numeric_not_starts_with: String
+  iso_numeric_ends_with: String
+  iso_numeric_not_ends_with: String
   iso_alpha_2: String
   iso_alpha_2_not: String
   iso_alpha_2_in: [String!]
@@ -608,7 +614,7 @@ input CountryWhereInput {
 input CountryWhereUniqueInput {
   id: ID
   id_number: Int
-  iso_numeric: Int
+  name_en: String
 }
 
 type Course {

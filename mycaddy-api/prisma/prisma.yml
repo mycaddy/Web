@@ -6,8 +6,8 @@ generate:
     output: ../src/generated/prisma-client/
 
 hooks:
-  post-deploy:
-    - prisma generate
+  # post-deploy:
+  #  - prisma generate # Since Prisma 1.31, the Prisma client is generated automatically after running `prisma deploy`
     # - npx nexus-prisma-generate --client ./src/generated/prisma-client --output ./src/generated/nexus-prisma # Runs the codegen tool from nexus-prisma.
 
 # Seeds initial data into the database by running a script.

@@ -10,10 +10,10 @@ type User {
 type Country {
   id: ID! @id
   id_number: Int @unique
-  iso_numeric: Int @unique
+  iso_numeric: String 
   iso_alpha_2: String
   iso_alpha_3: String
-  name_en: String! 
+  name_en: String! @unique
   name_kr: String
   dial_number: String 
 }

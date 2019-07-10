@@ -3,77 +3,26 @@ import { Avatar, Checkbox, Icon, IconButton, Typography } from '@material-ui/cor
 import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
-import { useQuery } from "react-apollo-hooks";
-import countries from '../../../../../@fake-db/db/countries.json'
+
 // import * as Actions from './store/actions';
 import CountryMultiSelectMenu from './CountryMultiSelectMenu';
 
-const testData = [
-  {
-    'id': '5725a680b3249760ea21de52',
-    'name': 'Abbott',
-    'lastName': 'Keitch',
-    'avatar': 'assets/images/avatars/Abbott.jpg',
-    'nickname': 'Royalguard',
-    'company': 'Saois',
-    'jobTitle': 'Digital Archivist',
-    'email': 'abbott@withinpixels.com',
-    'phone': '+1-202-555-0175',
-    'address': '933 8th Street Stamford, CT 06902',
-    'birthday': undefined,
-    'notes': ''
-  },
-  {
-    'id': '5725a680606588342058356d',
-    'name': 'Arnold',
-    'lastName': 'Matlock',
-    'avatar': 'assets/images/avatars/Arnold.jpg',
-    'nickname': 'Wanderer',
-    'company': 'Laotcone',
-    'jobTitle': 'Graphic Artist',
-    'email': 'arnold@withinpixels.com',
-    'phone': '+1-202-555-0141',
-    'address': '906 Valley Road Michigan City, IN 46360',
-    'birthday': undefined,
-    'notes': ''
-  },
-  {
-    'id': '5725a68009e20d0a9e9acf2a',
-    'name': 'Barrera',
-    'lastName': 'Bradbury',
-    'avatar': 'assets/images/avatars/Barrera.jpg',
-    'nickname': 'Jackal',
-    'company': 'Unizim',
-    'jobTitle': 'Graphic Designer',
-    'email': 'barrera@withinpixels.com',
-    'phone': '+1-202-555-0196',
-    'address': '183 River Street Passaic, NJ 07055',
-    'birthday': undefined,
-    'notes': ''
-  },
-]
-
-const country_data = countries.map((country,index) => ({
-  id: index,
-  id_number: index,
-  iso_numeric: country.ISO3166_1_numeric,
-  iso_alpha_2: country.ISO3166_1_Alpha_2,
-  iso_alpha_3: country.ISO3166_1_Alpha_3,
-  name_en: country.display_name,
-  name_kr: '',
-  dial_number: country.Dial 
-}))
-
-
-
+import { useQuery } from "react-apollo-hooks";
+import { GET_COUNTRIES } from '../../../../apollo/queries'
 
 function CountryList(props) {
-  
   const [filteredData, setFilteredData] = useState(null);
-
+  const { loading, error, data } = useQuery(GET_COUNTRIES, {
+    variables: { orderBy: 'name_en_ASC' }
+  }) 
+  
   useEffect(() => {
-    setFilteredData(country_data)
-  }, [])
+    if (data.countries)
+    {
+      setFilteredData(data.countries.data)
+    }  
+    
+  }, [data])
 
   if (!filteredData) {
     return null;
@@ -135,59 +84,53 @@ function CountryList(props) {
             width: 64
           },
           {
-            Header: () => (
-              (
-                <CountryMultiSelectMenu />
-              )
-            ),
+            Header: "Flag",
             accessor: "name_en",
-            Cell: row => (
-              <Avatar className="mr-8" alt={row.original.name} src={row.value} />
-            ),
+            Cell: row => {
+              // str.replace(/#/gi, ""); 
+              const flagSrc = `assets/images/countries/${row.value.toLowerCase().replace(/ /gi, '-')}.svg`
+              return (<Avatar className="mr-8" alt={row.value} src={flagSrc} />)
+            },
             className: "justify-center",
             width: 64,
             sortable: false
           },
           {
+            Header: "ID",
+            accessor: "id_number",
+            width: 64,
+          },
+          {
             Header: "Name",
             accessor: "name_en",
-            filterable: true,
-            className: "font-bold"
+            className: "font-bold",
+            width: 200,
           },
           {
-            Header: "ISO3166_1_numeric",
-            accessor: "iso_numeric",
-            filterable: true,
-            className: "font-bold"
-          },
-          {
-            Header: "ISO3166_1_Alpha_2",
+            Header: "Alpha2",
             accessor: "iso_alpha_2",
-            filterable: true
+            width: 64,
           },
           {
-            Header: "ISO3166_1_Alpha_3",
+            Header: "Alpha3",
             accessor: "iso_alpha_3",
-            filterable: true
+            width: 64,
           },
           {
             Header: "DIAL",
             accessor: "dial_number",
-            filterable: true
+            width: 64,
+          },
+          {
+            Header: "Numeric",
+            accessor: "iso_numeric",
+            width: 64,
           },
           {
             Header: "",
             width: 128,
             Cell: row => (
               <div className="flex items-center">
-                <IconButton
-                  onClick={(ev) => {
-                    ev.stopPropagation();
-                    // dispatch(Actions.toggleStarredContact(row.original.id))
-                  }}
-                >
-                  (<Icon>star_border</Icon>)
-                </IconButton>
                 <IconButton
                   onClick={(ev) => {
                     ev.stopPropagation();

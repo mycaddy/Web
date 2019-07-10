@@ -26,7 +26,7 @@ const routes = [
   {
     path: '/',
     exact: true,
-    component: () => <Redirect to="/apps/club" />
+    component: () => <Redirect to="/apps/golf-course/countries" />
   },
   {
     component: () => <Redirect to="/pages/errors/error-404" />

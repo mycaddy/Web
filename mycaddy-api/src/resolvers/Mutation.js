@@ -33,6 +33,7 @@ async function signIn(parent, args, context) {
 
 function addCountry(parent, args, context) {
   return context.prisma.createCountry({
+    id_number: args.id_number,
     iso_numeric: args.iso_number,
     iso_alpha_2: args.iso_alpha2,
     iso_alpha_3: args.iso_alpha3,
@@ -42,8 +43,15 @@ function addCountry(parent, args, context) {
   })
 }
 
+function removeCountry(parent, args, context) {
+  return context.prisma.deleteCountry({
+    id: args.id
+  })
+}
+
 export default {
   signUp,
   signIn,
   addCountry,
+  removeCountry,
 }

@@ -3,7 +3,9 @@ async function countries(parent, args, context) {
       where: {
         OR: [
           { name_en_contains: args.filter },
-          { name_kr_contains: args.filter }
+          { name_kr_contains: args.filter },
+          { iso_alpha_3_contains: args.filter },
+          { iso_alpha_2_contains: args.filter }, 
         ]
       }
     }).aggregate().count()
@@ -12,7 +14,9 @@ async function countries(parent, args, context) {
       where: {
         OR: [
           { name_en_contains: args.filter },
-          { name_kr_contains: args.filter }
+          { name_kr_contains: args.filter },
+          { iso_alpha_3_contains: args.filter },
+          { iso_alpha_2_contains: args.filter }, 
         ]
       },
       skip: args.skip,

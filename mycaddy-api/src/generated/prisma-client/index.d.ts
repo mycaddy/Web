@@ -413,7 +413,7 @@ export interface CourseUpdateManyMutationInput {
 
 export interface CountryUpdateInput {
   id_number?: Maybe<Int>;
-  iso_numeric?: Maybe<Int>;
+  iso_numeric?: Maybe<String>;
   iso_alpha_2?: Maybe<String>;
   iso_alpha_3?: Maybe<String>;
   name_en?: Maybe<String>;
@@ -719,7 +719,7 @@ export interface UserWhereInput {
 export type CountryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   id_number?: Maybe<Int>;
-  iso_numeric?: Maybe<Int>;
+  name_en?: Maybe<String>;
 }>;
 
 export interface CourseUpdateInput {
@@ -824,7 +824,7 @@ export type HoleWhereUniqueInput = AtLeastOne<{
 export interface CountryCreateInput {
   id?: Maybe<ID_Input>;
   id_number?: Maybe<Int>;
-  iso_numeric?: Maybe<Int>;
+  iso_numeric?: Maybe<String>;
   iso_alpha_2?: Maybe<String>;
   iso_alpha_3?: Maybe<String>;
   name_en: String;
@@ -985,7 +985,7 @@ export interface CourseWhereInput {
 
 export interface CountryUpdateManyMutationInput {
   id_number?: Maybe<Int>;
-  iso_numeric?: Maybe<Int>;
+  iso_numeric?: Maybe<String>;
   iso_alpha_2?: Maybe<String>;
   iso_alpha_3?: Maybe<String>;
   name_en?: Maybe<String>;
@@ -999,7 +999,7 @@ export type CourseWhereUniqueInput = AtLeastOne<{
 
 export interface CountryUpdateDataInput {
   id_number?: Maybe<Int>;
-  iso_numeric?: Maybe<Int>;
+  iso_numeric?: Maybe<String>;
   iso_alpha_2?: Maybe<String>;
   iso_alpha_3?: Maybe<String>;
   name_en?: Maybe<String>;
@@ -1071,14 +1071,20 @@ export interface CountryWhereInput {
   id_number_lte?: Maybe<Int>;
   id_number_gt?: Maybe<Int>;
   id_number_gte?: Maybe<Int>;
-  iso_numeric?: Maybe<Int>;
-  iso_numeric_not?: Maybe<Int>;
-  iso_numeric_in?: Maybe<Int[] | Int>;
-  iso_numeric_not_in?: Maybe<Int[] | Int>;
-  iso_numeric_lt?: Maybe<Int>;
-  iso_numeric_lte?: Maybe<Int>;
-  iso_numeric_gt?: Maybe<Int>;
-  iso_numeric_gte?: Maybe<Int>;
+  iso_numeric?: Maybe<String>;
+  iso_numeric_not?: Maybe<String>;
+  iso_numeric_in?: Maybe<String[] | String>;
+  iso_numeric_not_in?: Maybe<String[] | String>;
+  iso_numeric_lt?: Maybe<String>;
+  iso_numeric_lte?: Maybe<String>;
+  iso_numeric_gt?: Maybe<String>;
+  iso_numeric_gte?: Maybe<String>;
+  iso_numeric_contains?: Maybe<String>;
+  iso_numeric_not_contains?: Maybe<String>;
+  iso_numeric_starts_with?: Maybe<String>;
+  iso_numeric_not_starts_with?: Maybe<String>;
+  iso_numeric_ends_with?: Maybe<String>;
+  iso_numeric_not_ends_with?: Maybe<String>;
   iso_alpha_2?: Maybe<String>;
   iso_alpha_2_not?: Maybe<String>;
   iso_alpha_2_in?: Maybe<String[] | String>;
@@ -1934,7 +1940,7 @@ export interface UserSubscriptionPayloadSubscription
 export interface CountryPreviousValues {
   id: ID_Output;
   id_number?: Int;
-  iso_numeric?: Int;
+  iso_numeric?: String;
   iso_alpha_2?: String;
   iso_alpha_3?: String;
   name_en: String;
@@ -1947,7 +1953,7 @@ export interface CountryPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   id_number: () => Promise<Int>;
-  iso_numeric: () => Promise<Int>;
+  iso_numeric: () => Promise<String>;
   iso_alpha_2: () => Promise<String>;
   iso_alpha_3: () => Promise<String>;
   name_en: () => Promise<String>;
@@ -1960,7 +1966,7 @@ export interface CountryPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   id_number: () => Promise<AsyncIterator<Int>>;
-  iso_numeric: () => Promise<AsyncIterator<Int>>;
+  iso_numeric: () => Promise<AsyncIterator<String>>;
   iso_alpha_2: () => Promise<AsyncIterator<String>>;
   iso_alpha_3: () => Promise<AsyncIterator<String>>;
   name_en: () => Promise<AsyncIterator<String>>;
@@ -2293,7 +2299,7 @@ export interface UserEdgeSubscription
 export interface Country {
   id: ID_Output;
   id_number?: Int;
-  iso_numeric?: Int;
+  iso_numeric?: String;
   iso_alpha_2?: String;
   iso_alpha_3?: String;
   name_en: String;
@@ -2304,7 +2310,7 @@ export interface Country {
 export interface CountryPromise extends Promise<Country>, Fragmentable {
   id: () => Promise<ID_Output>;
   id_number: () => Promise<Int>;
-  iso_numeric: () => Promise<Int>;
+  iso_numeric: () => Promise<String>;
   iso_alpha_2: () => Promise<String>;
   iso_alpha_3: () => Promise<String>;
   name_en: () => Promise<String>;
@@ -2317,7 +2323,7 @@ export interface CountrySubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   id_number: () => Promise<AsyncIterator<Int>>;
-  iso_numeric: () => Promise<AsyncIterator<Int>>;
+  iso_numeric: () => Promise<AsyncIterator<String>>;
   iso_alpha_2: () => Promise<AsyncIterator<String>>;
   iso_alpha_3: () => Promise<AsyncIterator<String>>;
   name_en: () => Promise<AsyncIterator<String>>;
@@ -2330,7 +2336,7 @@ export interface CountryNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   id_number: () => Promise<Int>;
-  iso_numeric: () => Promise<Int>;
+  iso_numeric: () => Promise<String>;
   iso_alpha_2: () => Promise<String>;
   iso_alpha_3: () => Promise<String>;
   name_en: () => Promise<String>;
