@@ -4,14 +4,15 @@ import { FuseUtils, FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTable from "react-table";
 
-// import * as Actions from './store/actions';
+import * as Actions from './store/actions';
 import CountryMultiSelectMenu from './CountryMultiSelectMenu';
 
 import { useQuery } from "react-apollo-hooks";
 import { GET_COUNTRIES } from '../../../../apollo/queries'
 
 function CountryList(props) {
-  const [filteredData, setFilteredData] = useState(null);
+  const dispatch = useDispatch()
+  const [filteredData, setFilteredData] = useState(null)
   const { loading, error, data } = useQuery(GET_COUNTRIES, {
     variables: { orderBy: 'name_en_ASC' }
   }) 
@@ -47,8 +48,8 @@ function CountryList(props) {
             className: "cursor-pointer",
             onClick: (e, handleOriginal) => {
               if (rowInfo) {
-                console.log('getTrProps!')
-                // dispatch(Actions.openEditContactDialog(rowInfo.original));
+                console.log('getTrProps!', rowInfo.original)
+                dispatch(Actions.openEditCountryDialog(rowInfo.original));
               }
             }
           }

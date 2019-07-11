@@ -4,7 +4,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-// import * as Actions from '../store/actions';
+import * as Actions from './store/actions';
 
 function ClubsHeader(props) {
   const dispatch = useDispatch();
@@ -23,14 +23,11 @@ function ClubsHeader(props) {
         </FuseAnimate>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-12">
-
+      <div className="flex flex-1 items-left justify-left px-12">
         <ThemeProvider theme={mainTheme}>
           <FuseAnimate animation="transition.slideDownIn" delay={300}>
             <Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-
               <Icon className="mr-8" color="action">search</Icon>
-
               <Input
                 placeholder="Search"
                 className="flex flex-1"
@@ -45,14 +42,22 @@ function ClubsHeader(props) {
             </Paper>
           </FuseAnimate>
         </ThemeProvider>
-
+        <FuseAnimate animation="transition.slideRightIn" delay={300}>
+          <div className="pl-24">
+            <Button
+              onClick={() => {
+                dispatch(Actions.openNewCountryDialog())
+              }}
+              variant="contained"
+              color="primary"
+              className="whitespace-no-wrap"
+            >
+              ADD COUNTRY
+            </Button>
+          </div>
+        </FuseAnimate>      
       </div>
-      <FuseAnimate animation="transition.slideRightIn" delay={300}>
-        <Button component={Link} to="/apps/e-commerce/products/new" className="whitespace-no-wrap" variant="contained">
-          <span className="hidden sm:flex">Add New Product</span>
-          <span className="flex sm:hidden">New</span>
-        </Button>
-      </FuseAnimate>
+      
     </div>
   );
 }
