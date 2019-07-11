@@ -77,7 +77,6 @@
     "@babel/node": "7.4.5",
     "@babel/preset-env": "7.4.5",
     "cross-env": "5.2.0",
-    "dotenv": "^8.0.0",
     "globby": "9.2.0",
     "js-beautify": "1.10.0",
     "marked": "0.6.2",
