@@ -380,6 +380,21 @@ class FuseUtils {
     }
   }
 
+  static getSerialNumber (iArray, sort = false) {
+    const max = Math.max(...iArray)
+    if (sort) {
+      iArray.sort((a, b) => (a - b)) 
+      // console.log(iArray, max)
+    }
+    for (let i = 1; i < max; i++) {
+      if (i !== iArray[i-1]) {
+        // console.log('!!!', i)
+        return i
+      }
+    }
+    return (max + 1)
+  }
+
 }
 
 export default FuseUtils;

@@ -12,18 +12,21 @@ import { GET_COUNTRIES } from '../../../../apollo/queries'
 
 function CountryList(props) {
   const dispatch = useDispatch()
-  const [filteredData, setFilteredData] = useState(null)
+  const [ filteredData, setFilteredData ] = useState(null)
+  const searchText = useSelector(({countriesApp}) => countriesApp.countries.searchText)
+  
   const { loading, error, data } = useQuery(GET_COUNTRIES, {
-    variables: { orderBy: 'name_en_ASC' }
+    variables: { orderBy: 'name_en_ASC', filter: searchText, fetchPolicy:'network-only' }
   }) 
   
   useEffect(() => {
+    console.log('useEffect')
     if (data.countries)
     {
       setFilteredData(data.countries.data)
     }  
     
-  }, [data])
+  }, [data, searchText])
 
   if (!filteredData) {
     return null;
@@ -108,23 +111,23 @@ function CountryList(props) {
             width: 200,
           },
           {
-            Header: "Alpha2",
+            Header: "2 Code",
             accessor: "iso_alpha_2",
             width: 64,
           },
           {
-            Header: "Alpha3",
+            Header: "3 Code",
             accessor: "iso_alpha_3",
+            width: 64,
+          },
+          {
+            Header: "N Code",
+            accessor: "iso_numeric",
             width: 64,
           },
           {
             Header: "DIAL",
             accessor: "dial_number",
-            width: 64,
-          },
-          {
-            Header: "Numeric",
-            accessor: "iso_numeric",
             width: 64,
           },
           {

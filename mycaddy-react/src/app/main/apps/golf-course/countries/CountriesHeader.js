@@ -3,12 +3,12 @@ import { Paper, Button, Input, Icon, Typography } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { FuseAnimate } from '@fuse';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import * as Actions from './store/actions';
 
-function ClubsHeader(props) {
+function CountriesHeader(props) {
   const dispatch = useDispatch();
-  // const searchText = useSelector(({ eCommerceApp }) => eCommerceApp.products.searchText);
+  const searchText = useSelector(({ countriesApp }) => countriesApp.countries.searchText);
   const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
   return (
@@ -33,11 +33,11 @@ function ClubsHeader(props) {
                 className="flex flex-1"
                 disableUnderline
                 fullWidth
-                // value={searchText}
+                value={searchText}
                 inputProps={{
                   'aria-label': 'Search'
                 }}
-                // onChange={ev => dispatch(Actions.setProductsSearchText(ev))}
+                onChange={ev => dispatch(Actions.setCountrySearchText(ev))}
               />
             </Paper>
           </FuseAnimate>
@@ -62,4 +62,4 @@ function ClubsHeader(props) {
   );
 }
 
-export default ClubsHeader;
+export default CountriesHeader;

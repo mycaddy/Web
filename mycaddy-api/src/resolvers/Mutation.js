@@ -31,19 +31,18 @@ async function signIn(parent, args, context) {
   }
 }
 
-function addCountry(parent, args, context) {
-  return context.prisma.createCountry({
-    id_number: args.id_number,
-    iso_numeric: args.iso_number,
-    iso_alpha_2: args.iso_alpha2,
-    iso_alpha_3: args.iso_alpha3,
-    name_en: args.name_en,
-    name_kr: args.name_kr,
-    dial_number: args.dial_number,
+function createCountry(parent, args, context) {
+  return context.prisma.createCountry(args.data)
+}
+
+function updateCountry(parent, args, context) {
+  return context.prisma.updateCountry({
+    where: { id: args.id },
+    data: args.data,
   })
 }
 
-function removeCountry(parent, args, context) {
+function deleteCountry(parent, args, context) {
   return context.prisma.deleteCountry({
     id: args.id
   })
@@ -52,6 +51,7 @@ function removeCountry(parent, args, context) {
 export default {
   signUp,
   signIn,
-  addCountry,
-  removeCountry,
+  createCountry,
+  updateCountry,
+  deleteCountry
 }

@@ -1,6 +1,7 @@
 import * as Actions from '../actions'
 
 const initialState = {
+  searchText: '',
   countryDialog: {
     type: 'new',
     props: {
@@ -12,6 +13,13 @@ const initialState = {
 
 const countriesReducer = function (state = initialState, action) {
   switch(action.type) {
+    case Actions.SET_COUNTRY_SEARCH_TEXT:
+      {
+        return {
+          ...state,
+          searchText: action.searchText
+        }
+      }
     case Actions.OPEN_NEW_COUNTRY_DIALOG: 
       {
         return {

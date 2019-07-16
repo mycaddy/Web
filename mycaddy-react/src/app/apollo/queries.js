@@ -17,7 +17,18 @@ const GET_COUNTRIES = gql`
     }
   } 
 `
+const GET_COUNTRY_NUMBER_IDS = gql`
+  query GetCountryNumberIds($orderBy: CountryOrderByInput) {
+    countries(orderBy: $orderBy) {
+      count,
+      data {
+        id_number
+      }
+    }
+  }
+`
 
 export {
-  GET_COUNTRIES
+  GET_COUNTRIES,
+  GET_COUNTRY_NUMBER_IDS
 }

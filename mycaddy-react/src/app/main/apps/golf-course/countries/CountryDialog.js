@@ -1,54 +1,81 @@
-import React, { useEffect, useCallback } from 'react';
-import { TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, Avatar } from '@material-ui/core';
+import React, { useEffect, useCallback, useState } from 'react'
+import {
+  TextField, Button, Dialog, DialogActions, DialogContent,
+  Icon, IconButton, Typography, Toolbar, AppBar, Avatar
+} from '@material-ui/core'
 import { useForm } from '@fuse/hooks';
 import FuseUtils from '@fuse/FuseUtils';
 import * as Actions from './store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useApolloClient, useMutation } from "react-apollo-hooks";
+import { GET_COUNTRY_NUMBER_IDS } from '../../../../apollo/queries'
+import { CREATE_COUNTRY, UPDATE_COUNTRY, DELETE_COUNTRY } from '../../../../apollo/mutations'
+import _ from '@lodash'
+
+const defaultCountryInput = {
+  id_number: '',
+  iso_numeric: '',
+  iso_alpha_2: '',
+  iso_alpha_3: '',
+  name_en: '',
+  name_kr: '',
+}
+
 const defaultFormState = {
   flag: 'assets/images/countries/_flag.none.0.svg',
   id: '',
   id_number: '',
-  name_en: '',
-  name_kr: '',
-  iso_numeric: '',
-  iso_alpha_2: '',
-  iso_alpha_3: '',
-  dial_number: ''
+  ...defaultCountryInput
 };
 
 function CountryDialog(props) {
   const dispatch = useDispatch();
-  const contactDialog = useSelector(({ countriesApp }) => countriesApp.countries.countryDialog)
-  console.log('contactDialog', contactDialog)
+  const countryDialog = useSelector(({ countriesApp }) => countriesApp.countries.countryDialog)
   const { form, handleChange, setForm } = useForm(defaultFormState)
-   
+  const client = useApolloClient()
+  // const updateCountryStore = useMutation(UPDATE_COUNTRY)
+
   const initDialog = useCallback(
-    () => {
-      if (contactDialog.type === 'edit' && contactDialog.data) {
-        setForm({ ...contactDialog.data, flag: `assets/images/countries/${contactDialog.data.name_en.toLowerCase().replace(/ /gi, '-')}.svg` });
+    async () => {
+      // console.log('useCallback')
+      if (countryDialog.type === 'edit' && countryDialog.data) {
+        setForm({
+          ...countryDialog.data,
+          flag: `assets/images/countries/${countryDialog.data.name_en.toLowerCase().replace(/ /gi, '-')}.svg`
+        });
       }
 
-      if (contactDialog.type === 'new') {
+      if (countryDialog.type === 'new') {
+
+        const { data } = await client.query({
+          query: GET_COUNTRY_NUMBER_IDS,
+          variables: { orderBy: 'id_number_ASC' },
+          fetchPolicy: 'network-only',
+        });
+        const ids = data.countries.data.map(a => a.id_number)
+        const id_number_suggestion = FuseUtils.getSerialNumber(ids)
+
         setForm({
           ...defaultFormState,
-          ...contactDialog.data,
-          id: FuseUtils.generateGUID()
+          id_number: id_number_suggestion
+          //id: FuseUtils.generateGUID()
         });
       }
     },
-    [contactDialog.data, contactDialog.type, setForm],
+    [countryDialog.data, countryDialog.type, setForm],
   )
-  
+
   useEffect(() => {
-    if (contactDialog.props.open) {
+    // console.log('useEffect,countryDialog', 'countryDialog')
+    if (countryDialog.props.open) {
       initDialog();
     }
 
-  }, [contactDialog.props.open, initDialog]);
-   
+  }, [countryDialog.props.open, initDialog]);
+
   function closeComposeDialog() {
-    contactDialog.type === 'edit' ? dispatch(Actions.closeEditCountryDialog()) : dispatch(Actions.closeNewCountryDialog());
+    countryDialog.type === 'edit' ? dispatch(Actions.closeEditCountryDialog()) : dispatch(Actions.closeNewCountryDialog());
   }
 
   function canBeSubmitted() {
@@ -57,20 +84,47 @@ function CountryDialog(props) {
     );
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    // clear form data for GQL CountryInputType
+    let country_data = _.pick(form, _.keys(defaultCountryInput))
+    country_data = _.pickBy(country_data, _.identity)
+    if (form.iso_numeric)
+      _.set(country_data, 'iso_numeric', form.iso_numeric.toString())
+    console.log('country_data', country_data)
 
-    if (contactDialog.type === 'new') {
-      // dispatch(Actions.addCountry(form));
+    if (countryDialog.type === 'new') {
+      const { data } = await client.mutate({
+        mutation: CREATE_COUNTRY,
+        variables: {
+          data: country_data
+        }
+      })
+
     }
     else {
-      // dispatch(Actions.updateCountry(form));
+      console.log('edit', form.id)
+      const { data } = await client.mutate({
+        mutation: UPDATE_COUNTRY,
+        variables: {
+          id: form.id,
+          data: country_data
+        },
+      })
+      console.log('mutate result', data)
+
     }
     closeComposeDialog();
   }
 
-  function handleRemove() {
+  async function handleRemove() {
     // dispatch(Actions.removeCountry(form.id));
+    console.log(form)
+    const { data } = await client.mutate({
+      mutation: DELETE_COUNTRY,
+      variables: { id: form.id }
+    })
+    console.log('deleted', data)
     closeComposeDialog();
   }
 
@@ -79,7 +133,7 @@ function CountryDialog(props) {
       classes={{
         paper: "m-24"
       }}
-      {...contactDialog.props}
+      {...countryDialog.props}
       onClose={closeComposeDialog}
       fullWidth
       maxWidth="xs"
@@ -88,12 +142,12 @@ function CountryDialog(props) {
       <AppBar position="static" elevation={1}>
         <Toolbar className="flex w-full">
           <Typography variant="subtitle1" color="inherit">
-            {contactDialog.type === 'new' ? 'New Country' : 'Edit Country'}
+            {countryDialog.type === 'new' ? 'New Country' : 'Edit Country'}
           </Typography>
         </Toolbar>
         <div className="flex flex-col items-center justify-center pb-24">
           <Avatar className="w-60 h-60" alt="contact avatar" src={form.flag} />
-          {contactDialog.type === 'edit' && (
+          {countryDialog.type === 'edit' && (
             <Typography variant="h6" color="inherit" className="pt-8">
               {form.name_en}
             </Typography>
@@ -104,7 +158,7 @@ function CountryDialog(props) {
         <DialogContent classes={{ root: "p-24" }}>
           <div className="flex">
             <div className="min-w-48 pt-20">
-              <Icon color="action">account_circle</Icon>
+              <Icon color="action">bookmark</Icon>
             </div>
             <TextField
               className="mb-24"
@@ -112,7 +166,7 @@ function CountryDialog(props) {
               autoFocus
               id="id_number"
               name="id_number"
-              value={form.id_number}
+              value={form.id_number ? form.id_number : ''}
               onChange={handleChange}
               variant="outlined"
               required
@@ -122,7 +176,7 @@ function CountryDialog(props) {
 
           <div className="flex">
             <div className="min-w-48 pt-20">
-              <Icon color="action">account_circle</Icon>
+              <Icon color="action">book</Icon>
             </div>
             <TextField
               className="mb-24"
@@ -130,7 +184,7 @@ function CountryDialog(props) {
               autoFocus
               id="name_en"
               name="name_en"
-              value={form.name_en}
+              value={form.name_en ? form.name_en : ''}
               onChange={handleChange}
               variant="outlined"
               required
@@ -140,13 +194,14 @@ function CountryDialog(props) {
 
           <div className="flex">
             <div className="min-w-48 pt-20">
+              <Icon color="action">book</Icon>
             </div>
             <TextField
               className="mb-24"
               label="Name (Korean)"
               id="name_kr"
               name="name_kr"
-              value={form.name_kr}
+              value={form.name_kr ? form.name_kr : ''}
               onChange={handleChange}
               variant="outlined"
               fullWidth
@@ -155,14 +210,14 @@ function CountryDialog(props) {
 
           <div className="flex">
             <div className="min-w-48 pt-20">
-              <Icon color="action">star</Icon>
+              <Icon color="action">domain</Icon>
             </div>
             <TextField
               className="mb-24"
               label="2 Code"
               id="iso_alpha_2"
               name="iso_alpha_2"
-              value={form.iso_alpha_2}
+              value={form.iso_alpha_2 ? form.iso_alpha_2 : ''}
               onChange={handleChange}
               variant="outlined"
               fullWidth
@@ -178,7 +233,7 @@ function CountryDialog(props) {
               label="3 Code"
               id="iso_alpha_3"
               name="iso_alpha_3"
-              value={form.iso_alpha_3}
+              value={form.iso_alpha_3 ? form.iso_alpha_3 : ''}
               onChange={handleChange}
               variant="outlined"
               fullWidth
@@ -194,7 +249,7 @@ function CountryDialog(props) {
               label="Numeric Code"
               id="iso_numeric"
               name="iso_numeric"
-              value={form.iso_numeric}
+              value={form.iso_numeric ? form.iso_numeric : ''}
               onChange={handleChange}
               variant="outlined"
               fullWidth
@@ -210,51 +265,17 @@ function CountryDialog(props) {
               label="Dial"
               id="dial_number"
               name="dial_number"
-              value={form.dial_number}
+              value={form.dial_number ? form.dial_number : ''}
               onChange={handleChange}
               variant="outlined"
               fullWidth
             />
           </div>
 
-          <div className="flex">
-            <div className="min-w-48 pt-20">
-              <Icon color="action">work</Icon>
-            </div>
-            <TextField
-              className="mb-24"
-              label="Job title"
-              id="jobTitle"
-              name="jobTitle"
-              value={form.jobTitle}
-              onChange={handleChange}
-              variant="outlined"
-              fullWidth
-            />
-          </div>
-
-          <div className="flex">
-            <div className="min-w-48 pt-20">
-              <Icon color="action">cake</Icon>
-            </div>
-            <TextField
-              className="mb-24"
-              id="birthday"
-              label="Birthday"
-              type="date"
-              value={form.birthday}
-              onChange={handleChange}
-              InputLabelProps={{
-                shrink: true
-              }}
-              variant="outlined"
-              fullWidth
-            />
-          </div>
 
         </DialogContent>
 
-        {contactDialog.type === 'new' ? (
+        {countryDialog.type === 'new' ? (
           <DialogActions className="justify-between pl-16">
             <Button
               variant="contained"
@@ -264,7 +285,7 @@ function CountryDialog(props) {
               disabled={!canBeSubmitted()}
             >
               Add
-                        </Button>
+            </Button>
           </DialogActions>
         ) : (
             <DialogActions className="justify-between pl-16">
@@ -276,7 +297,7 @@ function CountryDialog(props) {
                 disabled={!canBeSubmitted()}
               >
                 Save
-                        </Button>
+              </Button>
               <IconButton
                 onClick={handleRemove}
               >
