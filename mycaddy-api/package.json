@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node ./src/index.js",
-    "build": "babel src/ -d dist/",
+    "build": "babel --presets @babel/preset-env src/ -d dist/",
     "test": "echo \"Error: no test specified\" && exit 1",
     "batch-country": "babel-node ./src/batch/countries.js",
     "start-ts": "ts-node-dev --no-notify --respawn --transpileOnly ./src"
