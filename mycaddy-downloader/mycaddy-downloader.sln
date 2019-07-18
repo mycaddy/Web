@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mycaddy-downloader", "mycaddy-downloader.csproj", "{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCE79716-54E4-49C1-B53E-0434ED47AF80}
+	EndGlobalSection
+EndGlobal

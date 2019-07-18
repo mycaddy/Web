@@ -1,0 +1,15 @@
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\mycaddy-downloader.exe.config
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\mycaddy-downloader.exe
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\mycaddy-downloader.pdb
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csprojAssemblyReference.cache
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\MainWindow.g.cs
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\App.g.cs
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader_MarkupCompile.cache
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader_MarkupCompile.lref
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\MainWindow.baml
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.g.resources
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy_downloader.Properties.Resources.resources
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csproj.GenerateResource.cache
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.exe
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.pdb
