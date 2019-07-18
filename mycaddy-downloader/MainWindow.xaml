@@ -4,9 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mycaddy_downloader"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="MYCADDY DWONLOADER"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        WindowStyle="SingleBorderWindow">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-        
+        <StackPanel Orientation="Vertical">
+            <materialDesign:Card Padding="32" Margin="16">
+                <WrapPanel ItemHeight="40" VerticalAlignment="Center">
+                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center">MY CADDY Downloader</TextBlock>
+                    <Button Name="btnDownload" Style='{StaticResource MaterialDesignRaisedAccentButton}' Margin="10 0" Click="BtnDownload_Click">Download</Button>
+                </WrapPanel>
+            </materialDesign:Card>
+            <materialDesign:Card Padding="32" Margin="16">
+                <Grid>
+                    <ProgressBar Name="prgbDownload" Minimum="0" Maximum="100" IsIndeterminate="False" />
+                    <TextBlock Text="{Binding ElementName=prgbDownload, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </materialDesign:Card>
+        </StackPanel>
     </Grid>
 </Window>
