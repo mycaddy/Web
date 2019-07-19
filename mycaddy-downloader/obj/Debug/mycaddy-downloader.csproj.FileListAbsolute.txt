@@ -23,3 +23,5 @@ D:\Dev\Projects\mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csproj.C
 D:\Dev\Projects\mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csproj.CopyComplete
 D:\Dev\Projects\mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.exe
 D:\Dev\Projects\mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.pdb
+D:\Dev\Projects\mycaddy\mycaddy-downloader\bin\Debug\Newtonsoft.Json.dll
+D:\Dev\Projects\mycaddy\mycaddy-downloader\bin\Debug\Newtonsoft.Json.xml

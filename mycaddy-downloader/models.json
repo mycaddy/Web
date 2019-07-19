@@ -1,0 +1,49 @@
+{
+  "models": [
+    {
+      "name": "Mycaddy WT",
+      "versions": [
+        {
+          "name": "V8",
+          "path": "WT_V8"
+        },
+        {
+          "name": "S3",
+          "path": "WT_S"
+        },
+        {
+          "name": "S2",
+          "path": "WT_S"
+        },
+        {
+          "name": "S1",
+          "path": "WT_S"
+        },
+        {
+          "name": "GOLD",
+          "path": "WT_S"
+        },
+        {
+          "name": "Light",
+          "path": "WT_S"
+        }
+      ]
+    },
+    {
+      "name": "Mycaddy Voice",
+      "versions": [
+        {
+          "name": "mycaddy",
+          "path": "JKG"
+        },
+        {
+          "name": "GPS pro",
+          "path": [
+            "Audio",
+            "System"
+          ]
+        }
+      ]
+    }
+  ]
+}

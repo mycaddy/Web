@@ -17,6 +17,7 @@ using System.ComponentModel;
 using FluentFTP;
 using System.Net;
 
+
 namespace mycaddy_downloader
 {
     /// <summary>
@@ -33,7 +34,18 @@ namespace mycaddy_downloader
             public const string FTP_PWD = "rladudtjs";
         }
 
-        
+        public class Model
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string Path { get; set; }
+        }
+        public IList<Model> Models
+        {
+            get { return Models; }
+            set { Models = value; }
+        }
+
         FtpClient ftp = new FtpClient(Constants.FTP_ADDR);
 
         public MainWindow()
