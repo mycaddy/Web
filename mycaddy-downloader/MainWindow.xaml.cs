@@ -20,6 +20,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 
 namespace mycaddy_downloader
@@ -31,6 +33,23 @@ namespace mycaddy_downloader
     /// 
     public partial class MainWindow : Window
     {
+        // Move window with body >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg,
+                int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+        public void move_window(object sender, MouseButtonEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(new WindowInteropHelper(this).Handle,
+                WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+        }
+        // Move window with body <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         static class Constants
         {
             public const string FTP_ADDR = "222.236.46.92";
@@ -50,20 +69,50 @@ namespace mycaddy_downloader
             set { Models = value; }
         }
 
-        FtpClient ftp = new FtpClient(Constants.FTP_ADDR);
+        string DOWNLOAD_PATH = "";
+        FtpClient ftp;
+
+        private void Initialize()
+        {
+            DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
+            if (!Directory.Exists(DOWNLOAD_PATH))
+            {
+                Directory.CreateDirectory(DOWNLOAD_PATH);
+            }
+
+            ftp = new FtpClient(Constants.FTP_ADDR);
+            ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
+
+        }
 
         public MainWindow()
         {
             InitializeComponent();
-            ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
+            Initialize();            
             // ReadModels();
+
         }
+
 
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
             prgbDownload.Value = 0;
             btnDownload.IsEnabled = false;
-                                 
+
+            Progress<FtpProgress> progress = new Progress<FtpProgress>(x => {
+                if (x.Progress < 0)
+                {
+                    prgbDownload.IsIndeterminate = true;
+                }
+                else
+                {
+                    prgbDownload.IsIndeterminate = false;
+                    prgbDownload.Value = x.Progress;
+                }
+            });
+
+
+
             ftp.Connect();
             if (ftp.IsConnected)
             {
@@ -100,6 +149,8 @@ namespace mycaddy_downloader
                 Thread.Sleep(10);
             }
         }
+                
+
 
         private void ReadModels()
         {

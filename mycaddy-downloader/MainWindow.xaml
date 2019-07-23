@@ -13,7 +13,18 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        WindowStyle="SingleBorderWindow">
+        Icon="mycaddy.ico"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Width="800"
+        Height="600"
+        MinWidth="400"
+        MinHeight="300"
+        MaxWidth="1024"
+        MaxHeight="768"
+        ResizeMode="CanResizeWithGrip"
+        BorderThickness="1"
+        >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,7 +35,26 @@
     </Window.Resources>
     <Grid>
         <StackPanel Orientation="Vertical">
-            <materialDesign:Card Padding="32" Margin="16">
+            <materialDesign:Card Padding="10" Margin="0, 0, 0, 10" MouseDown="move_window">
+                <DockPanel LastChildFill="False">
+                    <materialDesign:PackIcon Kind="GolfCourse" VerticalAlignment="Center" />
+                    <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" 
+                               VerticalAlignment="Center" 
+                               Margin="12,0,0,0"
+                               DockPanel.Dock="Left">MYCADDY DWONLOADER</TextBlock>
+                    <materialDesign:PopupBox
+                        DockPanel.Dock="Right"
+                        PlacementMode="BottomAndAlignRightEdges"
+                        >
+                        <ListBox>
+                            <ListBoxItem>
+                                Close
+                            </ListBoxItem>
+                        </ListBox>
+                    </materialDesign:PopupBox>
+                </DockPanel>
+            </materialDesign:Card>
+            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -34,7 +64,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">MY CADDY Downloader</TextBlock>
+                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">Select Model</TextBlock>
                     <ComboBox
                         Name="cbbModels"
                         materialDesign:HintAssist.Hint="Model"
@@ -44,12 +74,10 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         >
-                       
                     </ComboBox>
-
                 </Grid>
             </materialDesign:Card>
-            <materialDesign:Card Padding="32" Margin="16">
+            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -62,6 +90,17 @@
                     <ProgressBar Name="prgbDownload" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="0" Grid.Column="1" />
                     <TextBlock Text="{Binding ElementName=prgbDownload, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
                 </Grid>
+            </materialDesign:Card>
+            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
+                <CheckBox
+                    x:Name="MaterialDesignFilledTextFieldTextBoxEnabledComboBox"
+                    IsChecked="False"
+                    Margin="0,0,0,8"
+                    IsEnabled="False"
+                    IsManipulationEnabled="False"
+                    >
+                    Device Enabled         
+                </CheckBox>
             </materialDesign:Card>
         </StackPanel>
     </Grid>
