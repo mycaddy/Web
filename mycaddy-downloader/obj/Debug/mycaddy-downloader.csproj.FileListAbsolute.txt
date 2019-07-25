@@ -25,3 +25,5 @@ D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csproj.C
 D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.csproj.CopyComplete
 D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.exe
 D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.pdb
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\Device.Net.dll
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\Usb.Net.dll

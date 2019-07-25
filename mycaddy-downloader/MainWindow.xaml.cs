@@ -22,7 +22,10 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Windows.Threading;
 
+using mycaddy_downloader.utils;
+using System.Collections.ObjectModel;
 
 namespace mycaddy_downloader
 {
@@ -57,23 +60,34 @@ namespace mycaddy_downloader
             public const string FTP_PWD = "rladudtjs";
         }
 
-        public class Model
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public string Path { get; set; }
-        }
+        // Utils >>>>>>>>>>>>>>>>>>>>>>
+        string DOWNLOAD_PATH = "";
+        FtpClient ftp;
+        USBDetector usbDetector;
+        // <<<<<<<<<<<<<<<<<<<<<< Utils
+
+        /*    
         public IList<Model> Models
         {
             get { return Models; }
             set { Models = value; }
         }
+        */
 
-        string DOWNLOAD_PATH = "";
-        FtpClient ftp;
+        public ObservableCollection<USBDeviceInfo> usbList { get; set; }
+        public ObservableCollection<DiskDriveInfo> diskList { get; set; }
+        public ObservableCollection<MediaInfo> mediaList { get; set; }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            Initialize();
+            DataContext = this;
+        }
 
         private void Initialize()
         {
+            // FTP Init
             DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
             if (!Directory.Exists(DOWNLOAD_PATH))
             {
@@ -83,16 +97,90 @@ namespace mycaddy_downloader
             ftp = new FtpClient(Constants.FTP_ADDR);
             ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
 
+            // USB Devices init
+            usbDetector = new USBDetector();
+            usbDetector.StartWatching();
+            usbDetector.VolumeChanged += UsbDetector_VolumeChanged;
+            usbList = new ObservableCollection<USBDeviceInfo>();
+            diskList = new ObservableCollection<DiskDriveInfo>();
+            mediaList = new ObservableCollection<MediaInfo>();
+
+            dispatch_UsbList();
+            // dispatch_DiskList();
+            // dispatch_MediaList();
+
         }
 
-        public MainWindow()
+        private void UsbDetector_VolumeChanged(object sender, EventArgs e)
         {
-            InitializeComponent();
-            Initialize();            
-            // ReadModels();
+            dispatch_UsbList();
+            // dispatch_DiskList();
+            // dispatch_MediaList();
+        }
+        
+        private void dispatch_UsbList()
+        {
+            // http://wangxinliu.com/tech/program/WPF-DataBinding/
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                usbList.Clear();
+                List<USBDeviceInfo> list = usbDetector.GetUSBDeviceList("VID_03EB&PID_2403");
+                // List<USBDeviceInfo> list = usbDetector.GetUSBDeviceList();
+                foreach (var item in list)
+                {
+                    usbList.Add(item);
+                }
+            });
+
+            // Check Mycaddy device
+            bool bDetect = false;
+            string sDetectString = "Device not founded";
+            if (usbList.Count > 0)
+            {
+                bDetect = true;
+                sDetectString = "Device founded";
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                cbxDeviceEnable.IsEnabled = bDetect;
+                cbxDeviceEnable.IsChecked = bDetect;
+                cbxDeviceEnable.Content = sDetectString;
+            });
+
 
         }
 
+        private void dispatch_DiskList()
+        {
+            // http://wangxinliu.com/tech/program/WPF-DataBinding/
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                diskList.Clear();
+                List<DiskDriveInfo> list = usbDetector.GetUSBDkiskList();
+                foreach (var item in list)
+                {
+                    diskList.Add(item);
+                }
+            });
+        }
+
+        private void dispatch_MediaList()
+        {
+            // http://wangxinliu.com/tech/program/WPF-DataBinding/
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                mediaList.Clear();
+                List<MediaInfo> list = usbDetector.GetMediaList();
+                foreach (var item in list)
+                {
+                    mediaList.Add(item);
+                }
+            });
+        }
 
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
@@ -110,8 +198,7 @@ namespace mycaddy_downloader
                     prgbDownload.Value = x.Progress;
                 }
             });
-
-
+          
 
             ftp.Connect();
             if (ftp.IsConnected)
@@ -149,7 +236,6 @@ namespace mycaddy_downloader
                 Thread.Sleep(10);
             }
         }
-                
 
 
         private void ReadModels()

@@ -35,7 +35,7 @@
     </Window.Resources>
     <Grid>
         <StackPanel Orientation="Vertical">
-            <materialDesign:Card Padding="10" Margin="0, 0, 0, 10" MouseDown="move_window">
+            <materialDesign:Card Padding="10" Margin="0, 0, 0, 6" Background="#212121" MouseDown="move_window">
                 <DockPanel LastChildFill="False">
                     <materialDesign:PackIcon Kind="GolfCourse" VerticalAlignment="Center" />
                     <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" 
@@ -92,15 +92,46 @@
                 </Grid>
             </materialDesign:Card>
             <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
-                <CheckBox
-                    x:Name="MaterialDesignFilledTextFieldTextBoxEnabledComboBox"
-                    IsChecked="False"
-                    Margin="0,0,0,8"
-                    IsEnabled="False"
-                    IsManipulationEnabled="False"
-                    >
-                    Device Enabled         
-                </CheckBox>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox
+                        x:Name="cbxDeviceEnable"
+                        Margin="0,0,0,8"
+                        IsManipulationEnabled="False"
+                        IsHitTestVisible="False"
+                        Focusable="False"
+                        IsEnabled="False"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Top">
+                        No Device
+                    </CheckBox>
+                    <ListView ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding DeviceID}"
+                                    Header="DeviceID" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PnpDeviceID}"
+                                    Header="PnpDeviceID" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding Description}"
+                                    Header="Description" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding DiskName}"
+                                    Header="Description" />
+
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </materialDesign:Card>
         </StackPanel>
     </Grid>
