@@ -5,11 +5,13 @@
       "versions": [
         {
           "name": "V8",
-          "path": "WT_V8"
+          "path": "WT_V8",
+          "device_id": "VID_03EB&PID_2403"
         },
         {
           "name": "S3",
-          "path": "WT_S"
+          "path": "WT_S",
+          "paths":  "S_AUDIO, S_GOLFZONE, S"
         },
         {
           "name": "S2",
@@ -37,8 +39,8 @@
           "path": "JKG"
         },
         {
-          "name": "GPS pro",
           "path": [
+          "name": "GPS pro",
             "Audio",
             "System"
           ]

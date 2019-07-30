@@ -47,7 +47,7 @@
                         PlacementMode="BottomAndAlignRightEdges"
                         >
                         <ListBox>
-                            <ListBoxItem>
+                            <ListBoxItem Selected="ListBoxItem_Selected">
                                 Close
                             </ListBoxItem>
                         </ListBox>
