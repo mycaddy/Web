@@ -1,51 +1,21 @@
 {
   "models": [
     {
-      "name": "Mycaddy WT",
-      "versions": [
-        {
-          "name": "V8",
-          "path": "WT_V8",
-          "device_id": "VID_03EB&PID_2403"
-        },
-        {
-          "name": "S3",
-          "path": "WT_S",
-          "paths":  "S_AUDIO, S_GOLFZONE, S"
-        },
-        {
-          "name": "S2",
-          "path": "WT_S"
-        },
-        {
-          "name": "S1",
-          "path": "WT_S"
-        },
-        {
-          "name": "GOLD",
-          "path": "WT_S"
-        },
-        {
-          "name": "Light",
-          "path": "WT_S"
-        }
+      "name": "Mycaddy WT V8",
+      "zip": "WT_V8.zip",
+      "paths": [
+        { "/WT_V8/Rofs.bin": "/Rofs.bin" },
+        { "/WT_V8/V8_GOLFZONE": "/dat/" },
+        { "/WT_V8/V8_HOLEMAP": "/holemap/" },
+        { "/WT_V8/V8_DB": "/DB/" }
       ]
     },
     {
-      "name": "Mycaddy Voice",
-      "versions": [
-        {
-          "name": "mycaddy",
-          "path": "JKG"
-        },
-        {
-          "path": [
-          "name": "GPS pro",
-            "Audio",
-            "System"
-          ]
-        }
-      ]
+      "name": "Mycaddy WT S3"
+    },
+    {
+      "name": "Mycaddy WT O2"
     }
   ]
 }
+ 

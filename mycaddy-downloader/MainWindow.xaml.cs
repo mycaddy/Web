@@ -26,6 +26,8 @@ using System.Windows.Threading;
 
 using mycaddy_downloader.utils;
 using System.Collections.ObjectModel;
+using Renci.SshNet;
+using Renci.SshNet.Sftp;
 
 namespace mycaddy_downloader
 {
@@ -58,11 +60,15 @@ namespace mycaddy_downloader
             public const string FTP_ADDR = "222.236.46.92";
             public const string FTP_ID = "mycaddy";
             public const string FTP_PWD = "rladudtjs";
+            public const string SFTP_ADDR = "mycaddy.io";
+            public const string SFTP_ID = "downloader";
+            public const string SFTP_PWD = "ajB5xtXHP&7J";
         }
 
         // Utils >>>>>>>>>>>>>>>>>>>>>>
         string DOWNLOAD_PATH = "";
         FtpClient ftp;
+        SftpClient sftp;
         USBDetector usbDetector;
         // <<<<<<<<<<<<<<<<<<<<<< Utils
 
@@ -96,6 +102,8 @@ namespace mycaddy_downloader
 
             ftp = new FtpClient(Constants.FTP_ADDR);
             ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
+
+            sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
 
             // USB Devices init
             usbDetector = new USBDetector();
@@ -186,6 +194,12 @@ namespace mycaddy_downloader
 
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
+            download_sftp("./mycaddy/WT_V8.zip", "WT_V8.zip");
+           
+        }
+
+        private void download_ftp()
+        {
             prgbDownload.Value = 0;
             btnDownload.IsEnabled = false;
 
@@ -200,7 +214,7 @@ namespace mycaddy_downloader
                     prgbDownload.Value = x.Progress;
                 }
             });
-          
+
             // Error handling
             ftp.Connect();
             if (ftp.IsConnected)
@@ -217,7 +231,6 @@ namespace mycaddy_downloader
             {
                 MessageBox.Show("Not connected");
             }
-           
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -237,6 +250,37 @@ namespace mycaddy_downloader
                 (sender as BackgroundWorker).ReportProgress(i);
                 Thread.Sleep(10);
             }
+        }
+
+        private void download_sftp(string remote_path, string local_path)
+        {
+            // https://stackoverflow.com/questions/43555982/displaying-progress-of-file-upload-in-a-progressbar-with-ssh-net
+            // https://stackoverflow.com/questions/44442714/displaying-progress-of-file-download-in-a-progressbar-with-ssh-net
+
+            prgbDownload.Value = 0;
+            btnDownload.IsEnabled = false;
+
+            using (var stream = new FileStream(local_path, FileMode.Create))
+            using (sftp)
+            {
+                sftp.Connect();
+                SftpFileAttributes attributes = sftp.GetAttributes(remote_path);
+                
+                // Set progress bar maximum on foreground thread
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbDownload.Value = 0;
+                    prgbDownload.Maximum = (int)attributes.Size;
+                });
+                sftp.DownloadFile(remote_path, stream, download_sftp_progress);
+                btnDownload.IsEnabled = true;
+            }
+        }
+        private void download_sftp_progress(ulong uploaded)
+        {
+            // Update progress bar on foreground thread
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbDownload.Maximum = (int)uploaded;
+            });
         }
 
 
