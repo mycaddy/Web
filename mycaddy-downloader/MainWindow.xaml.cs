@@ -105,20 +105,22 @@ namespace mycaddy_downloader
             diskList = new ObservableCollection<DiskDriveInfo>();
             mediaList = new ObservableCollection<MediaInfo>();
 
-            dispatch_UsbList();
+            dispatch_usbList();
             // dispatch_DiskList();
             // dispatch_MediaList();
+
+            // dispatch_modelList();
 
         }
 
         private void UsbDetector_VolumeChanged(object sender, EventArgs e)
         {
-            dispatch_UsbList();
+            dispatch_usbList();
             // dispatch_DiskList();
             // dispatch_MediaList();
         }
         
-        private void dispatch_UsbList()
+        private void dispatch_usbList()
         {
             // http://wangxinliu.com/tech/program/WPF-DataBinding/
 
@@ -199,7 +201,7 @@ namespace mycaddy_downloader
                 }
             });
           
-
+            // Error handling
             ftp.Connect();
             if (ftp.IsConnected)
             {
@@ -238,7 +240,7 @@ namespace mycaddy_downloader
         }
 
 
-        private void ReadModels()
+        private void dispatch_modelList()
         {
             // 
 
@@ -260,7 +262,10 @@ namespace mycaddy_downloader
                 Console.WriteLine(o2);
             }
         }
-        
 
+        private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
