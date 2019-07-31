@@ -28,6 +28,7 @@ using mycaddy_downloader.utils;
 using System.Collections.ObjectModel;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using Ionic.Zip;
 
 namespace mycaddy_downloader
 {
@@ -66,7 +67,7 @@ namespace mycaddy_downloader
         }
 
         // Utils >>>>>>>>>>>>>>>>>>>>>>
-        string DOWNLOAD_PATH = "";
+        string DOWNLOAD_PATH = "_download";
         FtpClient ftp;
         SftpClient sftp;
         USBDetector usbDetector;
@@ -118,8 +119,15 @@ namespace mycaddy_downloader
             // dispatch_MediaList();
 
             // dispatch_modelList();
+            string path = $@"{DOWNLOAD_PATH}\ko.html";
+            webViewer.Navigate(new Uri($"file:///{path}"));
+
+           
+            // webViewer.Navigate(new Uri("http://www.wpf-tutorial.com"));
+
 
         }
+
 
         private void UsbDetector_VolumeChanged(object sender, EventArgs e)
         {
@@ -158,8 +166,6 @@ namespace mycaddy_downloader
                 cbxDeviceEnable.IsChecked = bDetect;
                 cbxDeviceEnable.Content = sDetectString;
             });
-
-
         }
 
         private void dispatch_DiskList()
@@ -194,10 +200,17 @@ namespace mycaddy_downloader
 
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
-            download_sftp("./mycaddy/WT_V8.zip", "WT_V8.zip");
-           
+            // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
+
+            string path = $@"{DOWNLOAD_PATH}\ko.html";
+            webViewer.Navigate(new Uri($"file:///{path}"));
+            Task.Run(() =>
+            {
+                download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
+            });
         }
 
+        #region download with FTP
         private void download_ftp()
         {
             prgbDownload.Value = 0;
@@ -216,6 +229,7 @@ namespace mycaddy_downloader
             });
 
             // Error handling
+            
             ftp.Connect();
             if (ftp.IsConnected)
             {
@@ -251,43 +265,112 @@ namespace mycaddy_downloader
                 Thread.Sleep(10);
             }
         }
+        #endregion
 
+        #region Download with SFTP
         private void download_sftp(string remote_path, string local_path)
         {
             // https://stackoverflow.com/questions/43555982/displaying-progress-of-file-upload-in-a-progressbar-with-ssh-net
             // https://stackoverflow.com/questions/44442714/displaying-progress-of-file-download-in-a-progressbar-with-ssh-net
 
-            prgbDownload.Value = 0;
-            btnDownload.IsEnabled = false;
-
-            using (var stream = new FileStream(local_path, FileMode.Create))
-            using (sftp)
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbDownload.Value = 0;
+                btnDownload.IsEnabled = false;
+            });
+         
+            try
             {
-                sftp.Connect();
-                SftpFileAttributes attributes = sftp.GetAttributes(remote_path);
-                
-                // Set progress bar maximum on foreground thread
+                using (var stream = new FileStream(local_path, FileMode.Create))
+                using (sftp)
+                {
+                    if (!sftp.IsConnected)
+                    {
+                        sftp.Connect();
+                    }
+                    SftpFileAttributes attributes = sftp.GetAttributes(remote_path);
+
+                    // Set progress bar maximum on foreground thread
+                    Application.Current.Dispatcher.Invoke(() => {
+                        var file_size = ByteSize.FromBytes((double)attributes.Size);
+
+                        prgbDownload.Value = 0;
+                        prgbDownload.Maximum = (int)file_size.Bytes;
+                        prgbDownloadText.Text = string.Format("{0} / {1:F1} MB", 0, file_size.MegaBytes);
+
+                    });
+                    sftp.DownloadFile(remote_path, stream, download_sftp_progress);
+                    extract_zipfile(local_path);
+
+                    Application.Current.Dispatcher.Invoke(() => {
+                        btnDownload.IsEnabled = true;
+                    });
+                }
+            }
+            catch (Exception e)
+            {
                 Application.Current.Dispatcher.Invoke(() => {
                     prgbDownload.Value = 0;
-                    prgbDownload.Maximum = (int)attributes.Size;
+                    btnDownload.IsEnabled = false;
                 });
-                sftp.DownloadFile(remote_path, stream, download_sftp_progress);
-                btnDownload.IsEnabled = true;
+                MessageBox.Show(e.Message);
             }
+           
         }
-        private void download_sftp_progress(ulong uploaded)
+        private void download_sftp_progress(ulong downloaded)
         {
             // Update progress bar on foreground thread
             Application.Current.Dispatcher.Invoke(() => {
-                prgbDownload.Maximum = (int)uploaded;
+                var downloaded_size = ByteSize.FromBytes((double)downloaded);
+                var download_size = ByteSize.FromBytes(prgbDownload.Maximum);
+                prgbDownload.Value = (int)downloaded_size.Bytes;
+                prgbDownloadText.Text = string.Format("{0:F1} / {1:F1} MB", downloaded_size.MegaBytes, download_size.MegaBytes);
             });
         }
+        #endregion
+
+        #region Extract zip file
+        private void extract_zipfile(string local_path)
+        {
+            using (ZipFile zip = ZipFile.Read(local_path))
+            {
+               
+                zip.ExtractProgress += extract_zipfile_progress;
+                
+                zip.ExtractAll(local_path.Replace(".zip",""), ExtractExistingFileAction.OverwriteSilently);
+            };
+        }
+        
+        private void extract_zipfile_progress(object sender, ExtractProgressEventArgs e)
+        {
+            Console.WriteLine(e.EventType);
+
+            Application.Current.Dispatcher.Invoke(() => {
+                int total = e.EntriesTotal;
+                int treated = e.EntriesExtracted;
+                switch(e.EventType)
+                {
+                    case ZipProgressEventType.Extracting_BeforeExtractAll:
+                        prgbDownload.Value = 0;
+                        break;
+                    case ZipProgressEventType.Extracting_AfterExtractEntry:
+                        prgbDownload.Maximum = total;
+                        prgbDownload.Value = treated;
+                        prgbDownloadText.Text = "Extracting..." + string.Format("{0:N0} / {1:N0}", treated, total);
+                        break;
+                    case ZipProgressEventType.Extracting_AfterExtractAll:
+                        prgbDownloadText.Text = "Completed";
+                        break;
+                    default:
+                        break;
+                }
+               
+            });
+        }
+        #endregion
 
 
         private void dispatch_modelList()
         {
-            // 
-
             // read JSON directly from a file
             // string path = Directory.GetCurrentDirectory();
             string configPath = $@"{Directory.GetCurrentDirectory()}\model.json";
@@ -310,6 +393,11 @@ namespace mycaddy_downloader
         private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void CbbModels_Selected(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("selected!");
         }
     }
 }

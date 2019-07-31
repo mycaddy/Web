@@ -40,6 +40,9 @@
     <Reference Include="Device.Net, Version=2.9.0.0, Culture=neutral, PublicKeyToken=7b6bc3f8fb80505e, processorArchitecture=MSIL">
       <HintPath>packages\Device.Net.2.9.0\lib\net45\Device.Net.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="FluentFTP, Version=26.0.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
       <HintPath>packages\FluentFTP.26.0.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
@@ -90,9 +93,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="utils\ByteSize.cs" />
     <Compile Include="utils\Device.cs" />
     <Compile Include="utils\USBDetector.cs" />
-    <Compile Include="utils\ZipTool.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
