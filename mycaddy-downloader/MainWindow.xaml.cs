@@ -30,6 +30,7 @@ using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using Ionic.Zip;
 
+
 namespace mycaddy_downloader
 {
     /// <summary>
@@ -69,7 +70,7 @@ namespace mycaddy_downloader
         // Utils >>>>>>>>>>>>>>>>>>>>>>
         string DOWNLOAD_PATH = "_download";
         FtpClient ftp;
-        SftpClient sftp;
+        
         USBDetector usbDetector;
         // <<<<<<<<<<<<<<<<<<<<<< Utils
 
@@ -103,8 +104,7 @@ namespace mycaddy_downloader
 
             ftp = new FtpClient(Constants.FTP_ADDR);
             ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
-
-            sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
+            
 
             // USB Devices init
             usbDetector = new USBDetector();
@@ -119,13 +119,6 @@ namespace mycaddy_downloader
             // dispatch_MediaList();
 
             // dispatch_modelList();
-            string path = $@"{DOWNLOAD_PATH}\ko.html";
-            webViewer.Navigate(new Uri($"file:///{path}"));
-
-           
-            // webViewer.Navigate(new Uri("http://www.wpf-tutorial.com"));
-
-
         }
 
 
@@ -198,12 +191,25 @@ namespace mycaddy_downloader
             });
         }
 
+        [Obsolete]
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
             // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
 
             string path = $@"{DOWNLOAD_PATH}\ko.html";
-            webViewer.Navigate(new Uri($"file:///{path}"));
+            
+            // wvc.Navigate(new Uri("file:///"+path));
+            // wvc.Navigate();
+            wvc.NavigateToLocal("/_download/ko.html");
+
+            /*
+            Uri url = wvc.BuildLocalStreamUri("MyTag", "/Minesweeper/default.html");
+            StreamUriWinRTResolver myResolver = new StreamUriWinRTResolver();
+
+            // Pass the resolver object to the navigate call.
+            webView4.NavigateToLocalStreamUri(url, myResolver);
+            */
+
             Task.Run(() =>
             {
                 download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
@@ -277,7 +283,9 @@ namespace mycaddy_downloader
                 prgbDownload.Value = 0;
                 btnDownload.IsEnabled = false;
             });
-         
+
+            SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
+
             try
             {
                 using (var stream = new FileStream(local_path, FileMode.Create))
@@ -314,7 +322,8 @@ namespace mycaddy_downloader
                 });
                 MessageBox.Show(e.Message);
             }
-           
+
+            sftp.Dispose();
         }
         private void download_sftp_progress(ulong downloaded)
         {

@@ -32,3 +32,6 @@ D:\Dev\Projects\Mycaddy\mycaddy-downloader\obj\Debug\mycaddy-downloader.pdb
 D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\DotNetZip.dll
 D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\DotNetZip.pdb
 D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\DotNetZip.xml
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\Microsoft.Toolkit.Wpf.UI.Controls.WebView.dll
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\Microsoft.Toolkit.Wpf.UI.Controls.WebView.pdb
+D:\Dev\Projects\Mycaddy\mycaddy-downloader\bin\Debug\Microsoft.Toolkit.Wpf.UI.Controls.WebView.xml
