@@ -75,9 +75,10 @@
                         />
                 </Grid>
             </materialDesign:Card>
-            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2" Background="White" Foreground="Black">
-                <Controls:WebView x:Name="wvc" HorizontalAlignment="Center" Width="926" Height="300" />
-                
+            <materialDesign:Card Padding="10" Margin="16, 8, 16, 2">
+                <StackPanel>
+                    <Controls:WebView x:Name="wvc" Height="300" VerticalAlignment="Stretch" />    
+                </StackPanel>
             </materialDesign:Card>
             <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
                 <Grid>

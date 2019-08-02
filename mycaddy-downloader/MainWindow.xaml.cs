@@ -93,6 +93,7 @@ namespace mycaddy_downloader
             DataContext = this;
         }
 
+        [Obsolete]
         private void Initialize()
         {
             // FTP Init
@@ -119,6 +120,7 @@ namespace mycaddy_downloader
             // dispatch_MediaList();
 
             // dispatch_modelList();
+            load_manual();
         }
 
 
@@ -194,21 +196,8 @@ namespace mycaddy_downloader
         [Obsolete]
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
+            load_manual();
             // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
-
-            string path = $@"{DOWNLOAD_PATH}\ko.html";
-            
-            // wvc.Navigate(new Uri("file:///"+path));
-            // wvc.Navigate();
-            wvc.NavigateToLocal("/_download/ko.html");
-
-            /*
-            Uri url = wvc.BuildLocalStreamUri("MyTag", "/Minesweeper/default.html");
-            StreamUriWinRTResolver myResolver = new StreamUriWinRTResolver();
-
-            // Pass the resolver object to the navigate call.
-            webView4.NavigateToLocalStreamUri(url, myResolver);
-            */
 
             Task.Run(() =>
             {
@@ -376,6 +365,32 @@ namespace mycaddy_downloader
             });
         }
         #endregion
+
+        [Obsolete]
+        private void load_manual()
+        {
+            load_manual("");
+        }
+        [Obsolete]
+        private void load_manual(string path)
+        {
+            wvc.NavigateToLocal("/_download/manual/WT_S.ko.html");
+            /*
+             * 
+            string path = $@"{DOWNLOAD_PATH}\ko.html";
+            
+            // wvc.Navigate(new Uri("file:///"+path));
+            // wvc.Navigate();
+            
+
+            Uri url = wvc.BuildLocalStreamUri("MyTag", "/Minesweeper/default.html");
+            StreamUriWinRTResolver myResolver = new StreamUriWinRTResolver();
+
+            // Pass the resolver object to the navigate call.
+            webView4.NavigateToLocalStreamUri(url, myResolver);
+            */
+
+        }
 
 
         private void dispatch_modelList()

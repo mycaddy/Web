@@ -21,9 +21,16 @@ h3 { font-style:italic; border-left:10px solid #eee; padding:10px 20px; margin:3
 h3 code { display:block; }
 
 /* WRAPPER */
-#wrapper { width:800px; margin:40px auto; }
+#wrapper { width:600px; margin:40px auto; }
+
+#list0 { }
+#list0 ul { list-style:none; text-align:center; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:10px 0; }
+#list0 ul li { display:inline; text-transform:uppercase; padding:0 10px; letter-spacing:2px; color: #bfe1f1;}
+#list0 ul li a { text-decoration:none; color: #bfe1f1; }
+#list0 ul li a:hover { text-decoration:underline; }
 
 /* LIST #1 */
+
 #list1 { }
 #list1 ul { list-style:none; text-align:center; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:10px 0; }
 #list1 ul li { display:inline; text-transform:uppercase; padding:0 10px; letter-spacing:10px; }
@@ -31,10 +38,10 @@ h3 code { display:block; }
 #list1 ul li a:hover { text-decoration:underline; }
 
 /* LIST #2 */
-#list2 { width:320px; }
+#list2 { }
 #list2 ol { font-style:italic; font-family:Georgia, Times, serif; font-size:24px; color:#bfe1f1;  }
 #list2 ol li { }
-#list2 ol li p { padding:8px; font-style:normal; font-family:Arial; font-size:13px; color:#eee; border-left: 1px solid #999; }
+#list2 ol li p { padding:8px; font-style:normal; font-family:Arial; font-size:16px; color:#eee; border-left: 1px solid #999; }
 #list2 ol li p em { display:block; }
 
 /* LIST #3 */
