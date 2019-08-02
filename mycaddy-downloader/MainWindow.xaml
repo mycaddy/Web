@@ -113,6 +113,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         VerticalAlignment="Top" Content="No Device"/>
+                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' Margin="10 0" Grid.Row="0" Grid.Column="0" Content="Upgrade"/>
                     <ListView ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
                         <ListView.View>
                             <GridView>

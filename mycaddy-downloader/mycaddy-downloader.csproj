@@ -96,6 +96,7 @@
     </ApplicationDefinition>
     <Compile Include="utils\ByteSize.cs" />
     <Compile Include="utils\Device.cs" />
+    <Compile Include="utils\DriveManager.cs" />
     <Compile Include="utils\USBDetector.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
