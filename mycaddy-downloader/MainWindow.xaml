@@ -53,7 +53,7 @@
                     </materialDesign:PopupBox>
                 </DockPanel>
             </materialDesign:Card>
-            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
+            <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -77,10 +77,10 @@
             </materialDesign:Card>
             <materialDesign:Card Padding="10" Margin="16, 8, 16, 2">
                 <StackPanel>
-                    <Controls:WebView x:Name="wvc" Height="300" VerticalAlignment="Stretch" />    
+                    <Controls:WebView x:Name="wvc" Height="350" VerticalAlignment="Stretch" />    
                 </StackPanel>
             </materialDesign:Card>
-            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
+            <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -94,9 +94,10 @@
                     <TextBlock x:Name="prgbDownloadText" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
                 </Grid>
             </materialDesign:Card>
-            <materialDesign:Card Padding="32" Margin="16, 8, 16, 2">
+            <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -112,8 +113,7 @@
                         IsEnabled="False"
                         Grid.Row="0"
                         Grid.Column="0"
-                        VerticalAlignment="Top" Content="No Device"/>
-                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' Margin="10 0" Grid.Row="0" Grid.Column="0" Content="Upgrade"/>
+                        VerticalAlignment="Center" Content="No Device"/>
                     <ListView ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
                         <ListView.View>
                             <GridView>
@@ -121,18 +121,14 @@
                                     DisplayMemberBinding="{Binding DeviceID}"
                                     Header="DeviceID" />
                                 <GridViewColumn
-                                    DisplayMemberBinding="{Binding PnpDeviceID}"
-                                    Header="PnpDeviceID" />
-                                <GridViewColumn
-                                    DisplayMemberBinding="{Binding Description}"
-                                    Header="Description" />
-                                <GridViewColumn
                                     DisplayMemberBinding="{Binding DiskName}"
-                                    Header="Description" />
-
+                                    Header="DiskName" />
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' IsEnabled="False" Margin="10 0" Grid.Row="1" Grid.Column="0" Content="Upgrade"/>
+                    <ProgressBar x:Name="prgbUpgrade" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="1" Grid.Column="1" />
+                    <TextBlock x:Name="prgbUpgradeText" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
                 </Grid>
             </materialDesign:Card>
         </StackPanel>

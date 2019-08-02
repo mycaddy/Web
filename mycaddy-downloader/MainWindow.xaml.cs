@@ -70,10 +70,13 @@ namespace mycaddy_downloader
         // Utils >>>>>>>>>>>>>>>>>>>>>>
         string DOWNLOAD_PATH = "_download";
         FtpClient ftp;
-        
         USBDetector usbDetector;
         // <<<<<<<<<<<<<<<<<<<<<< Utils
-
+        // Check Status >>>>>>>>>>>>>>>>>>>>>>
+        bool download_completed;
+        bool device_detected;    
+        // <<<<<<<<<<<<<<<<<<<<<< Check Status
+        
         /*    
         public IList<Model> Models
         {
@@ -97,6 +100,9 @@ namespace mycaddy_downloader
         [Obsolete]
         private void Initialize()
         {
+            download_completed = false;
+            device_detected = false;
+
             // FTP Init
             DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
             if (!Directory.Exists(DOWNLOAD_PATH))
@@ -211,6 +217,7 @@ namespace mycaddy_downloader
         {
             prgbDownload.Value = 0;
             btnDownload.IsEnabled = false;
+            download_completed = false;
 
             Progress<FtpProgress> progress = new Progress<FtpProgress>(x => {
                 if (x.Progress < 0)
@@ -243,9 +250,16 @@ namespace mycaddy_downloader
             }
         }
 
+        private void check_button_status()
+        {
+
+        }
+
+
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnDownload.IsEnabled = true;
+            
         }
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
