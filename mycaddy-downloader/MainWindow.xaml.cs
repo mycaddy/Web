@@ -29,7 +29,7 @@ using System.Collections.ObjectModel;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using Ionic.Zip;
-
+using System.Management;
 
 namespace mycaddy_downloader
 {
@@ -86,6 +86,7 @@ namespace mycaddy_downloader
         public ObservableCollection<DiskDriveInfo> diskList { get; set; }
         public ObservableCollection<MediaInfo> mediaList { get; set; }
 
+        [Obsolete]
         public MainWindow()
         {
             InitializeComponent();
@@ -392,6 +393,45 @@ namespace mycaddy_downloader
 
         }
 
+        private void format_disk(string driveLetter)
+        {
+
+            string fileSystem = "FAT";
+            bool quickFormat = false;
+            int clusterSize = 2048;
+            string label = "";
+            bool enableCompression = false;
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"select * from Win32_Volume WHERE DriveLetter = '" + driveLetter + "'");
+            foreach (ManagementObject vi in searcher.Get())
+            {
+                try
+                {
+                    var completed = false;
+                    var watcher = new ManagementOperationObserver();
+
+                    watcher.Completed += (sender, args) =>
+                    {
+                        Console.WriteLine("USB format completed " + args.Status);
+                        completed = true;
+                    };
+                    watcher.Progress += (sender, args) =>
+                    {
+                        Console.WriteLine("USB format in progress " + args.Current);
+                    };
+
+                    vi.InvokeMethod(watcher, "Format", new object[] { fileSystem, quickFormat, clusterSize, label, enableCompression });
+
+                    while (!completed) { System.Threading.Thread.Sleep(1000); }
+
+
+                }
+                catch
+                {
+
+                }
+            }
+        }
 
         private void dispatch_modelList()
         {
