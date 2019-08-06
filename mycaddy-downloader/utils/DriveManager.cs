@@ -290,8 +290,7 @@ namespace mycaddy_downloader.utils
 
 
 
-        public bool FormatUSB(string driveLetter, string fileSystem = "FAT", bool quickFormat = false,
-                                   int clusterSize = 2048, string label = "", bool enableCompression = false)
+        public bool FormatUSB(string driveLetter, string fileSystem = "FAT", bool quickFormat = false, int clusterSize = 2048, string label = "", bool enableCompression = false)
         {
             //add logic to format Usb drive
             //verify conditions for the letter format: driveLetter[0] must be letter. driveLetter[1] must be ":" and all the characters mustn't be more than 2
@@ -336,10 +335,15 @@ namespace mycaddy_downloader.utils
                     {
                         Console.WriteLine("USB format completed " + args.Status);
                         completed = true;
+                        OnFormatUSBCompleted(EventArgs.Empty);
                     };
                     watcher.Progress += (sender, args) =>
                     {
                         Console.WriteLine("USB format in progress " + args.Current);
+
+                        FormatUSBProgressEventArgs eventArgs = new FormatUSBProgressEventArgs();
+                        eventArgs.current = args.Current;
+                        OnFormatUSBProgress(eventArgs);
                     };
 
                     vi.InvokeMethod(watcher, "Format", new object[] { fileSystem, quickFormat, clusterSize, label, enableCompression });
@@ -356,5 +360,31 @@ namespace mycaddy_downloader.utils
             return true;
         }
 
+        public event EventHandler<FormatUSBProgressEventArgs> FormatUSBProgress;
+        protected virtual void OnFormatUSBProgress(FormatUSBProgressEventArgs e)
+        {
+            EventHandler<FormatUSBProgressEventArgs> handler = FormatUSBProgress;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler FormatUSBCompleted;
+        protected virtual void OnFormatUSBCompleted(EventArgs e)
+        {
+            EventHandler handler = FormatUSBCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+
     }
+    public class FormatUSBProgressEventArgs : EventArgs
+    {
+        public int current;
+    }
+
 }

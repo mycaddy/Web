@@ -165,6 +165,9 @@ namespace mycaddy_downloader
             if (usbList.Count > 0)
             {
                 device_detected = true;
+                // FOR TEST >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                download_completed = DOWNLOAD_STATUS.end;
+                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  FOR TEST
             }
             else
             {
@@ -194,10 +197,7 @@ namespace mycaddy_downloader
                 else
                 {
                     btnUpgrade.IsEnabled = false;
-                }
-
-                // for test
-                btnUpgrade.IsEnabled = true;
+                }               
 
             });            
         }
@@ -477,14 +477,48 @@ namespace mycaddy_downloader
 
                 USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
 
-                DriveManager dm = new DriveManager();
-                dm.FormatUSB(item.DiskName);
+                Task.Run(() =>
+                {
+                    format_device(item.DiskName);
+                });
+
             }
             else
             {
                 MessageBox.Show("No device!");
             }
 
+        }
+
+        private void format_device(string drive_letter)
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgradeText.Text = string.Format("Formatting...");
+                prgbUpgrade.Maximum = 100;
+                prgbUpgrade.Value = 0;
+            });
+
+
+            DriveManager dm = new DriveManager();
+            dm.FormatUSBProgress += Dm_FormatUSBProgress;
+            dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
+            dm.FormatUSB(drive_letter);
+
+        }
+
+        private void Dm_FormatUSBProgress(object sender, FormatUSBProgressEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgrade.Value = e.current;
+                prgbUpgradeText.Text = string.Format("Formatting... {0}%", e.current);
+            });
+        }
+
+        private void Dm_FormatUSBCompleted(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgradeText.Text = "Format completed!";
+            });
         }
     }
 }
