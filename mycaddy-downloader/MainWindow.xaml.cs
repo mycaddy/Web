@@ -71,12 +71,18 @@ namespace mycaddy_downloader
         string DOWNLOAD_PATH = "_download";
         FtpClient ftp;
         USBDetector usbDetector;
+
         // <<<<<<<<<<<<<<<<<<<<<< Utils
         // Check Status >>>>>>>>>>>>>>>>>>>>>>
-        bool download_completed;
-        bool device_detected;    
+        private DOWNLOAD_STATUS download_completed;
+        private bool device_detected;
         // <<<<<<<<<<<<<<<<<<<<<< Check Status
-        
+
+        private enum DOWNLOAD_STATUS
+        {
+            ini, start, end
+        }
+
         /*    
         public IList<Model> Models
         {
@@ -100,7 +106,9 @@ namespace mycaddy_downloader
         [Obsolete]
         private void Initialize()
         {
-            download_completed = false;
+            
+
+            download_completed = DOWNLOAD_STATUS.ini;
             device_detected = false;
 
             // FTP Init
@@ -127,7 +135,8 @@ namespace mycaddy_downloader
             // dispatch_MediaList();
 
             // dispatch_modelList();
-            load_manual();
+            update_ui();
+            dispatch_modelList();
         }
 
 
@@ -153,23 +162,47 @@ namespace mycaddy_downloader
                 }
             });
 
-            // Check Mycaddy device
-            bool bDetect = false;
-            string sDetectString = "Device not founded";
             if (usbList.Count > 0)
             {
-                bDetect = true;
-                sDetectString = "Device founded";
+                device_detected = true;
+            }
+            else
+            {
+                device_detected = false;
             }
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                cbxDeviceEnable.IsEnabled = bDetect;
-                cbxDeviceEnable.IsChecked = bDetect;
-                cbxDeviceEnable.Content = sDetectString;
-            });
+            update_ui();
+
         }
 
+        private void update_ui()
+        {   
+            // Check Mycaddy device 
+            string sDetectString = device_detected ? "Device founded" : "Device not founded";
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                prgbDownload.Value = 0;
+                btnDownload.IsEnabled = (download_completed != DOWNLOAD_STATUS.start) ? true : false;
+
+                cbxDeviceEnable.IsEnabled = device_detected;
+                cbxDeviceEnable.IsChecked = device_detected;
+                cbxDeviceEnable.Content = sDetectString;
+                if (download_completed == DOWNLOAD_STATUS.end && device_detected)
+                {
+                    btnUpgrade.IsEnabled = true;
+                }
+                else
+                {
+                    btnUpgrade.IsEnabled = false;
+                }
+
+                // for test
+                btnUpgrade.IsEnabled = true;
+
+            });            
+        }
+
+        #region dispatch Disk, Media List
         private void dispatch_DiskList()
         {
             // http://wangxinliu.com/tech/program/WPF-DataBinding/
@@ -199,6 +232,7 @@ namespace mycaddy_downloader
                 }
             });
         }
+        #endregion
 
         [Obsolete]
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
@@ -212,12 +246,12 @@ namespace mycaddy_downloader
             });
         }
 
-        #region download with FTP
+        #region download with FTP > incompleted
         private void download_ftp()
         {
             prgbDownload.Value = 0;
             btnDownload.IsEnabled = false;
-            download_completed = false;
+            
 
             Progress<FtpProgress> progress = new Progress<FtpProgress>(x => {
                 if (x.Progress < 0)
@@ -283,10 +317,8 @@ namespace mycaddy_downloader
             // https://stackoverflow.com/questions/43555982/displaying-progress-of-file-upload-in-a-progressbar-with-ssh-net
             // https://stackoverflow.com/questions/44442714/displaying-progress-of-file-download-in-a-progressbar-with-ssh-net
 
-            Application.Current.Dispatcher.Invoke(() => {
-                prgbDownload.Value = 0;
-                btnDownload.IsEnabled = false;
-            });
+            download_completed = DOWNLOAD_STATUS.start;
+            update_ui();
 
             SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
 
@@ -313,17 +345,14 @@ namespace mycaddy_downloader
                     sftp.DownloadFile(remote_path, stream, download_sftp_progress);
                     extract_zipfile(local_path);
 
-                    Application.Current.Dispatcher.Invoke(() => {
-                        btnDownload.IsEnabled = true;
-                    });
+                    download_completed = DOWNLOAD_STATUS.end;
+                    update_ui();
                 }
             }
             catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke(() => {
-                    prgbDownload.Value = 0;
-                    btnDownload.IsEnabled = false;
-                });
+                download_completed = DOWNLOAD_STATUS.ini;
+                update_ui();
                 MessageBox.Show(e.Message);
             }
 
@@ -407,51 +436,11 @@ namespace mycaddy_downloader
 
         }
 
-        private void format_disk(string driveLetter)
-        {
-
-            string fileSystem = "FAT";
-            bool quickFormat = false;
-            int clusterSize = 2048;
-            string label = "";
-            bool enableCompression = false;
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"select * from Win32_Volume WHERE DriveLetter = '" + driveLetter + "'");
-            foreach (ManagementObject vi in searcher.Get())
-            {
-                try
-                {
-                    var completed = false;
-                    var watcher = new ManagementOperationObserver();
-
-                    watcher.Completed += (sender, args) =>
-                    {
-                        Console.WriteLine("USB format completed " + args.Status);
-                        completed = true;
-                    };
-                    watcher.Progress += (sender, args) =>
-                    {
-                        Console.WriteLine("USB format in progress " + args.Current);
-                    };
-
-                    vi.InvokeMethod(watcher, "Format", new object[] { fileSystem, quickFormat, clusterSize, label, enableCompression });
-
-                    while (!completed) { System.Threading.Thread.Sleep(1000); }
-
-
-                }
-                catch
-                {
-
-                }
-            }
-        }
-
         private void dispatch_modelList()
         {
             // read JSON directly from a file
             // string path = Directory.GetCurrentDirectory();
-            string configPath = $@"{Directory.GetCurrentDirectory()}\model.json";
+            string configPath = $@"{DOWNLOAD_PATH}\models.json";
 
             JObject o1 = JObject.Parse(File.ReadAllText(configPath));
             Console.WriteLine(o1);
@@ -476,6 +465,26 @@ namespace mycaddy_downloader
         private void CbbModels_Selected(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("selected!");
+        }
+
+        private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
+        {
+            if (lstDevice.Items.Count > 0)
+            {
+
+                // MYCADDY Device only one can be detected
+                lstDevice.SelectAll();
+
+                USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
+
+                DriveManager dm = new DriveManager();
+                dm.FormatUSB(item.DiskName);
+            }
+            else
+            {
+                MessageBox.Show("No device!");
+            }
+
         }
     }
 }

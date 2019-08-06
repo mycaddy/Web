@@ -114,7 +114,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         VerticalAlignment="Center" Content="No Device"/>
-                    <ListView ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
+                    <ListView x:Name="lstDevice" ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn
@@ -126,7 +126,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' IsEnabled="False" Margin="10 0" Grid.Row="1" Grid.Column="0" Content="Upgrade"/>
+                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' IsEnabled="False" Margin="10 0" Grid.Row="1" Grid.Column="0" Content="Upgrade" Click="BtnUpgrade_Click"/>
                     <ProgressBar x:Name="prgbUpgrade" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="1" Grid.Column="1" />
                     <TextBlock x:Name="prgbUpgradeText" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
                 </Grid>

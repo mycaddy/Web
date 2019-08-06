@@ -291,7 +291,7 @@ namespace mycaddy_downloader.utils
 
 
         public bool FormatUSB(string driveLetter, string fileSystem = "FAT", bool quickFormat = false,
-                                   int clusterSize = 2048, string label = "USB_0000", bool enableCompression = false)
+                                   int clusterSize = 2048, string label = "", bool enableCompression = false)
         {
             //add logic to format Usb drive
             //verify conditions for the letter format: driveLetter[0] must be letter. driveLetter[1] must be ":" and all the characters mustn't be more than 2

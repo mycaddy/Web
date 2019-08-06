@@ -4,17 +4,38 @@
       "name": "Mycaddy WT V8",
       "zip": "WT_V8.zip",
       "paths": [
-        { "/WT_V8/Rofs.bin": "/Rofs.bin" },
-        { "/WT_V8/V8_GOLFZONE": "/dat/" },
-        { "/WT_V8/V8_HOLEMAP": "/holemap/" },
-        { "/WT_V8/V8_DB": "/DB/" }
+        { "/Rofs.bin": "/Rofs.bin" },
+        { "/8_GOLFZONE": "/dat/" },
+        { "/V8_HOLEMAP": "/holemap/" },
+        { "/V8_DB": "/DB/" }
       ]
     },
     {
-      "name": "Mycaddy WT S3"
+      "name": "Mycaddy WT S3",
+      "zip": [
+        { "CHA": "WT_S.CHA.zip" },
+        { "ENG": "WT_S.ENG.zip" },
+        { "JPN": "WT_S.JPN.zip" },
+        { "KOR": "WT_S.KOR.zip" }
+      ],
+      "paths": [
+        { "/S_AUDIO": "/" },
+        { "/S_GOLFZONE":  "/" }
+      ]
     },
     {
-      "name": "Mycaddy WT O2"
+      "name": "Mycaddy WT O2",
+      "zip": [
+        { "CHA": "WT_S.CHA.zip" },
+        { "ENG": "WT_S.ENG.zip" },
+        { "JPN": "WT_S.JPN.zip" },
+        { "KOR": "WT_S.KOR.zip" }
+      ],
+      "paths": [
+        { "/S_AUDIO": "/" },
+        { "/S_GOLFZONE": "/" }
+      ]
+
     }
   ]
 }
