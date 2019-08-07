@@ -68,7 +68,7 @@ namespace mycaddy_downloader
         }
 
         // Utils >>>>>>>>>>>>>>>>>>>>>>
-        string DOWNLOAD_PATH = "_download";
+        string DOWNLOAD_PATH;
         FtpClient ftp;
         USBDetector usbDetector;
 
@@ -83,17 +83,10 @@ namespace mycaddy_downloader
             ini, start, end
         }
 
-        /*    
-        public IList<Model> Models
-        {
-            get { return Models; }
-            set { Models = value; }
-        }
-        */
-
         public ObservableCollection<USBDeviceInfo> usbList { get; set; }
         public ObservableCollection<DiskDriveInfo> diskList { get; set; }
         public ObservableCollection<MediaInfo> mediaList { get; set; }
+        public ObservableCollection<ModelInfo> modelList { get; set; }
 
         [Obsolete]
         public MainWindow()
@@ -106,45 +99,54 @@ namespace mycaddy_downloader
         [Obsolete]
         private void Initialize()
         {
-            
-
             download_completed = DOWNLOAD_STATUS.ini;
             device_detected = false;
 
-            // FTP Init
             DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
             if (!Directory.Exists(DOWNLOAD_PATH))
             {
                 Directory.CreateDirectory(DOWNLOAD_PATH);
             }
 
-            ftp = new FtpClient(Constants.FTP_ADDR);
-            ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
-            
+            // Load default manual
+            download_manual();
+            load_manual("/_download/manual/Default.ko.html");
 
             // USB Devices init
             usbDetector = new USBDetector();
             usbDetector.StartWatching();
             usbDetector.VolumeChanged += UsbDetector_VolumeChanged;
             usbList = new ObservableCollection<USBDeviceInfo>();
-            diskList = new ObservableCollection<DiskDriveInfo>();
-            mediaList = new ObservableCollection<MediaInfo>();
-
             dispatch_usbList();
-            // dispatch_DiskList();
-            // dispatch_MediaList();
 
-            // dispatch_modelList();
-            update_ui();
+            // Model List
+            modelList = new ObservableCollection<ModelInfo>();
             dispatch_modelList();
-        }
 
+            update_ui();
+        }
 
         private void UsbDetector_VolumeChanged(object sender, EventArgs e)
         {
             dispatch_usbList();
-            // dispatch_DiskList();
-            // dispatch_MediaList();
+        }
+
+        private void download_manual()
+        {
+            SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
+
+            try
+            {
+                sftp.Connect();
+                download_directory_sftp(sftp, "./mycaddy/manual", $"{DOWNLOAD_PATH}/manual");
+                download_directory_sftp(sftp, "./mycaddy/config", $"{DOWNLOAD_PATH}/config");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            sftp.Dispose();
         }
         
         private void dispatch_usbList()
@@ -178,6 +180,40 @@ namespace mycaddy_downloader
 
         }
 
+        private void dispatch_modelList()
+        {
+            modelList.Clear();
+            
+            // read JSON directly from a file
+            // string path = Directory.GetCurrentDirectory();
+            string configPath = $@"{DOWNLOAD_PATH}\config\models.json";
+
+            // JObject o1 = JObject.Parse(File.ReadAllText(configPath));
+
+            List<dynamic> list = JsonConvert.DeserializeObject<List<dynamic>>(File.ReadAllText(configPath));
+
+            foreach (dynamic item in list)
+            {
+                Console.WriteLine(item);
+                ModelInfo info = new ModelInfo();
+                info.name = item.name;
+                info.id = item.id;
+                modelList.Add(info);
+            }
+
+        }
+
+        [Obsolete]
+        private void CbbModels_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ModelInfo item = (ModelInfo)(sender as ComboBox).SelectedItem;
+            string base_path = "/_download/manual";
+            // load_manual(base_path + "WT_S.ko.html");
+            string manual_path = $"{base_path}/{item.id}.ko.html";
+            load_manual(manual_path);
+        }
+
+
         private void update_ui()
         {   
             // Check Mycaddy device 
@@ -202,7 +238,18 @@ namespace mycaddy_downloader
             });            
         }
 
-        #region dispatch Disk, Media List
+        [Obsolete]
+        private void BtnDownload_Click(object sender, RoutedEventArgs e)
+        {
+            // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
+
+            Task.Run(() =>
+            {
+                download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
+            });
+        }
+
+        #region dispatch Disk, Media List > No used
         private void dispatch_DiskList()
         {
             // http://wangxinliu.com/tech/program/WPF-DataBinding/
@@ -234,24 +281,15 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        [Obsolete]
-        private void BtnDownload_Click(object sender, RoutedEventArgs e)
-        {
-            load_manual();
-            // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
-
-            Task.Run(() =>
-            {
-                download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
-            });
-        }
-
         #region download with FTP > incompleted
         private void download_ftp()
         {
             prgbDownload.Value = 0;
             btnDownload.IsEnabled = false;
-            
+
+            // FTP Init
+            ftp = new FtpClient(Constants.FTP_ADDR);
+            ftp.Credentials = new NetworkCredential(Constants.FTP_ID, Constants.FTP_PWD);
 
             Progress<FtpProgress> progress = new Progress<FtpProgress>(x => {
                 if (x.Progress < 0)
@@ -284,16 +322,9 @@ namespace mycaddy_downloader
             }
         }
 
-        private void check_button_status()
-        {
-
-        }
-
-
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnDownload.IsEnabled = true;
-            
         }
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -368,6 +399,43 @@ namespace mycaddy_downloader
                 prgbDownloadText.Text = string.Format("{0:F1} / {1:F1} MB", downloaded_size.MegaBytes, download_size.MegaBytes);
             });
         }
+
+        private void download_directory_sftp(SftpClient client, string source, string destination)
+        {
+
+            if (!Directory.Exists(destination))
+            {
+                Directory.CreateDirectory(destination);
+            }
+
+
+            var files = client.ListDirectory(source);
+            foreach (var file in files)
+            {
+                if (!file.IsDirectory && !file.IsSymbolicLink)
+                {
+                    download_file_sftp(client, file, destination);
+                }
+                else if (file.IsSymbolicLink)
+                {
+                    Console.WriteLine("Ignoring symbolic link {0}", file.FullName);
+                }
+                else if (file.Name != "." && file.Name != "..")
+                {
+                    var dir = Directory.CreateDirectory(System.IO.Path.Combine(destination, file.Name));
+                    download_directory_sftp(client, file.FullName, dir.FullName);
+                }
+            }
+        }
+
+        private static void download_file_sftp(SftpClient client, SftpFile file, string directory)
+        {
+            Console.WriteLine("Downloading {0}", file.FullName);
+            using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(directory, file.Name)))
+            {
+                client.DownloadFile(file.FullName, fileStream);
+            }
+        }
         #endregion
 
         #region Extract zip file
@@ -410,52 +478,52 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        [Obsolete]
-        private void load_manual()
+        #region Format Disk Drive
+        private void format_device(string drive_letter)
         {
-            load_manual("");
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgradeText.Text = string.Format("Formatting...");
+                prgbUpgrade.Maximum = 100;
+                prgbUpgrade.Value = 0;
+            });
+
+
+            DriveManager dm = new DriveManager();
+            dm.FormatUSBProgress += Dm_FormatUSBProgress;
+            dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
+            dm.FormatUSB(drive_letter);
+
         }
-        [Obsolete]
-        private void load_manual(string path)
+
+        private void Dm_FormatUSBProgress(object sender, FormatUSBProgressEventArgs e)
         {
-            wvc.NavigateToLocal("/_download/manual/WT_S.ko.html");
-            /*
-             * 
-            string path = $@"{DOWNLOAD_PATH}\ko.html";
-            
-            // wvc.Navigate(new Uri("file:///"+path));
-            // wvc.Navigate();
-            
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgrade.Value = e.current;
+                prgbUpgradeText.Text = string.Format("Formatting... {0}%", e.current);
+            });
+        }
 
-            Uri url = wvc.BuildLocalStreamUri("MyTag", "/Minesweeper/default.html");
-            StreamUriWinRTResolver myResolver = new StreamUriWinRTResolver();
+        private void Dm_FormatUSBCompleted(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgradeText.Text = "Format completed!";
+            });
+        }
+        #endregion
 
+        #region Load manual with Webview
+    
+        [Obsolete]
+        private void load_manual(string relative_path = "")
+        {
+            wvc.NavigateToLocal(relative_path);
             // Pass the resolver object to the navigate call.
+            /*
             webView4.NavigateToLocalStreamUri(url, myResolver);
             */
 
         }
-
-        private void dispatch_modelList()
-        {
-            // read JSON directly from a file
-            // string path = Directory.GetCurrentDirectory();
-            string configPath = $@"{DOWNLOAD_PATH}\models.json";
-
-            JObject o1 = JObject.Parse(File.ReadAllText(configPath));
-            Console.WriteLine(o1);
-            foreach(var item in o1)
-            {
-                
-            }
-
-            using (StreamReader file = File.OpenText(configPath))
-            using (JsonTextReader reader = new JsonTextReader(file))
-            {
-                JObject o2 = (JObject)JToken.ReadFrom(reader);
-                Console.WriteLine(o2);
-            }
-        }
+        #endregion
 
         private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
         {
@@ -489,36 +557,16 @@ namespace mycaddy_downloader
             }
 
         }
-
-        private void format_device(string drive_letter)
-        {
-            Application.Current.Dispatcher.Invoke(() => {
-                prgbUpgradeText.Text = string.Format("Formatting...");
-                prgbUpgrade.Maximum = 100;
-                prgbUpgrade.Value = 0;
-            });
-
-
-            DriveManager dm = new DriveManager();
-            dm.FormatUSBProgress += Dm_FormatUSBProgress;
-            dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
-            dm.FormatUSB(drive_letter);
-
-        }
-
-        private void Dm_FormatUSBProgress(object sender, FormatUSBProgressEventArgs e)
-        {
-            Application.Current.Dispatcher.Invoke(() => {
-                prgbUpgrade.Value = e.current;
-                prgbUpgradeText.Text = string.Format("Formatting... {0}%", e.current);
-            });
-        }
-
-        private void Dm_FormatUSBCompleted(object sender, EventArgs e)
-        {
-            Application.Current.Dispatcher.Invoke(() => {
-                prgbUpgradeText.Text = "Format completed!";
-            });
-        }
     }
+
+    public class ModelInfo
+    {
+        public string name { get; set; }
+        public string id { get; set; }
+        public Dictionary<string, string> zip { get; set; }
+        public Dictionary<string, string> paths { get; set; }
+       
+
+    }
+
 }

@@ -55,24 +55,53 @@
             </materialDesign:Card>
             <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
                 <Grid>
+                    <Grid.Resources >
+                        <Style TargetType="Border" >
+                            <Setter Property="Padding" Value="5,5,5,5" />
+                        </Style>
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="240" />
+                        <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="180" />
                     </Grid.ColumnDefinitions>
-
-                    <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"><Run Text="Select Model"/></TextBlock>
-                    <ComboBox
+                    <Border Grid.Row="0" Grid.Column="0">
+                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center"><Run Text="Select Model"/></TextBlock>
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="1">
+                        <ComboBox
                         x:Name="cbbModels"
                         materialDesign:HintAssist.Hint="Model"
-                        IsEditable="True"
+                        IsEditable="False"
                         materialDesign:HintAssist.HintOpacity=".26"
-                        ItemsSource="{Binding Models}"
-                        Grid.Row="0"
-                        Grid.Column="1"
+                        FontSize="20"
+                        ItemsSource="{Binding modelList}"
+                        DisplayMemberPath="name"
+                        SelectedValuePath="id"
+                        SelectedValue="{Binding Path=ModelInfo}"
+                        SelectionChanged="CbbModels_SelectionChanged"
+                        Padding="2"
                         />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="2">
+                        <ComboBox
+                        x:Name="cbbLanguage"
+                        materialDesign:HintAssist.Hint="Language"
+                        IsEditable="False"
+                        materialDesign:HintAssist.HintOpacity=".26"
+                        FontSize="20"
+                        Padding="2"
+                        ItemsSource="{Binding languageList}"
+                        DisplayMemberPath="name"
+                        SelectedValuePath="id"
+                        SelectedValue="{Binding Path=ModelInfo}"
+                        SelectionChanged="CbbModels_SelectionChanged"
+                        />
+                    </Border>
+
                 </Grid>
             </materialDesign:Card>
             <materialDesign:Card Padding="10" Margin="16, 8, 16, 2">
