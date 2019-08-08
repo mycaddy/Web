@@ -8,17 +8,21 @@ using System.Threading;
 using System.ComponentModel;
 using FluentFTP;
 using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 using mycaddy_downloader.utils;
 using System.Collections.ObjectModel;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using Ionic.Zip;
+using System.Linq;
 
 namespace mycaddy_downloader
 {
@@ -76,6 +80,7 @@ namespace mycaddy_downloader
         public ObservableCollection<DiskDriveInfo> diskList { get; set; }
         public ObservableCollection<MediaInfo> mediaList { get; set; }
         public ObservableCollection<ModelInfo> modelList { get; set; }
+        public ObservableCollection<LanguageInfo> languageList { get; set; }
 
         [Obsolete]
         public MainWindow()
@@ -111,6 +116,9 @@ namespace mycaddy_downloader
             // Model List
             modelList = new ObservableCollection<ModelInfo>();
             dispatch_modelList();
+
+            // Language List
+            languageList = new ObservableCollection<LanguageInfo>();
 
             update_ui();
         }
@@ -188,16 +196,62 @@ namespace mycaddy_downloader
                 info.name = item.name;
                 info.id = item.id;
 
-                // info.paths = item.paths.ToObject<Dictionary<string, string>>();
-                // var paths = (JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(item.paths)).ToDictionary(x => x.Key, x => x.Value);
-                // var dic = paths.ToDictionary(x => x.Key, x => x.Value);
-                //Dictionary<string, string> paths = JsonConvert.DeserializeObject<Dictionary<string, string>>(
-
-                var paths = item.paths;
-                //info.paths = paths;                
-
+                Dictionary<string, string> zips = new Dictionary<string, string>();
+                foreach (JObject content in item.zip.Children<JObject>())
+                {
+                    foreach (JProperty prop in content.Properties())
+                    {
+                        Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
+                        zips.Add(prop.Name, content[prop.Name].ToString());
+                    }
+                }
+                Dictionary<string, string> paths = new Dictionary<string, string>();
+                foreach (JObject content in item.paths.Children<JObject>())
+                {
+                    foreach (JProperty prop in content.Properties())
+                    {
+                        Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
+                        paths.Add(prop.Name, content[prop.Name].ToString());
+                    }
+                }
+                                             
+                info.zip = zips;
+                info.paths = paths;
                 modelList.Add(info);
             }
+
+        }
+
+        private void dispatch_languageList(ModelInfo model)
+        {
+            languageList.Clear();
+
+            foreach(var lan in model.zip)
+            {
+                LanguageInfo info = new LanguageInfo();
+                info.code = lan.Key;
+                info.file = lan.Value;
+                switch(info.code)
+                {
+                    case "CHA":
+                        info.name = "Chainese";
+                        break;
+                    case "ENG":
+                        info.name = "English";
+                        break;
+                    case "KOR":
+                        info.name = "Korean";
+                        break;
+                    case "JPN":
+                        info.name = "Japanese";
+                        break;
+                    default:
+                        info.name = "ALL";
+                        break;
+                }
+                languageList.Add(info);
+            }
+
 
         }
 
@@ -205,13 +259,17 @@ namespace mycaddy_downloader
         private void CbbModels_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ModelInfo item = (ModelInfo)(sender as ComboBox).SelectedItem;
+            dispatch_languageList(item);
+
             string base_path = "/_download/manual";
             // load_manual(base_path + "WT_S.ko.html");
             string manual_path = $"{base_path}/{item.id}.ko.html";
             load_manual(manual_path);
         }
+        private void CbbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
-
+        }
         private void update_ui()
         {   
             // Check Mycaddy device 
@@ -245,6 +303,35 @@ namespace mycaddy_downloader
             {
                 download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
             });
+        }
+
+        [Obsolete]
+        private void BtnDownload_Click2(object sender, RoutedEventArgs e)
+        {
+
+            string download_file = "";
+
+            Application.Current.Dispatcher.Invoke(() => {
+                if (cbbLanguage.SelectedItem != null)
+                {
+                    LanguageInfo item = (LanguageInfo)cbbLanguage.SelectedItem;
+                    download_file = item.file;
+                }
+            });
+
+            if (download_file != "")
+            {
+                Task.Run(() =>
+                {
+                    // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
+                    // download_sftp($"./mycaddy/{download_file}", $@"{DOWNLOAD_PATH}\{download_file}");
+                    download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
+                });
+            }
+            else
+            {
+                MessageBox.Show("Select Language");
+            }
         }
 
         #region dispatch Disk, Media List > No used
@@ -563,8 +650,13 @@ namespace mycaddy_downloader
         public string id { get; set; }
         public Dictionary<string, string> zip { get; set; }
         public Dictionary<string, string> paths { get; set; }
-       
+    }
 
+    public class LanguageInfo
+    {
+        public string name { get; set; }
+        public string code { get; set; }
+        public string file { get; set; }
     }
 
 }

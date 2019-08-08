@@ -97,8 +97,8 @@
                         ItemsSource="{Binding languageList}"
                         DisplayMemberPath="name"
                         SelectedValuePath="id"
-                        SelectedValue="{Binding Path=ModelInfo}"
-                        SelectionChanged="CbbModels_SelectionChanged"
+                        SelectedValue="{Binding Path=Language}"
+                        SelectionChanged="CbbLanguage_SelectionChanged"
                         />
                     </Border>
 
