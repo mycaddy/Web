@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Threading;
 using System.ComponentModel;
 using FluentFTP;
 using System.Net;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using System.Windows.Threading;
 
 using mycaddy_downloader.utils;
 using System.Collections.ObjectModel;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using Ionic.Zip;
-using System.Management;
 
 namespace mycaddy_downloader
 {
@@ -198,6 +187,15 @@ namespace mycaddy_downloader
                 ModelInfo info = new ModelInfo();
                 info.name = item.name;
                 info.id = item.id;
+
+                // info.paths = item.paths.ToObject<Dictionary<string, string>>();
+                // var paths = (JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<string, string>>>(item.paths)).ToDictionary(x => x.Key, x => x.Value);
+                // var dic = paths.ToDictionary(x => x.Key, x => x.Value);
+                //Dictionary<string, string> paths = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+
+                var paths = item.paths;
+                //info.paths = paths;                
+
                 modelList.Add(info);
             }
 
