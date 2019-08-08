@@ -23,6 +23,7 @@ using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using Ionic.Zip;
 using System.Linq;
+using System.Globalization;
 
 namespace mycaddy_downloader
 {
@@ -229,25 +230,25 @@ namespace mycaddy_downloader
             foreach(var lan in model.zip)
             {
                 LanguageInfo info = new LanguageInfo();
-                info.code = lan.Key;
+                info.id = lan.Key;
                 info.file = lan.Value;
-                switch(info.code)
+
+                if (info.id == "ALL")
                 {
-                    case "CHA":
-                        info.name = "Chainese";
-                        break;
-                    case "ENG":
-                        info.name = "English";
-                        break;
-                    case "KOR":
-                        info.name = "Korean";
-                        break;
-                    case "JPN":
-                        info.name = "Japanese";
-                        break;
-                    default:
-                        info.name = "ALL";
-                        break;
+                    info.name = "ALL";
+                }
+                else
+                {
+                    try
+                    {
+                        RegionInfo lang = new RegionInfo(info.id);
+                        info.name = lang.DisplayName;
+                    }
+                    catch (ArgumentException argEx)
+                    {
+                        // MessageBox.Show(argEx.Message);
+                        info.name = "Error ISO_3166-1_alpha-2";
+                    }
                 }
                 languageList.Add(info);
             }
@@ -297,35 +298,22 @@ namespace mycaddy_downloader
         [Obsolete]
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
-            // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
-
-            Task.Run(() =>
-            {
-                download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
-            });
-        }
-
-        [Obsolete]
-        private void BtnDownload_Click2(object sender, RoutedEventArgs e)
-        {
 
             string download_file = "";
 
-            Application.Current.Dispatcher.Invoke(() => {
-                if (cbbLanguage.SelectedItem != null)
-                {
-                    LanguageInfo item = (LanguageInfo)cbbLanguage.SelectedItem;
-                    download_file = item.file;
-                }
-            });
+            if (cbbLanguage.SelectedItem != null)
+            {
+                LanguageInfo item = (LanguageInfo)cbbLanguage.SelectedItem;
+                download_file = item.file;
+            }
 
             if (download_file != "")
             {
                 Task.Run(() =>
                 {
                     // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
-                    // download_sftp($"./mycaddy/{download_file}", $@"{DOWNLOAD_PATH}\{download_file}");
-                    download_sftp("./mycaddy/WT_V8.zip", $"{DOWNLOAD_PATH}/WT_V8.zip");
+                    download_sftp($"./mycaddy/{download_file}", $@"{DOWNLOAD_PATH}/{download_file}");
+
                 });
             }
             else
@@ -335,7 +323,7 @@ namespace mycaddy_downloader
         }
 
         #region dispatch Disk, Media List > No used
-        private void dispatch_DiskList()
+            private void dispatch_DiskList()
         {
             // http://wangxinliu.com/tech/program/WPF-DataBinding/
 
@@ -654,8 +642,8 @@ namespace mycaddy_downloader
 
     public class LanguageInfo
     {
+        public string id { get; set; }
         public string name { get; set; }
-        public string code { get; set; }
         public string file { get; set; }
     }
 

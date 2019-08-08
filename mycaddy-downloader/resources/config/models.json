@@ -16,10 +16,10 @@
     "name": "Mycaddy WT S Series",
     "id":  "WT_S3",
     "zip": [
-      { "CHA": "WT_S.CHA.zip" },
-      { "ENG": "WT_S.ENG.zip" },
-      { "JPN": "WT_S.JPN.zip" },
-      { "KOR": "WT_S.KOR.zip" }
+      { "CN": "WT_S.CHA.zip" },
+      { "US": "WT_S.ENG.zip" },
+      { "JP": "WT_S.JPN.zip" },
+      { "KR": "WT_S.KOR.zip" }
     ],
     "paths": [
       { "/S_AUDIO": "/" },
@@ -30,10 +30,10 @@
     "name": "Mycaddy O2",
     "id": "WT_O2",
     "zip": [
-      { "CHA": "WT_S.CHA.zip" },
-      { "ENG": "WT_S.ENG.zip" },
-      { "JPN": "WT_S.JPN.zip" },
-      { "KOR": "WT_S.KOR.zip" }
+      { "CN": "WT_S.CHA.zip" },
+      { "US": "WT_S.ENG.zip" },
+      { "JP": "WT_S.JPN.zip" },
+      { "KR": "WT_S.KOR.zip" }
     ],
     "paths": [
       { "/S_AUDIO": "/" },
