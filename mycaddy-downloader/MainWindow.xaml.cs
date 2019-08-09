@@ -68,7 +68,7 @@ namespace mycaddy_downloader
 
         // <<<<<<<<<<<<<<<<<<<<<< Utils
         // Check Status >>>>>>>>>>>>>>>>>>>>>>
-        private DOWNLOAD_STATUS download_completed;
+        private DOWNLOAD_STATUS download_status;
         private bool device_detected;
         // <<<<<<<<<<<<<<<<<<<<<< Check Status
 
@@ -94,7 +94,7 @@ namespace mycaddy_downloader
         [Obsolete]
         private void Initialize()
         {
-            download_completed = DOWNLOAD_STATUS.ini;
+            download_status = DOWNLOAD_STATUS.ini;
             device_detected = false;
 
             DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
@@ -166,7 +166,7 @@ namespace mycaddy_downloader
             {
                 device_detected = true;
                 // FOR TEST >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                download_completed = DOWNLOAD_STATUS.end;
+                download_status = DOWNLOAD_STATUS.end;
                 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  FOR TEST
             }
             else
@@ -259,6 +259,9 @@ namespace mycaddy_downloader
         [Obsolete]
         private void CbbModels_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            download_status = DOWNLOAD_STATUS.ini;
+            update_ui();
+
             ModelInfo item = (ModelInfo)(sender as ComboBox).SelectedItem;
             dispatch_languageList(item);
 
@@ -266,6 +269,10 @@ namespace mycaddy_downloader
             // load_manual(base_path + "WT_S.ko.html");
             string manual_path = $"{base_path}/{item.id}.ko.html";
             load_manual(manual_path);
+
+
+
+            
         }
         private void CbbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -278,12 +285,25 @@ namespace mycaddy_downloader
             Application.Current.Dispatcher.Invoke(() =>
             {
                 prgbDownload.Value = 0;
-                btnDownload.IsEnabled = (download_completed != DOWNLOAD_STATUS.start) ? true : false;
+
+                switch(download_status)
+                {
+                    case DOWNLOAD_STATUS.ini:
+                        prgbDownloadText.Text = "";
+                        btnDownload.IsEnabled = true;
+                        break;
+                    case DOWNLOAD_STATUS.start:
+                        btnDownload.IsEnabled = false;
+                        break;
+                    default:
+                        btnDownload.IsEnabled = true;
+                        break;
+                }
 
                 cbxDeviceEnable.IsEnabled = device_detected;
                 cbxDeviceEnable.IsChecked = device_detected;
                 cbxDeviceEnable.Content = sDetectString;
-                if (download_completed == DOWNLOAD_STATUS.end && device_detected)
+                if (download_status == DOWNLOAD_STATUS.end && device_detected)
                 {
                     btnUpgrade.IsEnabled = true;
                 }
@@ -421,7 +441,7 @@ namespace mycaddy_downloader
             // https://stackoverflow.com/questions/43555982/displaying-progress-of-file-upload-in-a-progressbar-with-ssh-net
             // https://stackoverflow.com/questions/44442714/displaying-progress-of-file-download-in-a-progressbar-with-ssh-net
 
-            download_completed = DOWNLOAD_STATUS.start;
+            download_status = DOWNLOAD_STATUS.start;
             update_ui();
 
             SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
@@ -449,13 +469,13 @@ namespace mycaddy_downloader
                     sftp.DownloadFile(remote_path, stream, download_sftp_progress);
                     extract_zipfile(local_path);
 
-                    download_completed = DOWNLOAD_STATUS.end;
+                    download_status = DOWNLOAD_STATUS.end;
                     update_ui();
                 }
             }
             catch (Exception e)
             {
-                download_completed = DOWNLOAD_STATUS.ini;
+                download_status = DOWNLOAD_STATUS.ini;
                 update_ui();
                 MessageBox.Show(e.Message);
             }
@@ -525,7 +545,7 @@ namespace mycaddy_downloader
         
         private void extract_zipfile_progress(object sender, ExtractProgressEventArgs e)
         {
-            Console.WriteLine(e.EventType);
+            // Console.WriteLine(e.EventType);
 
             Application.Current.Dispatcher.Invoke(() => {
                 int total = e.EntriesTotal;
@@ -560,7 +580,6 @@ namespace mycaddy_downloader
                 prgbUpgrade.Value = 0;
             });
 
-
             DriveManager dm = new DriveManager();
             dm.FormatUSBProgress += Dm_FormatUSBProgress;
             dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
@@ -584,8 +603,72 @@ namespace mycaddy_downloader
         }
         #endregion
 
+        private void upgrade_device()
+        {
+            if (cbbModels.SelectedItem != null)
+            {
+                ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
+                foreach(var item in model.paths)
+                {
+                    Console.WriteLine($"{item.Key}:{item.Value}");
+                }
+            
+            }
+            else
+            {
+                MessageBox.Show("Select Model and Langauge");
+            }
+            
+        }
+
+        private void upgrade_device(string source_path, string target_path)
+        {
+            DirectoryInfo source = new DirectoryInfo(source_path);
+            DirectoryInfo target = new DirectoryInfo(target_path);
+            int total = source.GetFiles("*.*", SearchOption.AllDirectories).Length;
+        }
+        
+        private void directory_copy(string source_path, string target_path, bool copy_sub)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(source_path);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + source_path);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(target_path))
+            {
+                Directory.CreateDirectory(target_path);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(target_path, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copy_sub)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(target_path, subdir.Name);
+                    directory_copy(subdir.FullName, temppath, copy_sub);
+                }
+            }
+        }
+
+
         #region Load manual with Webview
-    
+
         [Obsolete]
         private void load_manual(string relative_path = "")
         {
@@ -610,23 +693,29 @@ namespace mycaddy_downloader
 
         private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
         {
-            if (lstDevice.Items.Count > 0)
+          
+            if (lstDevice.Items.Count == 1)
             {
-
-                // MYCADDY Device only one can be detected
                 lstDevice.SelectAll();
+            }
+
+            if (lstDevice.SelectedItem != null)
+            {
 
                 USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
 
-                Task.Run(() =>
+                Console.WriteLine(item.DiskName);
+
+                var task = Task.Run(() =>
                 {
                     format_device(item.DiskName);
                 });
-
+                
+                // upgrade_device();
             }
             else
             {
-                MessageBox.Show("No device!");
+                MessageBox.Show("Select device!");
             }
 
         }

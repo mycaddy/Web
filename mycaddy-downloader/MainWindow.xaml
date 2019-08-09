@@ -18,11 +18,11 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Width="1024"
-        Height="768"
+        Height="740"
         MinWidth="400"
         MinHeight="300"
         MaxWidth="1024"
-        MaxHeight="768"
+        MaxHeight="800"
         ResizeMode="CanResizeWithGrip"
         BorderThickness="1"
         >
@@ -104,7 +104,7 @@
             </materialDesign:Card>
             <materialDesign:Card Padding="10" Margin="16, 8, 16, 2">
                 <StackPanel>
-                    <Controls:WebView x:Name="wvc" Height="350" VerticalAlignment="Stretch" />    
+                    <Controls:WebView x:Name="wvc" Height="320" VerticalAlignment="Stretch" />    
                 </StackPanel>
             </materialDesign:Card>
             <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
