@@ -114,11 +114,25 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="120" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnDownload" Style='{StaticResource MaterialDesignRaisedAccentButton}' Margin="10 0" Click="BtnDownload_Click" Grid.Row="0" Grid.Column="0" Content="Download"/>
-                    <ProgressBar x:Name="prgbDownload" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="0" Grid.Column="1" />
-                    <TextBlock x:Name="prgbDownloadText" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
+                    <CheckBox
+                        x:Name="cbxAutoUpgrade"
+                        Margin="0,0,0,8"
+                        Focusable="False"
+                        IsEnabled="True"
+                        IsChecked="True"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" Content="Auto upgrade"/>
+                    <ProgressBar x:Name="prgbDownload" Minimum="0" Maximum="100" Foreground="Black" Background="#9575cd" IsIndeterminate="False" Grid.Row="0" Grid.Column="2" />
+                    <TextBlock 
+                        x:Name="prgbDownloadText" FontSize="16px" Text="" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                        Grid.Row="0" Grid.Column="2" />
                 </Grid>
             </materialDesign:Card>
             <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
@@ -129,6 +143,7 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <CheckBox
@@ -138,10 +153,12 @@
                         IsHitTestVisible="False"
                         Focusable="False"
                         IsEnabled="False"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
                         Grid.Row="0"
                         Grid.Column="0"
-                        VerticalAlignment="Center" Content="No Device"/>
-                    <ListView x:Name="lstDevice" ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">
+                        Content="No Device"/>
+                    <ListView x:Name="lstDevice" ItemsSource="{Binding usbList}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn
@@ -154,8 +171,17 @@
                         </ListView.View>
                     </ListView>
                     <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' IsEnabled="False" Margin="10 0" Grid.Row="1" Grid.Column="0" Content="Upgrade" Click="BtnUpgrade_Click"/>
-                    <ProgressBar x:Name="prgbUpgrade" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="1" Grid.Column="1" />
-                    <TextBlock x:Name="prgbUpgradeText" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
+                    <CheckBox
+                        x:Name="cbxUpgradeFormat"
+                        Margin="0,0,0,8"
+                        Focusable="False"
+                        IsEnabled="True"
+                        IsChecked="True"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="Center" Content="Format First"/>
+                    <ProgressBar x:Name="prgbUpgrade" Foreground="Black" Background="DarkGray" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="1" Grid.Column="2" />
+                    <TextBlock x:Name="prgbUpgradeText" Foreground="White" FontSize="16px" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
                 </Grid>
             </materialDesign:Card>
         </StackPanel>

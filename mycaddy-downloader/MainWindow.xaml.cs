@@ -105,7 +105,7 @@ namespace mycaddy_downloader
 
             // Load default manual
             download_manual();
-            load_manual("/_download/manual/Default.ko.html");
+            load_manual("/_download/manual/Default.kr.html");
 
             // USB Devices init
             usbDetector = new USBDetector();
@@ -166,7 +166,7 @@ namespace mycaddy_downloader
             {
                 device_detected = true;
                 // FOR TEST >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                download_status = DOWNLOAD_STATUS.end;
+                // download_status = DOWNLOAD_STATUS.end;
                 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  FOR TEST
             }
             else
@@ -180,45 +180,52 @@ namespace mycaddy_downloader
 
         private void dispatch_modelList()
         {
-            modelList.Clear();
-            
-            // read JSON directly from a file
-            // string path = Directory.GetCurrentDirectory();
-            string configPath = $@"{DOWNLOAD_PATH}\config\models.json";
-
-            // JObject o1 = JObject.Parse(File.ReadAllText(configPath));
-
-            List<dynamic> list = JsonConvert.DeserializeObject<List<dynamic>>(File.ReadAllText(configPath));
-
-            foreach (dynamic item in list)
+            try
             {
-                Console.WriteLine(item);
-                ModelInfo info = new ModelInfo();
-                info.name = item.name;
-                info.id = item.id;
+                modelList.Clear();
 
-                Dictionary<string, string> zips = new Dictionary<string, string>();
-                foreach (JObject content in item.zip.Children<JObject>())
+                // read JSON directly from a file
+                // string path = Directory.GetCurrentDirectory();
+                string configPath = $@"{DOWNLOAD_PATH}\config\models.json";
+
+                // JObject o1 = JObject.Parse(File.ReadAllText(configPath));
+
+                List<dynamic> list = JsonConvert.DeserializeObject<List<dynamic>>(File.ReadAllText(configPath));
+
+                foreach (dynamic item in list)
                 {
-                    foreach (JProperty prop in content.Properties())
+                    Console.WriteLine(item);
+                    ModelInfo info = new ModelInfo();
+                    info.name = item.name;
+                    info.id = item.id;
+
+                    Dictionary<string, string> zips = new Dictionary<string, string>();
+                    foreach (JObject content in item.zip.Children<JObject>())
                     {
-                        Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
-                        zips.Add(prop.Name, content[prop.Name].ToString());
+                        foreach (JProperty prop in content.Properties())
+                        {
+                            Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
+                            zips.Add(prop.Name, content[prop.Name].ToString());
+                        }
                     }
-                }
-                Dictionary<string, string> paths = new Dictionary<string, string>();
-                foreach (JObject content in item.paths.Children<JObject>())
-                {
-                    foreach (JProperty prop in content.Properties())
+                    Dictionary<string, string> paths = new Dictionary<string, string>();
+                    foreach (JObject content in item.paths.Children<JObject>())
                     {
-                        Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
-                        paths.Add(prop.Name, content[prop.Name].ToString());
+                        foreach (JProperty prop in content.Properties())
+                        {
+                            Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
+                            paths.Add(prop.Name, content[prop.Name].ToString());
+                        }
                     }
+
+                    info.zip = zips;
+                    info.paths = paths;
+                    modelList.Add(info);
                 }
-                                             
-                info.zip = zips;
-                info.paths = paths;
-                modelList.Add(info);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
 
         }
@@ -266,12 +273,9 @@ namespace mycaddy_downloader
             dispatch_languageList(item);
 
             string base_path = "/_download/manual";
-            // load_manual(base_path + "WT_S.ko.html");
-            string manual_path = $"{base_path}/{item.id}.ko.html";
+            // load_manual(base_path + "WT_S.kr.html");
+            string manual_path = $"{base_path}/{item.id}.kr.html";
             load_manual(manual_path);
-
-
-
             
         }
         private void CbbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -284,13 +288,12 @@ namespace mycaddy_downloader
             string sDetectString = device_detected ? "Device founded" : "Device not founded";
             Application.Current.Dispatcher.Invoke(() =>
             {
-                prgbDownload.Value = 0;
-
                 switch(download_status)
                 {
                     case DOWNLOAD_STATUS.ini:
                         prgbDownloadText.Text = "";
                         btnDownload.IsEnabled = true;
+                        prgbDownload.Value = 0;
                         break;
                     case DOWNLOAD_STATUS.start:
                         btnDownload.IsEnabled = false;
@@ -303,14 +306,24 @@ namespace mycaddy_downloader
                 cbxDeviceEnable.IsEnabled = device_detected;
                 cbxDeviceEnable.IsChecked = device_detected;
                 cbxDeviceEnable.Content = sDetectString;
-                if (download_status == DOWNLOAD_STATUS.end && device_detected)
+                cbxAutoUpgrade.IsChecked = device_detected;
+                cbxUpgradeFormat.IsEnabled = device_detected;
+
+                if (download_status == DOWNLOAD_STATUS.end && device_detected == true)
                 {
                     btnUpgrade.IsEnabled = true;
                 }
                 else
                 {
                     btnUpgrade.IsEnabled = false;
-                }               
+                }
+                
+                if(device_detected == false)
+                {
+                    prgbUpgrade.Value = 0;
+                    prgbUpgradeText.Text = "";
+                }
+
 
             });            
         }
@@ -320,7 +333,7 @@ namespace mycaddy_downloader
         {
 
             string download_file = "";
-
+            
             if (cbbLanguage.SelectedItem != null)
             {
                 LanguageInfo item = (LanguageInfo)cbbLanguage.SelectedItem;
@@ -329,12 +342,7 @@ namespace mycaddy_downloader
 
             if (download_file != "")
             {
-                Task.Run(() =>
-                {
-                    // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
-                    download_sftp($"./mycaddy/{download_file}", $@"{DOWNLOAD_PATH}/{download_file}");
-
-                });
+                download_process(download_file);
             }
             else
             {
@@ -342,8 +350,24 @@ namespace mycaddy_downloader
             }
         }
 
+        private async void download_process(string download_file)
+        {
+            bool auto_upgrade = cbxAutoUpgrade.IsChecked ?? true;
+            var download_task = Task.Run(() =>
+            {
+                // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
+                download_sftp($"./mycaddy/{download_file}", $@"{DOWNLOAD_PATH}/{download_file}");
+            });
+            await download_task;
+            if (auto_upgrade)
+            {
+                upgrade_process();
+            }
+
+        }
+
         #region dispatch Disk, Media List > No used
-            private void dispatch_DiskList()
+        private void dispatch_DiskList()
         {
             // http://wangxinliu.com/tech/program/WPF-DataBinding/
 
@@ -374,7 +398,7 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        #region download with FTP > incompleted
+        #region download_ftp(): download with FTP > incompleted
         private void download_ftp()
         {
             prgbDownload.Value = 0;
@@ -417,7 +441,7 @@ namespace mycaddy_downloader
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            btnDownload.IsEnabled = true;
+            //btnDownload.IsEnabled = true;
         }
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -435,7 +459,7 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        #region Download with SFTP
+        #region download_sftp(): Download with SFTP
         private void download_sftp(string remote_path, string local_path)
         {
             // https://stackoverflow.com/questions/43555982/displaying-progress-of-file-upload-in-a-progressbar-with-ssh-net
@@ -531,7 +555,7 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        #region Extract zip file
+        #region extract_zipfile(): Extract zip file
         private void extract_zipfile(string local_path)
         {
             using (ZipFile zip = ZipFile.Read(local_path))
@@ -571,7 +595,13 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        #region Format Disk Drive
+        private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
+        {
+            upgrade_process();
+
+        }
+
+        #region format_device(): Format Disk Drive
         private void format_device(string drive_letter)
         {
             Application.Current.Dispatcher.Invoke(() => {
@@ -580,10 +610,21 @@ namespace mycaddy_downloader
                 prgbUpgrade.Value = 0;
             });
 
-            DriveManager dm = new DriveManager();
-            dm.FormatUSBProgress += Dm_FormatUSBProgress;
-            dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
-            dm.FormatUSB(drive_letter);
+            try
+            {
+                DriveManager dm = new DriveManager();
+                dm.FormatUSBProgress += Dm_FormatUSBProgress;
+                dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
+                dm.FormatUSB(drive_letter);
+            }
+            catch (Exception e)
+            {
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgradeText.Text = string.Format(e.Message);
+                    prgbUpgrade.Maximum = 100;
+                    prgbUpgrade.Value = 0;
+                });
+            }
 
         }
 
@@ -598,27 +639,60 @@ namespace mycaddy_downloader
         private void Dm_FormatUSBCompleted(object sender, EventArgs e)
         {
             Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgrade.Value = prgbUpgrade.Maximum;
                 prgbUpgradeText.Text = "Format completed!";
             });
         }
         #endregion
-
-        private void upgrade_device()
+        
+        private void upgrade_process()
         {
-            if (cbbModels.SelectedItem != null)
+            if (lstDevice.Items.Count == 1)
+            {
+                lstDevice.SelectAll();
+            }
+
+            if (lstDevice.SelectedItem != null)
+            {
+
+                USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
+
+                Console.WriteLine(item.DiskName);
+
+                if (cbxUpgradeFormat.IsChecked == true)
+                {
+                    Task.Run(() => {
+                        format_device(item.DiskName);
+                    });
+                }
+
+                upgrade_device(item.DiskName);
+            }
+            else
+            {
+                MessageBox.Show("Select device!");
+            }
+
+        }
+
+        private void upgrade_device(string disk_name)
+        {
+            if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
             {
                 ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
-                foreach(var item in model.paths)
+                LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
+ 
+                foreach (var item in model.paths)
                 {
                     Console.WriteLine($"{item.Key}:{item.Value}");
                 }
-            
+
             }
             else
             {
                 MessageBox.Show("Select Model and Langauge");
             }
-            
+
         }
 
         private void upgrade_device(string source_path, string target_path)
@@ -689,35 +763,6 @@ namespace mycaddy_downloader
         private void CbbModels_Selected(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("selected!");
-        }
-
-        private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
-        {
-          
-            if (lstDevice.Items.Count == 1)
-            {
-                lstDevice.SelectAll();
-            }
-
-            if (lstDevice.SelectedItem != null)
-            {
-
-                USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
-
-                Console.WriteLine(item.DiskName);
-
-                var task = Task.Run(() =>
-                {
-                    format_device(item.DiskName);
-                });
-                
-                // upgrade_device();
-            }
-            else
-            {
-                MessageBox.Show("Select device!");
-            }
-
         }
     }
 
