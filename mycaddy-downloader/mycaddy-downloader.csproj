@@ -147,10 +147,13 @@
     <Resource Include="resources\manual\format.capture.jpg" />
     <Content Include="resources\manual\style.css" />
     <Resource Include="resources\manual\WT_O2.jpg" />
+    <Content Include="resources\manual\WT_O2.kr.complete.html" />
     <Content Include="resources\manual\WT_O2.kr.html" />
     <Resource Include="resources\manual\WT_S3.jpg" />
+    <Content Include="resources\manual\WT_S3.kr.complete.html" />
     <Content Include="resources\manual\WT_S3.kr.html" />
     <Resource Include="resources\manual\WT_V8.jpg" />
+    <Content Include="resources\manual\WT_V8.kr.complete.html" />
     <Content Include="resources\manual\WT_V8.kr.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

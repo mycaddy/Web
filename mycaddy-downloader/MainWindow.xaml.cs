@@ -70,6 +70,8 @@ namespace mycaddy_downloader
         // Check Status >>>>>>>>>>>>>>>>>>>>>>
         private DOWNLOAD_STATUS download_status;
         private bool device_detected;
+        private int upgrade_total;
+        private int upgrade_count;
         // <<<<<<<<<<<<<<<<<<<<<< Check Status
 
         private enum DOWNLOAD_STATUS
@@ -280,7 +282,8 @@ namespace mycaddy_downloader
         }
         private void CbbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            download_status = DOWNLOAD_STATUS.ini;
+            update_ui();
         }
         private void update_ui()
         {   
@@ -350,6 +353,7 @@ namespace mycaddy_downloader
             }
         }
 
+        [Obsolete]
         private async void download_process(string download_file)
         {
             bool auto_upgrade = cbxAutoUpgrade.IsChecked ?? true;
@@ -525,7 +529,6 @@ namespace mycaddy_downloader
                 Directory.CreateDirectory(destination);
             }
 
-
             var files = client.ListDirectory(source);
             foreach (var file in files)
             {
@@ -547,7 +550,6 @@ namespace mycaddy_downloader
 
         private static void download_file_sftp(SftpClient client, SftpFile file, string directory)
         {
-            Console.WriteLine("Downloading {0}", file.FullName);
             using (Stream fileStream = File.OpenWrite(System.IO.Path.Combine(directory, file.Name)))
             {
                 client.DownloadFile(file.FullName, fileStream);
@@ -595,6 +597,7 @@ namespace mycaddy_downloader
         }
         #endregion
 
+        [Obsolete]
         private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
         {
             upgrade_process();
@@ -644,8 +647,9 @@ namespace mycaddy_downloader
             });
         }
         #endregion
-        
-        private void upgrade_process()
+
+        [Obsolete]
+        private async void upgrade_process()
         {
             if (lstDevice.Items.Count == 1)
             {
@@ -656,17 +660,28 @@ namespace mycaddy_downloader
             {
 
                 USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
-
-                Console.WriteLine(item.DiskName);
-
                 if (cbxUpgradeFormat.IsChecked == true)
                 {
-                    Task.Run(() => {
+                    await Task.Run(() =>
+                    {
                         format_device(item.DiskName);
                     });
                 }
 
-                upgrade_device(item.DiskName);
+                if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
+                {
+                    ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
+                    LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
+
+                    await Task.Run(() => {
+                        upgrade_device(item.DiskName, model, lan);
+                    }); 
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Select Model and Langauge");
+                }
             }
             else
             {
@@ -675,31 +690,34 @@ namespace mycaddy_downloader
 
         }
 
-        private void upgrade_device(string disk_name)
+        [Obsolete]
+        private void upgrade_device(string disk_name, ModelInfo model, LanguageInfo lan)
         {
-            if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
+            
+            string source_dir = $@"{DOWNLOAD_PATH}\{Path.GetFileNameWithoutExtension(lan.file)}";
+            DirectoryInfo source_total = new DirectoryInfo(source_dir);
+            upgrade_total = source_total.GetFiles("*.*", SearchOption.AllDirectories).Length;
+            upgrade_count = 0;
+
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgrade.Maximum = upgrade_total;
+                prgbUpgrade.Value = 0;
+                prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", 0, upgrade_total);
+            });
+
+            foreach (var item in model.paths)
             {
-                ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
-                LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
+                string source_path = $@"{source_dir}{item.Key.Replace("/", @"\")}";
+                string target_path = $@"{disk_name}{item.Value.Replace("/", @"\")}";
+                directory_copy(source_path, target_path, true);
+            }
+
+            Application.Current.Dispatcher.Invoke(() => {
+                prgbUpgrade.Value = upgrade_count;
+                prgbUpgradeText.Text = "Completed";
+                load_manual($"/_download/manual/{model.id}.kr.complete.html");
+            });
  
-                foreach (var item in model.paths)
-                {
-                    Console.WriteLine($"{item.Key}:{item.Value}");
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Select Model and Langauge");
-            }
-
-        }
-
-        private void upgrade_device(string source_path, string target_path)
-        {
-            DirectoryInfo source = new DirectoryInfo(source_path);
-            DirectoryInfo target = new DirectoryInfo(target_path);
-            int total = source.GetFiles("*.*", SearchOption.AllDirectories).Length;
         }
         
         private void directory_copy(string source_path, string target_path, bool copy_sub)
@@ -727,6 +745,12 @@ namespace mycaddy_downloader
             {
                 string temppath = Path.Combine(target_path, file.Name);
                 file.CopyTo(temppath, false);
+                upgrade_count += 1;
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgrade.Value = upgrade_count;
+                    prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", upgrade_count, upgrade_total);
+                });
+
             }
 
             // If copying subdirectories, copy them and their contents to new location.
@@ -758,11 +782,6 @@ namespace mycaddy_downloader
         private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-        }
-
-        private void CbbModels_Selected(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("selected!");
         }
     }
 
