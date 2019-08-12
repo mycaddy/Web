@@ -60,7 +60,7 @@ namespace mycaddy_downloader.utils
         /// <param name="enableCompression">enable drive compression?</param>
         /// <param name="clusterSize">cluster size (default=null for auto). Possible value depends on the file system : 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, ...</param>
         /// <returns>true if success, false if failure</returns>
-        public static bool FormatDrive(char driveLetter, string label = "", string fileSystem = "NTFS", bool quickFormat = true, bool enableCompression = false, int? clusterSize = null)
+        public bool FormatDrive(char driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int? clusterSize = 2048)
         {
             return FormatDrive_CommandLine(driveLetter, label, fileSystem, quickFormat, enableCompression, clusterSize);
         }
@@ -79,7 +79,7 @@ namespace mycaddy_downloader.utils
         /// <param name="enableCompression">enable drive compression?</param>
         /// <param name="clusterSize">cluster size (default=null for auto). Possible value depends on the file system : 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, ...</param>
         /// <returns>true if success, false if failure</returns>
-        public static bool FormatDrive_CommandLine(char driveLetter, string label = "", string fileSystem = "NTFS", bool quickFormat = true, bool enableCompression = false, int? clusterSize = null)
+        public bool FormatDrive_CommandLine(char driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int? clusterSize = 2048)
         {
             #region args check
 
@@ -226,7 +226,7 @@ namespace mycaddy_downloader.utils
         /// <param name="clusterSize">cluster size. Possible value depends on the file system : 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, ...</param>
         /// <returns>true if success, false if failure</returns>
         [Obsolete("Might have troubles formatting ram drives. Prefer the FormatDrive() or FormatDrive_CommandLine() methods")]
-        public static bool FormatDrive_Win32Api(char driveLetter, string label = "", string fileSystem = "NTFS", bool quickFormat = true, bool enableCompression = false, int clusterSize = 8192)
+        public static bool FormatDrive_Win32Api(char driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int clusterSize = 8192)
         {
             #region args check
 
@@ -237,6 +237,7 @@ namespace mycaddy_downloader.utils
             }
 
             #endregion
+            // clusterSize = 8192
             bool success = false;
             try
             {

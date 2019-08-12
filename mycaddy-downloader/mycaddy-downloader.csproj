@@ -147,14 +147,14 @@
     <Resource Include="resources\manual\format.capture.jpg" />
     <Content Include="resources\manual\style.css" />
     <Resource Include="resources\manual\WT_O2.jpg" />
-    <Content Include="resources\manual\WT_O2.kr.complete.html" />
-    <Content Include="resources\manual\WT_O2.kr.html" />
+    <Content Include="resources\manual\WT_O2.ko.complete.html" />
+    <Content Include="resources\manual\WT_O2.ko.html" />
     <Resource Include="resources\manual\WT_S3.jpg" />
-    <Content Include="resources\manual\WT_S3.kr.complete.html" />
-    <Content Include="resources\manual\WT_S3.kr.html" />
+    <Content Include="resources\manual\WT_S3.ko.complete.html" />
+    <Content Include="resources\manual\WT_S3.ko.html" />
     <Resource Include="resources\manual\WT_V8.jpg" />
-    <Content Include="resources\manual\WT_V8.kr.complete.html" />
-    <Content Include="resources\manual\WT_V8.kr.html" />
+    <Content Include="resources\manual\WT_V8.ko..complete.html" />
+    <Content Include="resources\manual\WT_V8.ko.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\ShowMeTheXAML.MSBuild.1.0.12\build\net45\ShowMeTheXAML.MSBuild.targets" Condition="Exists('packages\ShowMeTheXAML.MSBuild.1.0.12\build\net45\ShowMeTheXAML.MSBuild.targets')" />

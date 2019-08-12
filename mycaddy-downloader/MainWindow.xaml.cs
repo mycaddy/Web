@@ -24,6 +24,7 @@ using Renci.SshNet.Sftp;
 using Ionic.Zip;
 using System.Linq;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace mycaddy_downloader
 {
@@ -69,12 +70,17 @@ namespace mycaddy_downloader
         // <<<<<<<<<<<<<<<<<<<<<< Utils
         // Check Status >>>>>>>>>>>>>>>>>>>>>>
         private DOWNLOAD_STATUS download_status;
+        private UPGRADE_STATUS upgrade_status;
         private bool device_detected;
         private int upgrade_total;
         private int upgrade_count;
         // <<<<<<<<<<<<<<<<<<<<<< Check Status
 
         private enum DOWNLOAD_STATUS
+        {
+            ini, start, end
+        }
+        private enum UPGRADE_STATUS
         {
             ini, start, end
         }
@@ -98,6 +104,7 @@ namespace mycaddy_downloader
         {
             download_status = DOWNLOAD_STATUS.ini;
             device_detected = false;
+            upgrade_status = UPGRADE_STATUS.ini;
 
             DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
             if (!Directory.Exists(DOWNLOAD_PATH))
@@ -107,7 +114,7 @@ namespace mycaddy_downloader
 
             // Load default manual
             download_manual();
-            load_manual("/_download/manual/Default.kr.html");
+            load_manual("/_download/manual/Default.ko.html");
 
             // USB Devices init
             usbDetector = new USBDetector();
@@ -250,7 +257,7 @@ namespace mycaddy_downloader
                 {
                     try
                     {
-                        RegionInfo lang = new RegionInfo(info.id);
+                        CultureInfo lang = new CultureInfo(info.id);
                         info.name = lang.DisplayName;
                     }
                     catch (ArgumentException argEx)
@@ -275,8 +282,7 @@ namespace mycaddy_downloader
             dispatch_languageList(item);
 
             string base_path = "/_download/manual";
-            // load_manual(base_path + "WT_S.kr.html");
-            string manual_path = $"{base_path}/{item.id}.kr.html";
+            string manual_path = $"{base_path}/{item.id}.ko.html";
             load_manual(manual_path);
             
         }
@@ -297,12 +303,18 @@ namespace mycaddy_downloader
                         prgbDownloadText.Text = "";
                         btnDownload.IsEnabled = true;
                         prgbDownload.Value = 0;
+                        cbbModels.IsEnabled = true;
+                        cbbLanguage.IsEnabled = true;
                         break;
                     case DOWNLOAD_STATUS.start:
                         btnDownload.IsEnabled = false;
+                        cbbModels.IsEnabled = false;
+                        cbbLanguage.IsEnabled = false;
                         break;
                     default:
                         btnDownload.IsEnabled = true;
+                        cbbModels.IsEnabled = true;
+                        cbbLanguage.IsEnabled = true;
                         break;
                 }
 
@@ -312,7 +324,7 @@ namespace mycaddy_downloader
                 cbxAutoUpgrade.IsChecked = device_detected;
                 cbxUpgradeFormat.IsEnabled = device_detected;
 
-                if (download_status == DOWNLOAD_STATUS.end && device_detected == true)
+                if (download_status == DOWNLOAD_STATUS.end && device_detected == true && upgrade_status != UPGRADE_STATUS.start)
                 {
                     btnUpgrade.IsEnabled = true;
                 }
@@ -472,6 +484,10 @@ namespace mycaddy_downloader
             download_status = DOWNLOAD_STATUS.start;
             update_ui();
 
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+
             SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
 
             try
@@ -508,6 +524,18 @@ namespace mycaddy_downloader
                 MessageBox.Show(e.Message);
             }
 
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+
+            if (download_status == DOWNLOAD_STATUS.end)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    prgbDownloadText.Text += "(" + elapsedTime + ")";
+                });
+            }
+ 
             sftp.Dispose();
         }
         private void download_sftp_progress(ulong downloaded)
@@ -605,8 +633,9 @@ namespace mycaddy_downloader
         }
 
         #region format_device(): Format Disk Drive
-        private void format_device(string drive_letter)
+        private bool format_device(string drive_letter)
         {
+            bool bReturn = false;
             Application.Current.Dispatcher.Invoke(() => {
                 prgbUpgradeText.Text = string.Format("Formatting...");
                 prgbUpgrade.Maximum = 100;
@@ -616,11 +645,14 @@ namespace mycaddy_downloader
             try
             {
                 DriveManager dm = new DriveManager();
+                // bReturn = dm.FormatDrive(char.Parse(drive_letter.Replace(":","")));
+               
                 dm.FormatUSBProgress += Dm_FormatUSBProgress;
                 dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
-                dm.FormatUSB(drive_letter);
+                bReturn = dm.FormatUSB(drive_letter);
+                
             }
-            catch (Exception e)
+            catch (FormatException e)
             {
                 Application.Current.Dispatcher.Invoke(() => {
                     prgbUpgradeText.Text = string.Format(e.Message);
@@ -628,6 +660,7 @@ namespace mycaddy_downloader
                     prgbUpgrade.Value = 0;
                 });
             }
+            return bReturn;
 
         }
 
@@ -658,30 +691,44 @@ namespace mycaddy_downloader
 
             if (lstDevice.SelectedItem != null)
             {
+                upgrade_status = UPGRADE_STATUS.start;
+                update_ui();
 
+                bool bFormat = false;
+                
                 USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
                 if (cbxUpgradeFormat.IsChecked == true)
                 {
-                    await Task.Run(() =>
-                    {
-                        format_device(item.DiskName);
-                    });
-                }
-
-                if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
-                {
-                    ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
-                    LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
-
                     await Task.Run(() => {
-                        upgrade_device(item.DiskName, model, lan);
-                    }); 
-                    
+                        bFormat = format_device(item.DiskName);
+                    });
                 }
                 else
                 {
-                    MessageBox.Show("Select Model and Langauge");
+                    bFormat = true;
                 }
+
+                if (bFormat == true)
+                {
+                    if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
+                    {
+                        ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
+                        LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
+
+                        await Task.Run(() => {
+                            upgrade_device(item.DiskName, model, lan);
+                        });
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Select Model and Langauge");
+                    }
+                }
+
+                upgrade_status = UPGRADE_STATUS.end;
+                update_ui();
+
             }
             else
             {
@@ -693,7 +740,9 @@ namespace mycaddy_downloader
         [Obsolete]
         private void upgrade_device(string disk_name, ModelInfo model, LanguageInfo lan)
         {
-            
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             string source_dir = $@"{DOWNLOAD_PATH}\{Path.GetFileNameWithoutExtension(lan.file)}";
             DirectoryInfo source_total = new DirectoryInfo(source_dir);
             upgrade_total = source_total.GetFiles("*.*", SearchOption.AllDirectories).Length;
@@ -711,11 +760,15 @@ namespace mycaddy_downloader
                 string target_path = $@"{disk_name}{item.Value.Replace("/", @"\")}";
                 directory_copy(source_path, target_path, true);
             }
+            
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
             Application.Current.Dispatcher.Invoke(() => {
                 prgbUpgrade.Value = upgrade_count;
-                prgbUpgradeText.Text = "Completed";
-                load_manual($"/_download/manual/{model.id}.kr.complete.html");
+                prgbUpgradeText.Text = $"Completed({elapsedTime})";
+                load_manual($"/_download/manual/{model.id}.ko.complete.html");
             });
  
         }
@@ -724,46 +777,60 @@ namespace mycaddy_downloader
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(source_path);
+            FileAttributes attr = File.GetAttributes(source_path);
+           
+            if (attr.HasFlag(FileAttributes.Directory)) {
 
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException(
-                    "Source directory does not exist or could not be found: "
-                    + source_path);
+                if (!dir.Exists)
+                {
+                    throw new DirectoryNotFoundException(
+                        "Source directory does not exist or could not be found: "
+                        + source_path);
+                }
+
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                // If the destination directory doesn't exist, create it.
+                if (!Directory.Exists(target_path))
+                {
+                    Directory.CreateDirectory(target_path);
+                }
+
+                // Get the files in the directory and copy them to the new location.
+                FileInfo[] files = dir.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    string temppath = Path.Combine(target_path, file.Name);
+                    file.CopyTo(temppath, true);
+                    upgrade_count += 1;
+                    Application.Current.Dispatcher.Invoke(() => {
+                        prgbUpgrade.Value = upgrade_count;
+                        prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", upgrade_count, upgrade_total);
+                    });
+
+                }
+
+                // If copying subdirectories, copy them and their contents to new location.
+                if (copy_sub)
+                {
+                    foreach (DirectoryInfo subdir in dirs)
+                    {
+                        string temppath = Path.Combine(target_path, subdir.Name);
+                        directory_copy(subdir.FullName, temppath, copy_sub);
+                    }
+                }
             }
-
-            DirectoryInfo[] dirs = dir.GetDirectories();
-            // If the destination directory doesn't exist, create it.
-            if (!Directory.Exists(target_path))
+            else
             {
-                Directory.CreateDirectory(target_path);
-            }
-
-            // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string temppath = Path.Combine(target_path, file.Name);
-                file.CopyTo(temppath, false);
+                FileInfo file = new FileInfo(source_path);
+                file.CopyTo(target_path, true);
                 upgrade_count += 1;
                 Application.Current.Dispatcher.Invoke(() => {
                     prgbUpgrade.Value = upgrade_count;
                     prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", upgrade_count, upgrade_total);
                 });
-
             }
 
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copy_sub)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string temppath = Path.Combine(target_path, subdir.Name);
-                    directory_copy(subdir.FullName, temppath, copy_sub);
-                }
-            }
         }
-
 
         #region Load manual with Webview
 

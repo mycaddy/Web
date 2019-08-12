@@ -7,7 +7,7 @@
     ], 
     "paths": [
       { "/Rofs.bin": "/Rofs.bin" },
-      { "/8_GOLFZONE": "/dat/" },
+      { "/V8_GOLFZONE": "/dat/" },
       { "/V8_HOLEMAP": "/holemap/" },
       { "/V8_DB": "/DB/" }
     ]
@@ -16,10 +16,10 @@
     "name": "Mycaddy WT S Series",
     "id":  "WT_S3",
     "zip": [
-      { "KR": "WT_S.KOR.zip" },
-      { "US": "WT_S.ENG.zip" },
-      { "CN": "WT_S.CHA.zip" },
-      { "JP": "WT_S.JPN.zip" }
+      { "ko-KR": "WT_S.KOR.zip" },
+      { "en-US": "WT_S.ENG.zip" },
+      { "zh-CN": "WT_S.CHA.zip" },
+      { "ja-JP": "WT_S.JPN.zip" }
     ],
     "paths": [
       { "/S_AUDIO": "/" },
@@ -30,10 +30,10 @@
     "name": "Mycaddy O2",
     "id": "WT_O2",
     "zip": [
-      { "KR": "WT_S.KOR.zip" },
-      { "US": "WT_S.ENG.zip" },
-      { "CN": "WT_S.CHA.zip" },
-      { "JP": "WT_S.JPN.zip" }
+      { "ko-KR": "WT_S.KOR.zip" },
+      { "en-US": "WT_S.ENG.zip" },
+      { "zh-CN": "WT_S.CHA.zip" },
+      { "ja-JP": "WT_S.JPN.zip" }
     ],
     "paths": [
       { "/S_AUDIO": "/" },
