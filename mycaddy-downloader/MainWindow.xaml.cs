@@ -646,16 +646,26 @@ namespace mycaddy_downloader
             {
                 DriveManager dm = new DriveManager();
                 // bReturn = dm.FormatDrive(char.Parse(drive_letter.Replace(":","")));
-               
+
                 dm.FormatUSBProgress += Dm_FormatUSBProgress;
                 dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
                 bReturn = dm.FormatUSB(drive_letter);
-                
+
             }
             catch (FormatException e)
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    prgbUpgradeText.Text =e.Message;
+                    prgbUpgrade.Maximum = 100;
+                    prgbUpgrade.Value = 0;
+                });
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message);
                 Application.Current.Dispatcher.Invoke(() => {
-                    prgbUpgradeText.Text = string.Format(e.Message);
+                    prgbUpgradeText.Text = e.Message;
                     prgbUpgrade.Maximum = 100;
                     prgbUpgrade.Value = 0;
                 });
@@ -719,6 +729,11 @@ namespace mycaddy_downloader
                             upgrade_device(item.DiskName, model, lan);
                         });
 
+                        bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
+                        if (remove_safe)
+                        {
+                            MessageBox.Show("Safe removed usb device!");
+                        }
                     }
                     else
                     {

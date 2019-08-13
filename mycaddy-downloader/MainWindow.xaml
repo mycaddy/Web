@@ -66,7 +66,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="180" />
+                        <ColumnDefinition Width="200" />
                     </Grid.ColumnDefinitions>
                     <Border Grid.Row="0" Grid.Column="0">
                         <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center"><Run Text="Select Model"/></TextBlock>
@@ -104,7 +104,7 @@
             </materialDesign:Card>
             <materialDesign:Card Padding="10" Margin="16, 8, 16, 2">
                 <StackPanel>
-                    <Controls:WebView x:Name="wvc" Height="320" VerticalAlignment="Stretch" />    
+                    <Controls:WebView x:Name="wvc" Height="310" VerticalAlignment="Stretch" />    
                 </StackPanel>
             </materialDesign:Card>
             <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
@@ -185,5 +185,13 @@
                 </Grid>
             </materialDesign:Card>
         </StackPanel>
+        <materialDesign:DialogHost>
+            <materialDesign:DialogHost.DialogContent>
+                <materialDesign:Card>
+                    
+                </materialDesign:Card>
+            </materialDesign:DialogHost.DialogContent>
+            
+        </materialDesign:DialogHost>
     </Grid>
 </Window>

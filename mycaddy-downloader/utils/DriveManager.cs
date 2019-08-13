@@ -297,31 +297,52 @@ namespace mycaddy_downloader.utils
             //verify conditions for the letter format: driveLetter[0] must be letter. driveLetter[1] must be ":" and all the characters mustn't be more than 2
             if (driveLetter.Length != 2 || driveLetter[1] != ':' || !char.IsLetter(driveLetter[0]))
                 return false;
-
-            //query and format given drive 
-            //best option is to use ManagementObjectSearcher
-
-            var files = Directory.GetFiles(driveLetter);
-            var directories = Directory.GetDirectories(driveLetter);
-
-            foreach (var item in files)
+            DirectoryInfo di = new DirectoryInfo(driveLetter);
+            foreach (FileInfo file in di.EnumerateFiles())
             {
-                try
-                {
-                    File.Delete(item);
+                try {
+                    file.Delete();
                 }
-                catch (UnauthorizedAccessException) { }
-                catch (IOException) { }
+                catch (UnauthorizedAccessException e)
+                {
+                    if (e.Source != null)
+                    {
+                        Console.WriteLine("UnauthorizedAccessException:" + e.Message);
+                        throw;
+                    }
+
+                }
+                catch (IOException e)
+                {
+                    if (e.Source != null)
+                    {
+                        Console.WriteLine("IOExeption: " + e.Message);
+                        throw;
+                    }
+                }
             }
-
-            foreach (var item in directories)
+            foreach (DirectoryInfo dir in di.EnumerateDirectories())
             {
                 try
                 {
-                    Directory.Delete(item);
+                    dir.Delete(true);
                 }
-                catch (UnauthorizedAccessException) { }
-                catch (IOException) { }
+                catch (UnauthorizedAccessException e)
+                {
+                    if (e.Source != null)
+                    {
+                        Console.WriteLine("UnauthorizedAccessException:" + e.Message);
+                        throw;
+                    }
+                }
+                catch (IOException e)
+                {
+                    if (e.Source != null)
+                    {
+                        Console.WriteLine("IOExeption: " + e.Message);
+                        throw;
+                    }
+                }
             }
 
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"select * from Win32_Volume WHERE DriveLetter = '" + driveLetter + "'");
@@ -353,9 +374,13 @@ namespace mycaddy_downloader.utils
 
 
                 }
-                catch
+                catch(Exception e)
                 {
-
+                    if (e.Source != null)
+                    {
+                        Console.WriteLine(e.Message);
+                        throw;
+                    }
                 }
             }
             return true;
