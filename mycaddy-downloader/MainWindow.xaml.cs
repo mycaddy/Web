@@ -729,13 +729,14 @@ namespace mycaddy_downloader
                             upgrade_device(item.DiskName, model, lan);
                         });
 
-                        MessageBoxResult messageBoxResult = MessageBox.Show("업그레이드가 완료되었습니다, 장치를 꺼내시겠습니까?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
+                        MessageBoxResult messageBoxResult = MessageBox.Show("업그레이드가 완료되었습니다, 안전하게 장치를 꺼내시겠습니까?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                             bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
                             if (remove_safe)
                             {
-                                dispatch_usbList();   
+                                MessageBox.Show("연결된 장치를 분리하셔도 됩니다.");
+                                // dispatch_usbList();   
                             }
                         }
 
