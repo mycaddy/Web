@@ -112,12 +112,6 @@ namespace mycaddy_downloader
             {
                 Directory.CreateDirectory(DOWNLOAD_PATH);
             }
-
-            var temp_uri = new Uri(DOWNLOAD_PATH);
-
-
-
-
             // Load default manual
             download_manual();
 

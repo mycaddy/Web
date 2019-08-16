@@ -127,7 +127,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         VerticalAlignment="Center" Content="Auto upgrade"/>
-                    <ProgressBar x:Name="prgbDownload" Minimum="0" Maximum="100" Foreground="Black" Background="#9575cd" IsIndeterminate="False" Grid.Row="0" Grid.Column="2" />
+                    <ProgressBar x:Name="prgbDownload" Minimum="0" Maximum="100" Height="24" Foreground="Black" Background="#9575cd" IsIndeterminate="False" Grid.Row="0" Grid.Column="2" />
                     <TextBlock 
                         x:Name="prgbDownloadText" FontSize="16px" Text="" 
                         HorizontalAlignment="Center" VerticalAlignment="Center" 
@@ -180,18 +180,10 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         VerticalAlignment="Center" Content="Format First"/>
-                    <ProgressBar x:Name="prgbUpgrade" Foreground="Black" Background="DarkGray" Minimum="0" Maximum="100" IsIndeterminate="False" Grid.Row="1" Grid.Column="2" />
+                    <ProgressBar x:Name="prgbUpgrade" Foreground="Black" Background="DarkGray" Minimum="0" Maximum="100" Height="24"  IsIndeterminate="False" Grid.Row="1" Grid.Column="2" />
                     <TextBlock x:Name="prgbUpgradeText" Foreground="White" FontSize="16px" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
                 </Grid>
             </materialDesign:Card>
         </StackPanel>
-        <materialDesign:DialogHost>
-            <materialDesign:DialogHost.DialogContent>
-                <materialDesign:Card>
-                    
-                </materialDesign:Card>
-            </materialDesign:DialogHost.DialogContent>
-            
-        </materialDesign:DialogHost>
     </Grid>
 </Window>
