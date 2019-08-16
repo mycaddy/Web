@@ -26,6 +26,10 @@ using System.Linq;
 using System.Globalization;
 using System.Diagnostics;
 
+using CefSharp;
+using CefSharp.Wpf;
+using CefSharp.SchemeHandler;
+
 namespace mycaddy_downloader
 {
     /// <summary>
@@ -66,6 +70,7 @@ namespace mycaddy_downloader
         string DOWNLOAD_PATH;
         FtpClient ftp;
         USBDetector usbDetector;
+        ChromiumWebBrowser webBrowser;
 
         // <<<<<<<<<<<<<<<<<<<<<< Utils
         // Check Status >>>>>>>>>>>>>>>>>>>>>>
@@ -96,6 +101,7 @@ namespace mycaddy_downloader
         {
             InitializeComponent();
             Initialize();
+            InitializeBrowser();
             DataContext = this;
         }
 
@@ -115,8 +121,6 @@ namespace mycaddy_downloader
             // Load default manual
             download_manual();
 
-            load_manual($@"{DOWNLOAD_PATH}\manual\Default.ko.html");
-
             // USB Devices init
             usbDetector = new USBDetector();
             usbDetector.StartWatching();
@@ -132,6 +136,26 @@ namespace mycaddy_downloader
             languageList = new ObservableCollection<LanguageInfo>();
 
             update_ui();
+        }
+
+        private void InitializeBrowser()
+        {
+            // https://stackoverflow.com/questions/52338368/loading-local-html-css-js-files-with-cefsharp-v65
+            var settins = new CefSharp.Wpf.CefSettings();
+            settins.RegisterScheme(new CefCustomScheme
+            {
+                SchemeName = "localfolder",
+                SchemeHandlerFactory = new FolderSchemeHandlerFactory(
+                    rootFolder: $@"{DOWNLOAD_PATH}\manual",
+                    hostName: "mycaddy.manual"
+                )
+            });
+            Cef.Initialize(settins);
+
+            webBrowser = new ChromiumWebBrowser("localfolder://mycaddy.manual/Default.ko.html");
+            webBrowser.Height = panWebBrowser.Height;
+            panWebBrowser.Children.Add(webBrowser);
+
         }
 
         private void UsbDetector_VolumeChanged(object sender, EventArgs e)
@@ -282,9 +306,7 @@ namespace mycaddy_downloader
             ModelInfo item = (ModelInfo)(sender as ComboBox).SelectedItem;
             dispatch_languageList(item);
 
-            string base_path = $@"{DOWNLOAD_PATH}\manual";
-            string manual_path = $@"{base_path}\{item.id}.ko.html";
-            load_manual(manual_path);
+            load_manual($"{item.id}.ko.html");
             
         }
         private void CbbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -790,7 +812,7 @@ namespace mycaddy_downloader
             Application.Current.Dispatcher.Invoke(() => {
                 prgbUpgrade.Value = upgrade_count;
                 prgbUpgradeText.Text = $"Completed({elapsedTime})";
-                load_manual($"/_download/manual/{model.id}.ko.complete.html");
+                load_manual($"{model.id}.ko.complete.html");
             });
  
         }
@@ -857,20 +879,9 @@ namespace mycaddy_downloader
         #region Load manual with Webview
 
         [Obsolete]
-        private void load_manual(string path = "")
+        private void load_manual(string file_name)
         {
-            // wvc.NavigateToLocal(path);
-            var temp_uri = new Uri(path);
-            string html_source = File.ReadAllText(path);
-
-
-            wvc.NavigateToString(html_source);
-
-            // Pass the resolver object to the navigate call.
-            /*
-            webView4.NavigateToLocalStreamUri(url, myResolver);
-            */
-
+            webBrowser.Load($"localfolder://mycaddy.manual/{file_name}");
         }
         #endregion
 

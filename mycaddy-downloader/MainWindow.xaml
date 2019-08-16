@@ -103,8 +103,7 @@
                 </Grid>
             </materialDesign:Card>
             <materialDesign:Card Padding="10" Margin="16, 8, 16, 2">
-                <StackPanel>
-                    <Controls:WebView x:Name="wvc" Height="310" VerticalAlignment="Stretch" />    
+                <StackPanel x:Name="panWebBrowser" Height="310">
                 </StackPanel>
             </materialDesign:Card>
             <materialDesign:Card Padding="20" Margin="16, 8, 16, 2">
