@@ -106,15 +106,22 @@ namespace mycaddy_downloader
             device_detected = false;
             upgrade_status = UPGRADE_STATUS.ini;
 
-            DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
+            // DOWNLOAD_PATH = $@"{Directory.GetCurrentDirectory()}\_download";
+            DOWNLOAD_PATH = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\mycaddy\_download";
             if (!Directory.Exists(DOWNLOAD_PATH))
             {
                 Directory.CreateDirectory(DOWNLOAD_PATH);
             }
 
+            var temp_uri = new Uri(DOWNLOAD_PATH);
+
+
+
+
             // Load default manual
             download_manual();
-            load_manual("/_download/manual/Default.ko.html");
+
+            load_manual($@"{DOWNLOAD_PATH}\manual\Default.ko.html");
 
             // USB Devices init
             usbDetector = new USBDetector();
@@ -262,7 +269,7 @@ namespace mycaddy_downloader
                     }
                     catch (ArgumentException argEx)
                     {
-                        // MessageBox.Show(argEx.Message);
+                        Console.WriteLine(argEx.Message);
                         info.name = "Error ISO_3166-1_alpha-2";
                     }
                 }
@@ -281,8 +288,8 @@ namespace mycaddy_downloader
             ModelInfo item = (ModelInfo)(sender as ComboBox).SelectedItem;
             dispatch_languageList(item);
 
-            string base_path = "/_download/manual";
-            string manual_path = $"{base_path}/{item.id}.ko.html";
+            string base_path = $@"{DOWNLOAD_PATH}\manual";
+            string manual_path = $@"{base_path}\{item.id}.ko.html";
             load_manual(manual_path);
             
         }
@@ -856,9 +863,15 @@ namespace mycaddy_downloader
         #region Load manual with Webview
 
         [Obsolete]
-        private void load_manual(string relative_path = "")
+        private void load_manual(string path = "")
         {
-            wvc.NavigateToLocal(relative_path);
+            // wvc.NavigateToLocal(path);
+            var temp_uri = new Uri(path);
+            string html_source = File.ReadAllText(path);
+
+
+            wvc.NavigateToString(html_source);
+
             // Pass the resolver object to the navigate call.
             /*
             webView4.NavigateToLocalStreamUri(url, myResolver);
