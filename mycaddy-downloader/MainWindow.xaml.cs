@@ -14,15 +14,12 @@ using System.Windows.Interop;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 using mycaddy_downloader.utils;
 using System.Collections.ObjectModel;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using Ionic.Zip;
-using System.Linq;
 using System.Globalization;
 using System.Diagnostics;
 

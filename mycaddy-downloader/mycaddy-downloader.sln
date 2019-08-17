@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mycaddy-downloader", "mycaddy-downloader.csproj", "{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "mycaddy-downloader-setup", "mycaddy-downloader-setup\mycaddy-downloader-setup.vdproj", "{4AFFCB76-4246-46C4-A031-C52C7868A757}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,11 @@ Global
 		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Release|x86.ActiveCfg = Release|x86
 		{8C386E3E-FB3E-4B95-AD3B-205177E36BCA}.Release|x86.Build.0 = Release|x86
+		{4AFFCB76-4246-46C4-A031-C52C7868A757}.Debug|Any CPU.ActiveCfg = Debug
+		{4AFFCB76-4246-46C4-A031-C52C7868A757}.Debug|x86.ActiveCfg = Debug
+		{4AFFCB76-4246-46C4-A031-C52C7868A757}.Release|Any CPU.ActiveCfg = Release
+		{4AFFCB76-4246-46C4-A031-C52C7868A757}.Release|x86.ActiveCfg = Release
+		{4AFFCB76-4246-46C4-A031-C52C7868A757}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

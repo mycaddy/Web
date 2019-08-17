@@ -73,30 +73,30 @@
                     </Border>
                     <Border Grid.Row="0" Grid.Column="1">
                         <ComboBox
-                        x:Name="cbbModels"
-                        materialDesign:HintAssist.Hint="Model"
-                        IsEditable="False"
-                        materialDesign:HintAssist.HintOpacity=".26"
-                        FontSize="20"
-                        ItemsSource="{Binding modelList}"
-                        DisplayMemberPath="name"
-                        SelectedValuePath="id"
-                        SelectionChanged="CbbModels_SelectionChanged"
-                        Padding="2"
+                            x:Name="cbbModels"
+                            materialDesign:HintAssist.Hint="Model"
+                            IsEditable="False"
+                            materialDesign:HintAssist.HintOpacity=".26"
+                            FontSize="20"
+                            ItemsSource="{Binding modelList}"
+                            DisplayMemberPath="name"
+                            SelectedValuePath="id"
+                            SelectionChanged="CbbModels_SelectionChanged"
+                            Padding="2"
                         />
                     </Border>
                     <Border Grid.Row="0" Grid.Column="2">
                         <ComboBox
-                        x:Name="cbbLanguage"
-                        materialDesign:HintAssist.Hint="Language"
-                        IsEditable="False"
-                        materialDesign:HintAssist.HintOpacity=".26"
-                        FontSize="20"
-                        Padding="2"
-                        ItemsSource="{Binding languageList}"
-                        DisplayMemberPath="name"
-                        SelectedValuePath="id"
-                        SelectionChanged="CbbLanguage_SelectionChanged"
+                            x:Name="cbbLanguage"
+                            materialDesign:HintAssist.Hint="Language"
+                            IsEditable="False"
+                            materialDesign:HintAssist.HintOpacity=".26"
+                            FontSize="20"
+                            Padding="2"
+                            ItemsSource="{Binding languageList}"
+                            DisplayMemberPath="name"
+                            SelectedValuePath="id"
+                            SelectionChanged="CbbLanguage_SelectionChanged"
                         />
                     </Border>
 
