@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mycaddy_downloader"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:Controls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls.WebView" x:Class="mycaddy_downloader.MainWindow"
+        x:Class="mycaddy_downloader.MainWindow"
         Title="MYCADDY DWONLOADER"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -181,6 +181,16 @@
                         VerticalAlignment="Center" Content="Format First"/>
                     <ProgressBar x:Name="prgbUpgrade" Foreground="Black" Background="DarkGray" Minimum="0" Maximum="100" Height="24"  IsIndeterminate="False" Grid.Row="1" Grid.Column="2" />
                     <TextBlock x:Name="prgbUpgradeText" Foreground="White" FontSize="16px" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
+                    <ProgressBar
+                        x:Name="prgbFormat"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Value="70"
+                        Visibility="Hidden"
+                        IsIndeterminate="True"
+                        Foreground="Red"
+                        Grid.Row="1" Grid.Column="2"
+                        
+                    />
                 </Grid>
             </materialDesign:Card>
         </StackPanel>

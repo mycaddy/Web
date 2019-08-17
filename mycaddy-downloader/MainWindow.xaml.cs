@@ -657,6 +657,7 @@ namespace mycaddy_downloader
         {
             bool bReturn = false;
             Application.Current.Dispatcher.Invoke(() => {
+                prgbFormat.Visibility = Visibility.Visible;
                 prgbUpgradeText.Text = string.Format("Formatting...");
                 prgbUpgrade.Maximum = 100;
                 prgbUpgrade.Value = 0;
@@ -705,6 +706,7 @@ namespace mycaddy_downloader
         private void Dm_FormatUSBCompleted(object sender, EventArgs e)
         {
             Application.Current.Dispatcher.Invoke(() => {
+                prgbFormat.Visibility = Visibility.Hidden;
                 prgbUpgrade.Value = prgbUpgrade.Maximum;
                 prgbUpgradeText.Text = "Format completed!";
             });
