@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Threading;
 using System.ComponentModel;
+
 using FluentFTP;
 using System.Net;
 using System.IO;
@@ -26,6 +27,7 @@ using System.Diagnostics;
 using CefSharp;
 using CefSharp.Wpf;
 using CefSharp.SchemeHandler;
+using System.Reflection;
 
 namespace mycaddy_downloader
 {
@@ -658,7 +660,7 @@ namespace mycaddy_downloader
             bool bReturn = false;
             Application.Current.Dispatcher.Invoke(() => {
                 prgbFormat.Visibility = Visibility.Visible;
-                prgbUpgradeText.Text = string.Format("Formatting...");
+                prgbUpgradeText.Text = string.Format("Formatting...      ");
                 prgbUpgrade.Maximum = 100;
                 prgbUpgrade.Value = 0;
             });

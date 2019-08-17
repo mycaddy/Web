@@ -39,10 +39,12 @@
             <materialDesign:Card Padding="10" Margin="0, 0, 0, 6" Background="#212121" MouseDown="move_window">
                 <DockPanel LastChildFill="False">
                     <materialDesign:PackIcon Kind="GolfCourse" VerticalAlignment="Center" />
-                    <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" 
-                               VerticalAlignment="Center" 
-                               Margin="12,0,0,0"
-                               DockPanel.Dock="Left"><Run Text="MYCADDY DWONLOADER"/></TextBlock>
+                    <TextBlock 
+                        x:Name="txtToolBar"
+                        Style="{DynamicResource MaterialDesignBody2TextBlock}" 
+                        VerticalAlignment="Center" 
+                        Margin="12,0,0,0"
+                        DockPanel.Dock="Left"><Run Text="MYCADDY DWONLOADER"/> version 1.0.4</TextBlock>
                     <materialDesign:PopupBox
                         DockPanel.Dock="Right"
                         PlacementMode="BottomAndAlignRightEdges"
@@ -188,8 +190,7 @@
                         Visibility="Hidden"
                         IsIndeterminate="True"
                         Foreground="Red"
-                        Grid.Row="1" Grid.Column="2"
-                        
+                        Grid.Row="1" Grid.Column="2" Margin="260,0,400,0"
                     />
                 </Grid>
             </materialDesign:Card>

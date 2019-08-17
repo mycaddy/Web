@@ -46,18 +46,6 @@
         "Entry"
         {
         "MsmKey" = "8:_06CF1B70F2C3092BD79DD9ED72E14DEE"
-        "OwnerKey" = "8:_85A03C8A45EE42BA94A44F5C3E404D93"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_06CF1B70F2C3092BD79DD9ED72E14DEE"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_06CF1B70F2C3092BD79DD9ED72E14DEE"
         "OwnerKey" = "8:_C4DE80E62638BED3CF5F8AD64CDE0ADA"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -160,30 +148,12 @@
         "Entry"
         {
         "MsmKey" = "8:_210253A1A08393B4F54D8A5FBBCE947D"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_210253A1A08393B4F54D8A5FBBCE947D"
         "OwnerKey" = "8:_C4DE80E62638BED3CF5F8AD64CDE0ADA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_24A01AC75012492987BBC598658106CD"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_27F7A6EF73E84356A947DB7E8487A5F1"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_285526F4AFBC4B4881883434CD8E00CA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -285,12 +255,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_584D51676107BBDE59F39DE1069AAD09"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_58FA4E9BD3714B50A342CCC2C6725891"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -299,12 +263,6 @@
         {
         "MsmKey" = "8:_5C7CF4635CCB5530F29ED2EB6691CCE2"
         "OwnerKey" = "8:_97259F0F6C3042BCBA54E1FBBB122264"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5C7CF4635CCB5530F29ED2EB6691CCE2"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -423,12 +381,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_85A03C8A45EE42BA94A44F5C3E404D93"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_86A8460B893A497D811A2D63D33E7D78"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -448,12 +400,6 @@
         "Entry"
         {
         "MsmKey" = "8:_8883608CE09048E4764C92203B68FE4A"
-        "OwnerKey" = "8:_285526F4AFBC4B4881883434CD8E00CA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8883608CE09048E4764C92203B68FE4A"
         "OwnerKey" = "8:_C63AF5F62782CA8CDF21BFBEA2B0C3F4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -467,12 +413,6 @@
         {
         "MsmKey" = "8:_93668D1E55A7F10D02DA51DE09A06A32"
         "OwnerKey" = "8:_97259F0F6C3042BCBA54E1FBBB122264"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_93668D1E55A7F10D02DA51DE09A06A32"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -651,20 +591,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C3AABADAC115EF7202B02EF9855B6404"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C4DE80E62638BED3CF5F8AD64CDE0ADA"
         "OwnerKey" = "8:_97259F0F6C3042BCBA54E1FBBB122264"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C4DE80E62638BED3CF5F8AD64CDE0ADA"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -712,12 +640,6 @@
         "Entry"
         {
         "MsmKey" = "8:_CE5E802DD6284183B56A9582FD54EB3A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -861,12 +783,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F922A868283FAEF4A16371CBE5F9EB14"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_FA04E3D1F857430491814A6D8E56C6AB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -899,24 +815,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9832D97A3D3BB04F77F8F951EECE143C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_85A03C8A45EE42BA94A44F5C3E404D93"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_285526F4AFBC4B4881883434CD8E00CA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CE65586B23F2427DB9426A465337C6FD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1073,10 +971,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.6.1(x86 및 x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    "Name" = "8:Microsoft .NET Framework 4.7.2(x86 및 x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
                     {
@@ -1507,63 +1405,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_24A01AC75012492987BBC598658106CD"
-            {
-            "SourcePath" = "8:..\\bin\\x86\\Release\\mycaddy-downloader.exe.config"
-            "TargetName" = "8:mycaddy-downloader.exe.config"
-            "Tag" = "8:"
-            "Folder" = "8:_3850ECFB9F2E472987FDE7EEC93B3DFD"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27F7A6EF73E84356A947DB7E8487A5F1"
             {
             "SourcePath" = "8:..\\bin\\x86\\Release\\locales\\he.pak"
             "TargetName" = "8:he.pak"
             "Tag" = "8:"
             "Folder" = "8:_323D876250574263910AC1B1255A832D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_285526F4AFBC4B4881883434CD8E00CA"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Usb.Net, Version=2.9.0.0, Culture=neutral, PublicKeyToken=7b6bc3f8fb80505e, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_285526F4AFBC4B4881883434CD8E00CA"
-                    {
-                    "Name" = "8:Usb.Net.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\bin\\x86\\Release\\Usb.Net.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3850ECFB9F2E472987FDE7EEC93B3DFD"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2337,37 +2184,6 @@
             "TargetName" = "8:WT_O2.ko.complete.html"
             "Tag" = "8:"
             "Folder" = "8:_86875F02D5574278B58FE3F7604B3BE1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_85A03C8A45EE42BA94A44F5C3E404D93"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CefSharp.BrowserSubprocess.Core, Version=75.1.141.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_85A03C8A45EE42BA94A44F5C3E404D93"
-                    {
-                    "Name" = "8:CefSharp.BrowserSubprocess.Core.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\bin\\x86\\Release\\CefSharp.BrowserSubprocess.Core.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3850ECFB9F2E472987FDE7EEC93B3DFD"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3301,37 +3117,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CE65586B23F2427DB9426A465337C6FD"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:mycaddy-downloader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_CE65586B23F2427DB9426A465337C6FD"
-                    {
-                    "Name" = "8:mycaddy-downloader.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\bin\\x86\\Release\\mycaddy-downloader.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3850ECFB9F2E472987FDE7EEC93B3DFD"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CE7F7027CCF14C8C8D46E3282E6FFD42"
             {
             "SourcePath" = "8:..\\bin\\x86\\Release\\libEGL.dll"
@@ -4007,15 +3792,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:mycaddy-downloader"
-        "ProductCode" = "8:{F370E349-22D1-4AFC-B1E6-530AF269FBA6}"
-        "PackageCode" = "8:{6B8C67A9-476E-48A7-B20F-759AC602C883}"
+        "ProductCode" = "8:{1E912991-23E2-4F6A-8E72-78F76F8A3034}"
+        "PackageCode" = "8:{8BD6B636-FF8C-45A4-B6EE-DB5C4BEA6EAC}"
         "UpgradeCode" = "8:{C99C9736-AFB3-479B-846F-971817098481}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:MyCaddy"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
