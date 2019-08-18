@@ -44,7 +44,7 @@
                         Style="{DynamicResource MaterialDesignBody2TextBlock}" 
                         VerticalAlignment="Center" 
                         Margin="12,0,0,0"
-                        DockPanel.Dock="Left"><Run Text="MYCADDY DWONLOADER"/> version 1.0.4</TextBlock>
+                        DockPanel.Dock="Left"><Run Text="MYCADDY DWONLOADER"/> version 1.0.5</TextBlock>
                     <materialDesign:PopupBox
                         DockPanel.Dock="Right"
                         PlacementMode="BottomAndAlignRightEdges"
