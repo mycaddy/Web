@@ -966,7 +966,7 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:1"
+            "PrerequisitesLocation" = "2:2"
             "Url" = "8:"
             "ComponentsUrl" = "8:D:\\Dev\\Projects\\Mycaddy\\mycaddy-downloader\\mycaddy-downloader-setup\\_Prerequisites"
                 "Items"
@@ -975,11 +975,6 @@
                     {
                     "Name" = "8:Microsoft .NET Framework 4.7.2(x86 및 x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
-                    {
-                    "Name" = "8:Visual C++ \"14\" 런타임 라이브러리(x86)"
-                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x86"
                     }
                 }
             }
@@ -3793,7 +3788,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:mycaddy-downloader"
         "ProductCode" = "8:{9A7B0CDD-9CF6-4C41-A08D-256BE1E17D38}"
-        "PackageCode" = "8:{CD82F941-9E90-45AC-90AC-6156420413A3}"
+        "PackageCode" = "8:{D52FE081-3193-4FD1-87C4-09AF4269D7E9}"
         "UpgradeCode" = "8:{C99C9736-AFB3-479B-846F-971817098481}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
