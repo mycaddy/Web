@@ -966,15 +966,25 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:2"
+            "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:D:\\Dev\\Projects\\Mycaddy\\mycaddy-downloader\\mycaddy-downloader-setup\\_Prerequisites"
                 "Items"
                 {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5.2(x86 및 x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5.2"
+                    }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
                     {
                     "Name" = "8:Microsoft .NET Framework 4.7.2(x86 및 x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x86"
+                    {
+                    "Name" = "8:Visual C++ \"14\" 런타임 라이브러리(x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x86"
                     }
                 }
             }
@@ -4351,7 +4361,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_97259F0F6C3042BCBA54E1FBBB122264"
             {
-            "SourcePath" = "8:..\\obj\\x86\\Release\\mycaddy-downloader.exe"
+            "SourcePath" = "8:..\\obj\\x86\\Debug\\mycaddy-downloader.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3850ECFB9F2E472987FDE7EEC93B3DFD"

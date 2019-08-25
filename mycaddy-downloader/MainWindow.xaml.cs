@@ -686,7 +686,14 @@ namespace mycaddy_downloader
             }
             catch (IOException e)
             {
-                Console.WriteLine(e.Message);
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgradeText.Text = e.Message;
+                    prgbUpgrade.Maximum = 100;
+                    prgbUpgrade.Value = 0;
+                });
+            }
+            catch (Exception e)
+            {
                 Application.Current.Dispatcher.Invoke(() => {
                     prgbUpgradeText.Text = e.Message;
                     prgbUpgrade.Maximum = 100;
@@ -749,21 +756,27 @@ namespace mycaddy_downloader
                         ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
                         LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
 
-                        await Task.Run(() => {
-                            upgrade_device(item.DiskName, model, lan);
-                        });
-
-                        MessageBoxResult messageBoxResult = MessageBox.Show("업그레이드가 완료되었습니다, 안전하게 장치를 꺼내시겠습니까?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
-                        if (messageBoxResult == MessageBoxResult.Yes)
+                        try
                         {
-                            bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
-                            if (remove_safe)
+                            await Task.Run(() => {
+                                upgrade_device(item.DiskName, model, lan);
+                            });
+
+                            MessageBoxResult messageBoxResult = MessageBox.Show("업그레이드가 완료되었습니다, 안전하게 장치를 꺼내시겠습니까?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
+                            if (messageBoxResult == MessageBoxResult.Yes)
                             {
-                                MessageBox.Show("연결된 장치를 분리하셔도 됩니다.");
-                                // dispatch_usbList();   
+                                bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
+                                if (remove_safe)
+                                {
+                                    MessageBox.Show("연결된 장치를 분리하셔도 됩니다.");
+                                    // dispatch_usbList();   
+                                }
                             }
                         }
-
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
                     else
                     {
@@ -785,94 +798,116 @@ namespace mycaddy_downloader
         [Obsolete]
         private void upgrade_device(string disk_name, ModelInfo model, LanguageInfo lan)
         {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
 
-            string source_dir = $@"{DOWNLOAD_PATH}\{Path.GetFileNameWithoutExtension(lan.file)}";
-            DirectoryInfo source_total = new DirectoryInfo(source_dir);
-            upgrade_total = source_total.GetFiles("*.*", SearchOption.AllDirectories).Length;
-            upgrade_count = 0;
-
-            Application.Current.Dispatcher.Invoke(() => {
-                prgbUpgrade.Maximum = upgrade_total;
-                prgbUpgrade.Value = 0;
-                prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", 0, upgrade_total);
-            });
-
-            foreach (var item in model.paths)
+            try
             {
-                string source_path = $@"{source_dir}{item.Key.Replace("/", @"\")}";
-                string target_path = $@"{disk_name}{item.Value.Replace("/", @"\")}";
-                directory_copy(source_path, target_path, true);
-            }
-            
-            stopWatch.Stop();
-            TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
 
-            Application.Current.Dispatcher.Invoke(() => {
-                prgbUpgrade.Value = upgrade_count;
-                prgbUpgradeText.Text = $"Completed({elapsedTime})";
-                load_manual($"{model.id}.ko.complete.html");
-            });
- 
+                string source_dir = $@"{DOWNLOAD_PATH}\{Path.GetFileNameWithoutExtension(lan.file)}";
+                DirectoryInfo source_total = new DirectoryInfo(source_dir);
+                upgrade_total = source_total.GetFiles("*.*", SearchOption.AllDirectories).Length;
+                upgrade_count = 0;
+
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgrade.Maximum = upgrade_total;
+                    prgbUpgrade.Value = 0;
+                    prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", 0, upgrade_total);
+                });
+
+                foreach (var item in model.paths)
+                {
+                    string source_path = $@"{source_dir}{item.Key.Replace("/", @"\")}";
+                    string target_path = $@"{disk_name}{item.Value.Replace("/", @"\")}";
+                    directory_copy(source_path, target_path, true);
+                }
+
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgrade.Value = upgrade_count;
+                    prgbUpgradeText.Text = $"Completed({elapsedTime})";
+                    load_manual($"{model.id}.ko.complete.html");
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgradeText.Text = e.Message;
+                });
+                throw new Exception(e.Message);
+            }
+
+
         }
         
         private void directory_copy(string source_path, string target_path, bool copy_sub)
         {
-            // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(source_path);
-            FileAttributes attr = File.GetAttributes(source_path);
-           
-            if (attr.HasFlag(FileAttributes.Directory)) {
+            try
+            {
+                // Get the subdirectories for the specified directory.
+                DirectoryInfo dir = new DirectoryInfo(source_path);
+                FileAttributes attr = File.GetAttributes(source_path);
 
-                if (!dir.Exists)
+                if (attr.HasFlag(FileAttributes.Directory))
                 {
-                    throw new DirectoryNotFoundException(
-                        "Source directory does not exist or could not be found: "
-                        + source_path);
+
+                    if (!dir.Exists)
+                    {
+                        throw new DirectoryNotFoundException(
+                            "Source directory does not exist or could not be found: "
+                            + source_path);
+                    }
+
+                    DirectoryInfo[] dirs = dir.GetDirectories();
+                    // If the destination directory doesn't exist, create it.
+                    if (!Directory.Exists(target_path))
+                    {
+                        Directory.CreateDirectory(target_path);
+                    }
+
+                    // Get the files in the directory and copy them to the new location.
+                    FileInfo[] files = dir.GetFiles();
+                    foreach (FileInfo file in files)
+                    {
+                        string temppath = Path.Combine(target_path, file.Name);
+                        file.CopyTo(temppath, true);
+                        upgrade_count += 1;
+                        Application.Current.Dispatcher.Invoke(() => {
+                            prgbUpgrade.Value = upgrade_count;
+                            prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", upgrade_count, upgrade_total);
+                        });
+
+                    }
+
+                    // If copying subdirectories, copy them and their contents to new location.
+                    if (copy_sub)
+                    {
+                        foreach (DirectoryInfo subdir in dirs)
+                        {
+                            string temppath = Path.Combine(target_path, subdir.Name);
+                            directory_copy(subdir.FullName, temppath, copy_sub);
+                        }
+                    }
                 }
-
-                DirectoryInfo[] dirs = dir.GetDirectories();
-                // If the destination directory doesn't exist, create it.
-                if (!Directory.Exists(target_path))
+                else
                 {
-                    Directory.CreateDirectory(target_path);
-                }
-
-                // Get the files in the directory and copy them to the new location.
-                FileInfo[] files = dir.GetFiles();
-                foreach (FileInfo file in files)
-                {
-                    string temppath = Path.Combine(target_path, file.Name);
-                    file.CopyTo(temppath, true);
+                    FileInfo file = new FileInfo(source_path);
+                    file.CopyTo(target_path, true);
                     upgrade_count += 1;
                     Application.Current.Dispatcher.Invoke(() => {
                         prgbUpgrade.Value = upgrade_count;
                         prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", upgrade_count, upgrade_total);
                     });
-
-                }
-
-                // If copying subdirectories, copy them and their contents to new location.
-                if (copy_sub)
-                {
-                    foreach (DirectoryInfo subdir in dirs)
-                    {
-                        string temppath = Path.Combine(target_path, subdir.Name);
-                        directory_copy(subdir.FullName, temppath, copy_sub);
-                    }
                 }
             }
-            else
+            catch (Exception e)
             {
-                FileInfo file = new FileInfo(source_path);
-                file.CopyTo(target_path, true);
-                upgrade_count += 1;
-                Application.Current.Dispatcher.Invoke(() => {
-                    prgbUpgrade.Value = upgrade_count;
-                    prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", upgrade_count, upgrade_total);
-                });
+                Console.WriteLine(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
