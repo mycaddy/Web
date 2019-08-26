@@ -16,6 +16,7 @@
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 !include "x64.nsh"
+!include "LogicLib.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -84,7 +85,7 @@ Function InstallVCRedist_x86
 
     StrCmp $R0 "No" 0 +3
 
-;MessageBox MB_OK|MB_ICONSTOP "프로그램 실행을 위해 Visual C++ 2008 SP1 Redistributable x86을(를) 설치합니다."
+    ;MessageBox MB_OK|MB_ICONSTOP "프로그램 실행을 위해 Visual C++ 2008 SP1 Redistributable x86을(를) 설치합니다."
 
     ExecWait '"$TEMP\vcredist_x86.exe" /qb /norestart'
 
@@ -108,10 +109,10 @@ Function CheckVCRedist_x86
 
    ;ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}" "Version" ;2008 SP1 x86
 
-   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9BE518E6-ECC6-35A9-88E4-87755C07200F}" "Version" ;2008 SP1 x86 MFC
+  ; https://stackoverflow.com/questions/12206314/detect-if-visual-c-redistributable-for-visual-studio-2012-is-installed
+   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{5bfc1380-fd35-4b85-9715-7351535d077e}" "Version" ;2008 SP1 x86 MFC
 
    ; if VS 2008 SP1 redist x86 not installed, install it
-
    IfErrors 0 VSRedistx86Installed
 
    StrCpy $R0 "No"
@@ -303,3 +304,44 @@ Section Uninstall
   SetAutoClose true
 
 SectionEnd
+
+
+Function InstallVCRedist
+;MessageBox MB_ICONINFORMATION|MB_OK "재배포패키지 설치시작"
+    Call CheckVCRedist
+    Pop $R0
+    StrCmp $R0 "No" 0 +3
+   File "TEST\Driver\vcredist_x86.exe"  ; 지정된 경로를 적어둠.
+
+ 
+
+   ExecWait 'vcredist_x86.exe /q:a /c:"msiexec /i vcredist.msi /qb! /l*v $TEMP\vcredist_x86.log" '
+
+​;//처음에 자동설치모드로 실행했으나,, 해당PC에 vcredist_x86이 있는경우 복구/삭제 선택메뉴 뜨게됨..
+
+;// 맨아래 옵션주면 복구/삭제메뉴를 보지 않도록 한다. ​
+
+;//각 옵션별 기능. 
+
+ ;  ExecWait 'vcredist_x86.exe' # 일반설치
+ ; ExecWait '"vcredist_x86.exe" /q' # silent install 자동설치
+
+;  ExecWait '"vcredist_x86.exe" /q:a' # silent install, display a progress dialog but requires no user interaction.
+;  ExecWait '"vcredist_x86.exe" /qb' # unattended install 무인설치
+;  ExecWait 'vcredist_x86.exe /q:a /c:"msiexec /i vcredist.msi /qb! /l*v $TEMP\vcredist_x86.log" ' # suppress all UI during installation.
+
+FunctionEnd
+
+
+Function CheckVCRedist
+   Push $R0
+   ClearErrors
+   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{{9A25302D-30C0-39D9-BD6F-21E6EC160475}}" "Version"
+
+   IfErrors 0 VSRedistInstalled
+   StrCpy $R0 "No"
+
+VSRedistInstalled:
+   Exch $R0
+FunctionEnd
+
