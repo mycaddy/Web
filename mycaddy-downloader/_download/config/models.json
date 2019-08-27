@@ -10,7 +10,8 @@
       { "/V8_GOLFZONE": "/dat/" },
       { "/V8_HOLEMAP": "/holemap/" },
       { "/V8_DB": "/DB/" }
-    ]
+    ],
+    "size": 3951001600
   },
   {
     "name": "Mycaddy WT S Series",
@@ -24,7 +25,8 @@
     "paths": [
       { "/S_AUDIO": "/" },
       { "/S_GOLFZONE":  "/" }
-    ]
+    ],
+    "size": 129617920
   },
   {
     "name": "Mycaddy O2",
@@ -38,8 +40,8 @@
     "paths": [
       { "/S_AUDIO": "/" },
       { "/S_GOLFZONE": "/" }
-    ]
-
+    ],
+    "size": 129617920
   }
 ]
  

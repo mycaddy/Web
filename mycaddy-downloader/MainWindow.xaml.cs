@@ -28,6 +28,7 @@ using CefSharp;
 using CefSharp.Wpf;
 using CefSharp.SchemeHandler;
 using System.Reflection;
+using System.Windows.Media;
 
 namespace mycaddy_downloader
 {
@@ -107,6 +108,9 @@ namespace mycaddy_downloader
         [Obsolete]
         private void Initialize()
         {
+            AssemblyName assembly = Assembly.GetExecutingAssembly().GetName();
+            txtToolBar.Text = "MYCADDY DWONLOADER version:" + assembly.Version.ToString();
+
             download_status = DOWNLOAD_STATUS.ini;
             device_detected = false;
             upgrade_status = UPGRADE_STATUS.ini;
@@ -227,7 +231,7 @@ namespace mycaddy_downloader
 
                 foreach (dynamic item in list)
                 {
-                    Console.WriteLine(item);
+                    // Debug.WriteLine(item);
                     ModelInfo info = new ModelInfo();
                     info.name = item.name;
                     info.id = item.id;
@@ -237,7 +241,7 @@ namespace mycaddy_downloader
                     {
                         foreach (JProperty prop in content.Properties())
                         {
-                            Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
+                            // Debug.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
                             zips.Add(prop.Name, content[prop.Name].ToString());
                         }
                     }
@@ -246,13 +250,14 @@ namespace mycaddy_downloader
                     {
                         foreach (JProperty prop in content.Properties())
                         {
-                            Console.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
+                            // Debug.WriteLine(prop.Name + ' ' + content[prop.Name].ToString());
                             paths.Add(prop.Name, content[prop.Name].ToString());
                         }
                     }
 
                     info.zip = zips;
                     info.paths = paths;
+                    info.size = item.size;
                     modelList.Add(info);
                 }
             }
@@ -286,7 +291,7 @@ namespace mycaddy_downloader
                     }
                     catch (ArgumentException argEx)
                     {
-                        Console.WriteLine(argEx.Message);
+                        Debug.WriteLine(argEx.Message);
                         info.name = "Error ISO_3166-1_alpha-2";
                     }
                 }
@@ -588,7 +593,7 @@ namespace mycaddy_downloader
                 }
                 else if (file.IsSymbolicLink)
                 {
-                    Console.WriteLine("Ignoring symbolic link {0}", file.FullName);
+                    // Debug.WriteLine("Ignoring symbolic link {0}", file.FullName);
                 }
                 else if (file.Name != "." && file.Name != "..")
                 {
@@ -621,7 +626,7 @@ namespace mycaddy_downloader
         
         private void extract_zipfile_progress(object sender, ExtractProgressEventArgs e)
         {
-            // Console.WriteLine(e.EventType);
+            // Debug.WriteLine(e.EventType);
 
             Application.Current.Dispatcher.Invoke(() => {
                 int total = e.EntriesTotal;
@@ -738,11 +743,14 @@ namespace mycaddy_downloader
                 bool bFormat = false;
                 
                 USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
+                
+
                 if (cbxUpgradeFormat.IsChecked == true)
                 {
                     await Task.Run(() => {
                         bFormat = format_device(item.DiskName);
                     });
+
                 }
                 else
                 {
@@ -751,32 +759,47 @@ namespace mycaddy_downloader
 
                 if (bFormat == true)
                 {
+
                     if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
                     {
                         ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
                         LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
 
-                        try
+                        // Check Drive size
+                        DriveInfo drive_info = new DriveInfo(item.DiskName);
+                        if (model.size != drive_info.TotalSize)
                         {
-                            await Task.Run(() => {
-                                upgrade_device(item.DiskName, model, lan);
+                            Application.Current.Dispatcher.Invoke(() => {
+                                prgbUpgrade.Value = 0;
+                                prgbUpgradeText.Foreground = Brushes.Red;
+                                prgbUpgradeText.Text = "Upgrade Fail: Invalid disk drive size! retry Format";
                             });
-
-                            MessageBoxResult messageBoxResult = MessageBox.Show("업그레이드가 완료되었습니다, 안전하게 장치를 꺼내시겠습니까?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
-                            if (messageBoxResult == MessageBoxResult.Yes)
+                        }
+                        else
+                        {
+                            try
                             {
-                                bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
-                                if (remove_safe)
+                                await Task.Run(() => {
+                                    upgrade_device(item.DiskName, model, lan);
+                                });
+
+                                MessageBoxResult messageBoxResult = MessageBox.Show("Upgrade completed, do you want to safely eject your device?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
+                                if (messageBoxResult == MessageBoxResult.Yes)
                                 {
-                                    MessageBox.Show("연결된 장치를 분리하셔도 됩니다.");
-                                    // dispatch_usbList();   
+                                    bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
+                                    if (remove_safe)
+                                    {
+                                        MessageBox.Show("You can also disconnect the connected device.");
+                                        // dispatch_usbList();   
+                                    }
                                 }
                             }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine(e.Message);
+                            }
                         }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
+
                     }
                     else
                     {
@@ -798,7 +821,7 @@ namespace mycaddy_downloader
         [Obsolete]
         private void upgrade_device(string disk_name, ModelInfo model, LanguageInfo lan)
         {
-
+         
             try
             {
                 Stopwatch stopWatch = new Stopwatch();
@@ -810,6 +833,7 @@ namespace mycaddy_downloader
                 upgrade_count = 0;
 
                 Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgradeText.ClearValue(TextBlock.ForegroundProperty);
                     prgbUpgrade.Maximum = upgrade_total;
                     prgbUpgrade.Value = 0;
                     prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", 0, upgrade_total);
@@ -834,7 +858,7 @@ namespace mycaddy_downloader
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Debug.WriteLine(e.Message);
                 Application.Current.Dispatcher.Invoke(() => {
                     prgbUpgradeText.Text = e.Message;
                 });
@@ -906,7 +930,7 @@ namespace mycaddy_downloader
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Debug.WriteLine(e.Message);
                 throw new Exception(e.Message);
             }
 
@@ -933,6 +957,7 @@ namespace mycaddy_downloader
         public string id { get; set; }
         public Dictionary<string, string> zip { get; set; }
         public Dictionary<string, string> paths { get; set; }
+        public long size { get; set; }
     }
 
     public class LanguageInfo

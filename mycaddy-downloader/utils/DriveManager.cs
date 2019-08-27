@@ -307,7 +307,7 @@ namespace mycaddy_downloader.utils
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine("UnauthorizedAccessException:" + e.Message);
+                        Debug.WriteLine("UnauthorizedAccessException:" + e.Message);
                         throw;
                     }
 
@@ -316,7 +316,7 @@ namespace mycaddy_downloader.utils
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine("IOExeption: " + e.Message);
+                        Debug.WriteLine("IOExeption: " + e.Message);
                         throw;
                     }
                 }
@@ -331,7 +331,7 @@ namespace mycaddy_downloader.utils
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine("UnauthorizedAccessException:" + e.Message);
+                        Debug.WriteLine("UnauthorizedAccessException:" + e.Message);
                         throw;
                     }
                 }
@@ -339,7 +339,7 @@ namespace mycaddy_downloader.utils
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine("IOExeption: " + e.Message);
+                        Debug.WriteLine("IOExeption: " + e.Message);
                         throw;
                     }
                 }
@@ -355,13 +355,13 @@ namespace mycaddy_downloader.utils
 
                     watcher.Completed += (sender, args) =>
                     {
-                        Console.WriteLine("USB format completed " + args.Status);
+                        Debug.WriteLine("USB format completed " + args.Status);
                         completed = true;
                         OnFormatUSBCompleted(EventArgs.Empty);
                     };
                     watcher.Progress += (sender, args) =>
                     {
-                        Console.WriteLine("USB format in progress " + args.Current);
+                        Debug.WriteLine("USB format in progress " + args.Current);
 
                         FormatUSBProgressEventArgs eventArgs = new FormatUSBProgressEventArgs();
                         eventArgs.current = args.Current;
@@ -378,7 +378,7 @@ namespace mycaddy_downloader.utils
                 {
                     if (e.Source != null)
                     {
-                        Console.WriteLine(e.Message);
+                        Debug.WriteLine(e.Message);
                         throw;
                     }
                 }

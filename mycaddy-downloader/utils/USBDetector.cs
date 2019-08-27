@@ -74,12 +74,25 @@ namespace mycaddy_downloader.utils
             {
                 string pnp_device_id = (string)device.GetPropertyValue("PNPDeviceID");
                 string disk_name = GetDiskName(pnp_device_id);
+                long drive_size = 0;
+                try
+                {
+                    DriveInfo drive = new DriveInfo(disk_name);
+                    drive_size = drive.TotalSize;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+
+                Debug.WriteLine("TotalSize: " + drive_size.ToString());
 
                 devices.Add(new USBDeviceInfo(
                     (string)device.GetPropertyValue("DeviceID"),
                     pnp_device_id,
                     (string)device.GetPropertyValue("Description"),
-                    disk_name
+                    disk_name,
+                    drive_size
                 ));
             }
             collection.Dispose();
@@ -247,17 +260,19 @@ namespace mycaddy_downloader.utils
 
     public class USBDeviceInfo
     {
-        public USBDeviceInfo(string deviceID, string pnpDeviceID, string description, string diskName)
+        public USBDeviceInfo(string deviceID, string pnpDeviceID, string description, string diskName, long totalSize)
         {
             this.DeviceID = deviceID;
             this.PnpDeviceID = pnpDeviceID;
             this.Description = description;
             this.DiskName = diskName;
+            this.TotalSize = totalSize;
         }
         public string DeviceID { get; private set; }
         public string PnpDeviceID { get; private set; }
         public string Description { get; private set; }
         public string DiskName { get; private set; }
+        public long TotalSize { get; private set; }
     }
 
     public class DiskDriveInfo
