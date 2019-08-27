@@ -663,6 +663,8 @@ namespace mycaddy_downloader
         private bool format_device(string drive_letter)
         {
             bool bReturn = false;
+            string err_message = "";
+
             Application.Current.Dispatcher.Invoke(() => {
                 prgbFormat.Visibility = Visibility.Visible;
                 prgbUpgradeText.Text = string.Format("Formatting...      ");
@@ -682,29 +684,29 @@ namespace mycaddy_downloader
             }
             catch (FormatException e)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    prgbUpgradeText.Text =e.Message;
-                    prgbUpgrade.Maximum = 100;
-                    prgbUpgrade.Value = 0;
-                });
+                err_message = e.Message;
+                
             }
             catch (IOException e)
             {
-                Application.Current.Dispatcher.Invoke(() => {
-                    prgbUpgradeText.Text = e.Message;
-                    prgbUpgrade.Maximum = 100;
-                    prgbUpgrade.Value = 0;
-                });
+                err_message = e.Message;
             }
             catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke(() => {
-                    prgbUpgradeText.Text = e.Message;
+                err_message = e.Message;
+            }
+
+            if (err_message != "")
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    prgbFormat.Visibility = Visibility.Hidden;
+                    prgbUpgradeText.Text = err_message;
                     prgbUpgrade.Maximum = 100;
                     prgbUpgrade.Value = 0;
                 });
             }
+
             return bReturn;
 
         }

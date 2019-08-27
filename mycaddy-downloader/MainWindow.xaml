@@ -90,7 +90,7 @@
                     <Border Grid.Row="0" Grid.Column="2">
                         <ComboBox
                             x:Name="cbbLanguage"
-                            materialDesign:HintAssist.Hint="Language"
+                            materialDesign:HintAssist.Hint="Device Language"
                             IsEditable="False"
                             materialDesign:HintAssist.HintOpacity=".26"
                             FontSize="20"

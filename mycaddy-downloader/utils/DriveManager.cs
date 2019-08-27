@@ -297,6 +297,8 @@ namespace mycaddy_downloader.utils
             //verify conditions for the letter format: driveLetter[0] must be letter. driveLetter[1] must be ":" and all the characters mustn't be more than 2
             if (driveLetter.Length != 2 || driveLetter[1] != ':' || !char.IsLetter(driveLetter[0]))
                 return false;
+
+
             DirectoryInfo di = new DirectoryInfo(driveLetter);
             foreach (FileInfo file in di.EnumerateFiles())
             {
@@ -340,7 +342,11 @@ namespace mycaddy_downloader.utils
                     if (e.Source != null)
                     {
                         Debug.WriteLine("IOExeption: " + e.Message);
-                        throw;
+                        if (e.HResult != -2147023504)
+                        {
+                            throw;
+                        }
+                        
                     }
                 }
             }
