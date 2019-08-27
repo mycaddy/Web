@@ -1,5 +1,6 @@
 !include "MUI2.nsh"
 !include "DotNetChecker.nsh"
+!include WinVer.nsh
 
 !define PRODUCT_NAME "mycaddy-downloader"
 !define PRODUCT_VERSION "1.0.5.0"
@@ -32,7 +33,7 @@ RequestExecutionLevel admin
 
 SetOverWrite on
 
-Section "Program"
+Section "Program" SEC_PROGRAM
 
   SetOutPath "$INSTDIR"
  
@@ -56,7 +57,7 @@ Section "Program"
 
 SectionEnd
 
-Section "Visual C++ Redistributable Library" 
+Section "Visual C++ Redistributable Library" SEC_CPP_REDIST
 
   SetOutPath "$TEMP"
 
@@ -67,7 +68,6 @@ Section "Visual C++ Redistributable Library"
   ;Call Installvc_redist.x86
 
 SectionEnd
-
 
 Section "Uninstall"
 
@@ -84,6 +84,18 @@ Section "Uninstall"
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"  
 
 SectionEnd
+
+Function .onInit
+  ${IfNot} ${AtLeastWin7}
+    MessageBox MB_OK "Windows 7 and above required"
+    Quit
+  ${EndIf}
+
+  ; define mandatory sections
+  SectionSetFlags ${SEC_PROGRAM} 17
+  SectionSetFlags ${SEC_CPP_REDIST} 17
+  
+FunctionEnd
 
 Function .onInstSuccess
    Call Installvc_redist.x86
