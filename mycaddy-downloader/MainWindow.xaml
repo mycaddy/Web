@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mycaddy_downloader"
+        xmlns:ls="clr-namespace:mycaddy_i18n;assembly=mycaddy-i18n"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         x:Class="mycaddy_downloader.MainWindow"
         Title="MYCADDY DWONLOADER"
@@ -49,9 +50,16 @@
                         DockPanel.Dock="Right"
                         PlacementMode="BottomAndAlignRightEdges"
                         >
-                        <ListBox>
-                            <ListBoxItem Selected="ListBoxItem_Selected" Content="Close"/>
-                        </ListBox>
+                        <StackPanel>
+                            <Button Content="Korean" Click="MenuPopupButton_OnClick"/>
+                            <Button Content="English" Click="MenuPopupButton_OnClick"/>
+                            <Button Content="Chinese" Click="MenuPopupButton_OnClick" />
+                            <Button Content="Japanese" Click="MenuPopupButton_OnClick" />
+                            <Separator/>
+                            <Button Content="Close" Click="MenuPopupButton_OnClick"/>
+                        </StackPanel>
+
+                        
                     </materialDesign:PopupBox>
                 </DockPanel>
             </materialDesign:Card>
@@ -71,12 +79,12 @@
                         <ColumnDefinition Width="200" />
                     </Grid.ColumnDefinitions>
                     <Border Grid.Row="0" Grid.Column="0">
-                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center"><Run Text="Select Model"/></TextBlock>
+                        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center" Text="{Binding Path=[SelectModel], Source={x:Static ls:LanguageResources.Instance}}" />
                     </Border>
                     <Border Grid.Row="0" Grid.Column="1">
                         <ComboBox
                             x:Name="cbbModels"
-                            materialDesign:HintAssist.Hint="Model"
+                            materialDesign:HintAssist.Hint="{Binding Path=[Model], Source={x:Static ls:LanguageResources.Instance}}"
                             IsEditable="False"
                             materialDesign:HintAssist.HintOpacity=".26"
                             FontSize="20"
@@ -90,7 +98,7 @@
                     <Border Grid.Row="0" Grid.Column="2">
                         <ComboBox
                             x:Name="cbbLanguage"
-                            materialDesign:HintAssist.Hint="Device Language"
+                            materialDesign:HintAssist.Hint="{Binding Path=[DeviceLanguage], Source={x:Static ls:LanguageResources.Instance}}"
                             IsEditable="False"
                             materialDesign:HintAssist.HintOpacity=".26"
                             FontSize="20"
@@ -118,7 +126,7 @@
                         <ColumnDefinition Width="120" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="btnDownload" Style='{StaticResource MaterialDesignRaisedAccentButton}' Margin="10 0" Click="BtnDownload_Click" Grid.Row="0" Grid.Column="0" Content="Download"/>
+                    <Button x:Name="btnDownload" Style='{StaticResource MaterialDesignRaisedAccentButton}' Margin="10 0" Click="BtnDownload_Click" Grid.Row="0" Grid.Column="0" Content="{Binding Path=[Download], Source={x:Static ls:LanguageResources.Instance}}"/>
                     <CheckBox
                         x:Name="cbxAutoUpgrade"
                         Margin="0,0,0,8"
@@ -127,7 +135,7 @@
                         IsChecked="True"
                         Grid.Row="1"
                         Grid.Column="1"
-                        VerticalAlignment="Center" Content="Auto upgrade"/>
+                        VerticalAlignment="Center" Content="{Binding Path=[AutoUpgrade], Source={x:Static ls:LanguageResources.Instance}}"/>
                     <ProgressBar x:Name="prgbDownload" Minimum="0" Maximum="100" Height="24" Foreground="Black" Background="#9575cd" IsIndeterminate="False" Grid.Row="0" Grid.Column="2" />
                     <TextBlock 
                         x:Name="prgbDownloadText" FontSize="16px" Text="" 
@@ -164,17 +172,17 @@
                             <GridView>
                                 <GridViewColumn
                                     DisplayMemberBinding="{Binding DeviceID}"
-                                    Header="DeviceID" />
+                                    Header="{Binding Path=[DeviceID], Source={x:Static ls:LanguageResources.Instance}}" />
                                 <GridViewColumn
                                     DisplayMemberBinding="{Binding DiskName}"
-                                    Header="DiskName" />
+                                    Header="{Binding Path=[DiskName], Source={x:Static ls:LanguageResources.Instance}}" />
                                 <GridViewColumn
                                     DisplayMemberBinding="{Binding TotalSize}"
-                                    Header="TotalSize" />
+                                    Header="{Binding Path=[TotalSize], Source={x:Static ls:LanguageResources.Instance}}" />
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' IsEnabled="False" Margin="10 0" Grid.Row="1" Grid.Column="0" Content="Upgrade" Click="BtnUpgrade_Click"/>
+                    <Button x:Name="btnUpgrade" Style='{StaticResource MaterialDesignRaisedDarkButton}' IsEnabled="False" Margin="10 0" Grid.Row="1" Grid.Column="0" Content="{Binding Path=[Upgrade], Source={x:Static ls:LanguageResources.Instance}}" Click="BtnUpgrade_Click"/>
                     <CheckBox
                         x:Name="cbxUpgradeFormat"
                         Margin="0,0,0,8"
@@ -183,7 +191,7 @@
                         IsChecked="True"
                         Grid.Row="1"
                         Grid.Column="1"
-                        VerticalAlignment="Center" Content="Format First"/>
+                        VerticalAlignment="Center" Content="{Binding Path=[FormatFirst], Source={x:Static ls:LanguageResources.Instance}}"/>
                     <ProgressBar x:Name="prgbUpgrade" Foreground="Black" Background="DarkGray" Minimum="0" Maximum="100" Height="24"  IsIndeterminate="False" Grid.Row="1" Grid.Column="2" />
                     <TextBlock x:Name="prgbUpgradeText" Foreground="White" FontSize="16px" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
                     <ProgressBar

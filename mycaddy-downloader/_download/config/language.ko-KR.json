@@ -1,0 +1,14 @@
+[
+	{"Key": "SelectModel",    "Value": "모델 선택"},
+	{"Key": "Model",          "Value": "모델"},
+	{"Key": "DeviceLanguage", "Value": "장치언어"},
+	{"Key": "Download",       "Value": "다운로드"},
+	{"Key": "AutoUpgrade",    "Value": "자동 업그레이드"},
+	{"Key": "Upgrade",        "Value": "업그레이드"},
+	{"Key": "NoDevice",       "Value": "장치 없음"},
+	{"Key": "DeviceFounded",  "Value": "장치 발견됨"},
+	{"Key": "FormatFirst",    "Value": "포맷작업"},
+	{"Key": "DeviceID",       "Value": "장치아이디"},
+	{"Key": "DiskName",       "Value": "디스크이름"},
+	{"Key": "TotalSize",      "Value": "전체크기"}
+]

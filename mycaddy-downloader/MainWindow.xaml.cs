@@ -29,6 +29,7 @@ using CefSharp.Wpf;
 using CefSharp.SchemeHandler;
 using System.Reflection;
 using System.Windows.Media;
+using mycaddy_i18n;
 
 namespace mycaddy_downloader
 {
@@ -96,7 +97,6 @@ namespace mycaddy_downloader
         public ObservableCollection<ModelInfo> modelList { get; set; }
         public ObservableCollection<LanguageInfo> languageList { get; set; }
 
-        [Obsolete]
         public MainWindow()
         {
             InitializeComponent();
@@ -105,7 +105,6 @@ namespace mycaddy_downloader
             DataContext = this;
         }
 
-        [Obsolete]
         private void Initialize()
         {
             AssemblyName assembly = Assembly.GetExecutingAssembly().GetName();
@@ -121,8 +120,8 @@ namespace mycaddy_downloader
             {
                 Directory.CreateDirectory(DOWNLOAD_PATH);
             }
-            // Load default manual
-            download_manual();
+            // Load default model and manual
+            download_config();
 
             // USB Devices init
             usbDetector = new USBDetector();
@@ -139,12 +138,13 @@ namespace mycaddy_downloader
             languageList = new ObservableCollection<LanguageInfo>();
 
             update_ui();
+            
         }
 
         private void InitializeBrowser()
         {
             // https://stackoverflow.com/questions/52338368/loading-local-html-css-js-files-with-cefsharp-v65
-            var settins = new CefSharp.Wpf.CefSettings();
+            CefSettings settins = new CefSharp.Wpf.CefSettings();
             settins.RegisterScheme(new CefCustomScheme
             {
                 SchemeName = "localfolder",
@@ -155,7 +155,8 @@ namespace mycaddy_downloader
             });
             Cef.Initialize(settins);
 
-            webBrowser = new ChromiumWebBrowser("localfolder://mycaddy.manual/Default.ko.html");
+            string man_default = $"localfolder://mycaddy.manual/Default.{LanguageResources.Instance.CultureName.Substring(0, 2)}.html";
+            webBrowser = new ChromiumWebBrowser(man_default);
             webBrowser.Height = panWebBrowser.Height;
             panWebBrowser.Children.Add(webBrowser);
 
@@ -166,7 +167,7 @@ namespace mycaddy_downloader
             dispatch_usbList();
         }
 
-        private void download_manual()
+        private void download_config()
         {
             SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
 
@@ -272,46 +273,52 @@ namespace mycaddy_downloader
         {
             languageList.Clear();
 
-            foreach(var lan in model.zip)
+            if (model != null)
             {
-                LanguageInfo info = new LanguageInfo();
-                info.id = lan.Key;
-                info.file = lan.Value;
+                foreach (var lan in model.zip)
+                {
+                    LanguageInfo info = new LanguageInfo();
+                    info.id = lan.Key;
+                    info.file = lan.Value;
 
-                if (info.id == "ALL")
-                {
-                    info.name = "ALL";
-                }
-                else
-                {
-                    try
+                    if (info.id == "ALL")
                     {
-                        CultureInfo lang = new CultureInfo(info.id);
-                        info.name = lang.DisplayName;
+                        info.name = "ALL";
                     }
-                    catch (ArgumentException argEx)
+                    else
                     {
-                        Debug.WriteLine(argEx.Message);
-                        info.name = "Error ISO_3166-1_alpha-2";
+                        try
+                        {
+                            CultureInfo lang = new CultureInfo(info.id);
+                            info.name = lang.DisplayName;
+                        }
+                        catch (ArgumentException argEx)
+                        {
+                            Debug.WriteLine(argEx.Message);
+                            info.name = "Error ISO_3166-1_alpha-2";
+                        }
                     }
+                    languageList.Add(info);
                 }
-                languageList.Add(info);
+
             }
-
 
         }
 
-        [Obsolete]
         private void CbbModels_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             download_status = DOWNLOAD_STATUS.ini;
             update_ui();
 
             ModelInfo item = (ModelInfo)(sender as ComboBox).SelectedItem;
-            dispatch_languageList(item);
 
-            load_manual($"{item.id}.ko.html");
-            
+            if (item != null)
+            {
+                dispatch_languageList(item);
+
+                load_manual($"{item.id}.{LanguageResources.Instance.CultureName.Substring(0, 2)}.html");
+            }
+
         }
         private void CbbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -321,7 +328,7 @@ namespace mycaddy_downloader
         private void update_ui()
         {   
             // Check Mycaddy device 
-            string sDetectString = device_detected ? "Device founded" : "Device not founded";
+            string sDetectString = device_detected ? LanguageResources.Instance.ResourceDictionary["DeviceFounded"] : LanguageResources.Instance.ResourceDictionary["NoDevice"];
             Application.Current.Dispatcher.Invoke(() =>
             {
                 switch(download_status)
@@ -370,7 +377,6 @@ namespace mycaddy_downloader
             });            
         }
 
-        [Obsolete]
         private void BtnDownload_Click(object sender, RoutedEventArgs e)
         {
 
@@ -392,7 +398,6 @@ namespace mycaddy_downloader
             }
         }
 
-        [Obsolete]
         private async void download_process(string download_file)
         {
             bool auto_upgrade = cbxAutoUpgrade.IsChecked ?? true;
@@ -652,7 +657,6 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        [Obsolete]
         private void BtnUpgrade_Click(object sender, RoutedEventArgs e)
         {
             upgrade_process();
@@ -729,7 +733,6 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        [Obsolete]
         private async void upgrade_process()
         {
             if (lstDevice.Items.Count == 1)
@@ -812,7 +815,7 @@ namespace mycaddy_downloader
                         Application.Current.Dispatcher.Invoke(() => {
                             prgbUpgrade.Value = upgrade_count;
                             prgbUpgradeText.Text = $"Completed({elapsedTime})";
-                            load_manual($"{model.id}.ko.complete.html");
+                            load_manual($"{model.id}.{LanguageResources.Instance.CultureName.Substring(0, 2)}.complete.html");
                         });
 
                     }
@@ -839,7 +842,6 @@ namespace mycaddy_downloader
 
         }
 
-        [Obsolete]
         private void upgrade_device(string disk_name, ModelInfo model, LanguageInfo lan)
         {
          
@@ -963,17 +965,44 @@ namespace mycaddy_downloader
 
         #region Load manual with Webview
 
-        [Obsolete]
         private void load_manual(string file_name)
         {
             webBrowser.Load($"localfolder://mycaddy.manual/{file_name}");
         }
         #endregion
 
-        private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
+        private void MenuPopupButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            string menu_text = ((Button)sender).Content.ToString();
+            if (menu_text == "Close")
+            {
+                Application.Current.Shutdown();
+            }
+            else {
+                string language_code;
+                switch (menu_text) {
+                    case "English":
+                        language_code = "en-US";
+                        break;
+                    case "Chinese":
+                        language_code = "zh-CN";
+                        break;
+                    case "Japanese":
+                        language_code = "ja-JP";
+                        break;
+                    default:
+                        language_code = "ko-KR";
+                        break;
+                }
+                LanguageResources.Instance.CultureName = language_code;
+                cbbLanguage.SelectedIndex = -1;
+                cbbModels.SelectedIndex = -1;
+                load_manual($"Default.{LanguageResources.Instance.CultureName.Substring(0, 2)}.html");
+
+            }
+            
         }
+
     }
 
     public class ModelInfo

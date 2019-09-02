@@ -1,0 +1,14 @@
+[
+	{"Key": "SelectModel",    "Value": "Select Model"},
+	{"Key": "Model",          "Value": "Model"},
+	{"Key": "DeviceLanguage", "Value": "Device Language"},
+	{"Key": "Download",       "Value": "Download"},
+	{"Key": "AutoUpgrade",    "Value": "Auto Upgrade"},
+	{"Key": "Upgrade",        "Value": "Upgrade"},
+	{"Key": "NoDevice",       "Value": "No Device"},
+	{"Key": "DeviceFounded",  "Value": "Device founded"},
+	{"Key": "FormatFirst",    "Value": "Format First"},
+	{"Key": "DeviceID",       "Value": "Device ID"},
+	{"Key": "DiskName",       "Value": "Disk Name"},
+	{"Key": "TotalSize",      "Value": "Total Size"}
+]

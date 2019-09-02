@@ -1,0 +1,8 @@
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Debug\mycaddy-i18n.dll
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Debug\mycaddy-i18n.pdb
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.csproj.CoreCompileInputs.cache
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.dll
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.pdb
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Debug\Newtonsoft.Json.dll
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Debug\Newtonsoft.Json.xml
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.csproj.CopyComplete

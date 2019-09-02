@@ -1,0 +1,14 @@
+[
+	{"Key": "SelectModel",    "Value": "モデルを選択"},
+	{"Key": "Model",          "Value": "モデル"},
+	{"Key": "DeviceLanguage", "Value": "デバイス言語"},
+	{"Key": "Download",       "Value": "ダウンロード"},
+	{"Key": "AutoUpgrade",    "Value": "自動アップグレード"},
+	{"Key": "Upgrade",        "Value": "アップグレード"},
+	{"Key": "NoDevice",       "Value": "デバイスなし"},
+	{"Key": "DeviceFounded",  "Value": "デバイスが設立されました"},
+	{"Key": "FormatFirst",    "Value": "Format First"},
+	{"Key": "DeviceID",       "Value": "Device ID"},
+	{"Key": "DiskName",       "Value": "Disk Name"},
+	{"Key": "TotalSize",      "Value": "Total Size"}
+]

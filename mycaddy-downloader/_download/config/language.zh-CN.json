@@ -1,0 +1,14 @@
+[
+	{"Key": "SelectModel",    "Value": "选择型号"},
+	{"Key": "Model",          "Value": "模型"},
+	{"Key": "DeviceLanguage", "Value": "设备语言"},
+	{"Key": "Download",       "Value": "下载"},
+	{"Key": "AutoUpgrade",    "Value": "自动升级"},
+	{"Key": "Upgrade",        "Value": "升级"},
+	{"Key": "NoDevice",       "Value": "没有设备"},
+	{"Key": "DeviceFounded",  "Value": "设备成立"},
+	{"Key": "FormatFirst",    "Value": "格式化第一"},
+	{"Key": "DeviceID",       "Value": "Device ID"},
+	{"Key": "DiskName",       "Value": "Disk Name"},
+	{"Key": "TotalSize",      "Value": "Total Size"}
+]
