@@ -193,7 +193,7 @@
                         Visibility="Hidden"
                         IsIndeterminate="True"
                         Foreground="Red"
-                        Grid.Row="1" Grid.Column="2" Margin="260,0,400,0"
+                        Grid.Row="1" Grid.Column="2" Margin="240,0,420,0"
                     />
                 </Grid>
             </materialDesign:Card>

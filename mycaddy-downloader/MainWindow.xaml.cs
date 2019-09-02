@@ -739,6 +739,9 @@ namespace mycaddy_downloader
 
             if (lstDevice.SelectedItem != null)
             {
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+
                 upgrade_status = UPGRADE_STATUS.start;
                 update_ui();
 
@@ -802,6 +805,16 @@ namespace mycaddy_downloader
                             }
                         }
 
+                        stopWatch.Stop();
+                        TimeSpan ts = stopWatch.Elapsed;
+                        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+
+                        Application.Current.Dispatcher.Invoke(() => {
+                            prgbUpgrade.Value = upgrade_count;
+                            prgbUpgradeText.Text = $"Completed({elapsedTime})";
+                            load_manual($"{model.id}.ko.complete.html");
+                        });
+
                     }
                     else
                     {
@@ -809,8 +822,14 @@ namespace mycaddy_downloader
                     }
                 }
 
+                if (stopWatch.IsRunning)
+                {
+                    stopWatch.Stop();
+                }
+
                 upgrade_status = UPGRADE_STATUS.end;
                 update_ui();
+
 
             }
             else
@@ -826,8 +845,10 @@ namespace mycaddy_downloader
          
             try
             {
+                /*
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
+                */
 
                 string source_dir = $@"{DOWNLOAD_PATH}\{Path.GetFileNameWithoutExtension(lan.file)}";
                 DirectoryInfo source_total = new DirectoryInfo(source_dir);
@@ -838,7 +859,7 @@ namespace mycaddy_downloader
                     prgbUpgradeText.ClearValue(TextBlock.ForegroundProperty);
                     prgbUpgrade.Maximum = upgrade_total;
                     prgbUpgrade.Value = 0;
-                    prgbUpgradeText.Text = string.Format("{0:N0} / {1:N0}", 0, upgrade_total);
+                    prgbUpgradeText.Text = string.Format("transfer... {0:N0} / {1:N0}", 0, upgrade_total);
                 });
 
                 foreach (var item in model.paths)
@@ -848,6 +869,7 @@ namespace mycaddy_downloader
                     directory_copy(source_path, target_path, true);
                 }
 
+                /*
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
                 string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
@@ -857,6 +879,7 @@ namespace mycaddy_downloader
                     prgbUpgradeText.Text = $"Completed({elapsedTime})";
                     load_manual($"{model.id}.ko.complete.html");
                 });
+                */
             }
             catch (Exception e)
             {
