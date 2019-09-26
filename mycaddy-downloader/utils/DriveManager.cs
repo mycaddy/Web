@@ -298,7 +298,7 @@ namespace mycaddy_downloader.utils
             if (driveLetter.Length != 2 || driveLetter[1] != ':' || !char.IsLetter(driveLetter[0]))
                 return false;
 
-
+            /*
             DirectoryInfo di = new DirectoryInfo(driveLetter);
             foreach (FileInfo file in di.EnumerateFiles())
             {
@@ -350,6 +350,7 @@ namespace mycaddy_downloader.utils
                     }
                 }
             }
+            */
 
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"select * from Win32_Volume WHERE DriveLetter = '" + driveLetter + "'");
             foreach (ManagementObject vi in searcher.Get())

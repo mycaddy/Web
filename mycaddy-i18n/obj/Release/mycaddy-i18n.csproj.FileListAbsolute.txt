@@ -5,5 +5,4 @@ D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Release\mycaddy-i18n.dll
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Release\mycaddy-i18n.pdb
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Release\Newtonsoft.Json.dll
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Release\Newtonsoft.Json.xml
-D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Release\mycaddy-i18n.csprojAssemblyReference.cache
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Release\mycaddy-i18n.csproj.CopyComplete

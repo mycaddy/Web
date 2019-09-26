@@ -352,11 +352,21 @@ namespace mycaddy_downloader
                         break;
                 }
 
+                if (upgrade_status == UPGRADE_STATUS.start)
+                {
+                    btnDownload.IsEnabled = false;
+                }
+                else
+                {
+                    btnDownload.IsEnabled = true;
+                }
+
+
                 cbxDeviceEnable.IsEnabled = device_detected;
                 cbxDeviceEnable.IsChecked = device_detected;
                 cbxDeviceEnable.Content = sDetectString;
-                cbxAutoUpgrade.IsChecked = device_detected;
-                cbxUpgradeFormat.IsEnabled = device_detected;
+                // cbxAutoUpgrade.IsChecked = device_detected;
+                // cbxUpgradeFormat.IsEnabled = device_detected;
 
                 if (download_status == DOWNLOAD_STATUS.end && device_detected == true && upgrade_status != UPGRADE_STATUS.start)
                 {
@@ -791,6 +801,7 @@ namespace mycaddy_downloader
                                     upgrade_device(item.DiskName, model, lan);
                                 });
 
+                                /*
                                 MessageBoxResult messageBoxResult = MessageBox.Show("Upgrade completed, do you want to safely eject your device?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
                                 if (messageBoxResult == MessageBoxResult.Yes)
                                 {
@@ -801,6 +812,7 @@ namespace mycaddy_downloader
                                         // dispatch_usbList();   
                                     }
                                 }
+                                */
                             }
                             catch (Exception e)
                             {
@@ -837,7 +849,7 @@ namespace mycaddy_downloader
             }
             else
             {
-                MessageBox.Show("Select device!");
+                MessageBox.Show("Connect or Select device!");
             }
 
         }

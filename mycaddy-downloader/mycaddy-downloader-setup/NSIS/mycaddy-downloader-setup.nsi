@@ -3,7 +3,7 @@
 !include WinVer.nsh
 
 !define PRODUCT_NAME "mycaddy-downloader"
-!define PRODUCT_VERSION "1.0.5.0"
+!define PRODUCT_VERSION "1.1.1.0"
 !define PRODUCT_PUBLISHER "MYCADDY Co., LTD."
 !define PRODUCT_WEB_SITE "http://www.mycaddy.co.kr"
 
