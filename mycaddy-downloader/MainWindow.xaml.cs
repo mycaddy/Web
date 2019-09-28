@@ -674,7 +674,7 @@ namespace mycaddy_downloader
         }
 
         #region format_device(): Format Disk Drive
-        private bool format_device(string drive_letter)
+        private bool format_device(string drive_letter, string model_id)
         {
             bool bReturn = false;
             string err_message = "";
@@ -693,7 +693,14 @@ namespace mycaddy_downloader
 
                 dm.FormatUSBProgress += Dm_FormatUSBProgress;
                 dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
-                bReturn = dm.FormatUSB(drive_letter);
+                if (model_id == "WT_V8")
+                {
+                    bReturn = dm.FormatUSB(drive_letter, "FAT32", false, 2048, model_id);
+                }
+                else
+                {
+                    bReturn = dm.FormatUSB(drive_letter, "FAT", false, 2048, model_id);
+                }
 
             }
             catch (FormatException e)
@@ -743,7 +750,7 @@ namespace mycaddy_downloader
         }
         #endregion
 
-        private async void upgrade_process()
+        private void upgrade_process()
         {
             if (lstDevice.Items.Count == 1)
             {
@@ -752,104 +759,102 @@ namespace mycaddy_downloader
 
             if (lstDevice.SelectedItem != null)
             {
+                if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
+                {
+                    upgrade_task();
+                }
+                else
+                {
+                    MessageBox.Show("Select Model and Langauge");
+                }    
+            }
+            else
+            {
+                MessageBox.Show("Select device!");
+            }
+        }
+
+        private async void upgrade_task()
+        {
+            ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
+            LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
+
+            load_manual($"{model.id}.{LanguageResources.Instance.CultureName.Substring(0, 2)}.html");
+
+            try
+            {
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
 
                 upgrade_status = UPGRADE_STATUS.start;
                 update_ui();
 
-                bool bFormat = false;
-                
                 USBDeviceInfo item = (USBDeviceInfo)lstDevice.SelectedItems[0];
-                
-
+                bool bFormat = false;
                 if (cbxUpgradeFormat.IsChecked == true)
                 {
                     await Task.Run(() => {
-                        bFormat = format_device(item.DiskName);
+                       bFormat = format_device(item.DiskName, model.id);
                     });
-
-                }
-                else
-                {
-                    bFormat = true;
                 }
 
-                if (bFormat == true)
+                // Check Drive size
+                DriveInfo drive_info = new DriveInfo(item.DiskName);
+                if (model.size != drive_info.TotalSize)
                 {
+                    Application.Current.Dispatcher.Invoke(() => {
+                        prgbUpgrade.Value = 0;
+                        prgbUpgradeText.Foreground = Brushes.Red;
+                        prgbUpgradeText.Text = "Upgrade Fail: Invalid disk drive size! retry Format";
+                    });
+                }
 
-                    if (cbbModels.SelectedItem != null && cbbLanguage.SelectedItem != null)
+
+                await Task.Run(() => {
+                    upgrade_device(item.DiskName, model, lan);
+                });
+
+                /*
+                MessageBoxResult messageBoxResult = MessageBox.Show("Upgrade completed, do you want to safely eject your device?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
+                    if (remove_safe)
                     {
-                        ModelInfo model = (ModelInfo)cbbModels.SelectedItem;
-                        LanguageInfo lan = (LanguageInfo)cbbLanguage.SelectedItem;
-
-                        // Check Drive size
-                        DriveInfo drive_info = new DriveInfo(item.DiskName);
-                        if (model.size != drive_info.TotalSize)
-                        {
-                            Application.Current.Dispatcher.Invoke(() => {
-                                prgbUpgrade.Value = 0;
-                                prgbUpgradeText.Foreground = Brushes.Red;
-                                prgbUpgradeText.Text = "Upgrade Fail: Invalid disk drive size! retry Format";
-                            });
-                        }
-                        else
-                        {
-                            try
-                            {
-                                await Task.Run(() => {
-                                    upgrade_device(item.DiskName, model, lan);
-                                });
-
-                                /*
-                                MessageBoxResult messageBoxResult = MessageBox.Show("Upgrade completed, do you want to safely eject your device?", "Remove device confirmation", System.Windows.MessageBoxButton.YesNo);
-                                if (messageBoxResult == MessageBoxResult.Yes)
-                                {
-                                    bool remove_safe = RemoveDriveTools.RemoveDrive(item.DiskName);
-                                    if (remove_safe)
-                                    {
-                                        MessageBox.Show("You can also disconnect the connected device.");
-                                        // dispatch_usbList();   
-                                    }
-                                }
-                                */
-                            }
-                            catch (Exception e)
-                            {
-                                Debug.WriteLine(e.Message);
-                            }
-                        }
-
-                        stopWatch.Stop();
-                        TimeSpan ts = stopWatch.Elapsed;
-                        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-
-                        Application.Current.Dispatcher.Invoke(() => {
-                            prgbUpgrade.Value = upgrade_count;
-                            prgbUpgradeText.Text = $"Completed({elapsedTime})";
-                            load_manual($"{model.id}.{LanguageResources.Instance.CultureName.Substring(0, 2)}.complete.html");
-                        });
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Select Model and Langauge");
+                        MessageBox.Show("You can also disconnect the connected device.");
+                        // dispatch_usbList();   
                     }
                 }
-
+                */
                 if (stopWatch.IsRunning)
                 {
                     stopWatch.Stop();
                 }
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgrade.Value = upgrade_count;
+                    prgbUpgradeText.Text = $"Completed({elapsedTime})";
+                    load_manual($"{model.id}.{LanguageResources.Instance.CultureName.Substring(0, 2)}.complete.html");
+                });
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Application.Current.Dispatcher.Invoke(() => {
+                    prgbUpgrade.Value = 0;
+                    prgbUpgradeText.Foreground = Brushes.Red;
+                    prgbUpgradeText.Text = "Upgrade Fail:" + e.Message;
+                });
+
+            }
+            finally
+            {
                 upgrade_status = UPGRADE_STATUS.end;
                 update_ui();
 
-
-            }
-            else
-            {
-                MessageBox.Show("Connect or Select device!");
             }
 
         }
