@@ -259,6 +259,8 @@ namespace mycaddy_downloader
                     info.zip = zips;
                     info.paths = paths;
                     info.size = item.size;
+                    info.fileSystem = item.fileSystem;
+                    info.clusterSize = item.clusterSize;
                     modelList.Add(info);
                 }
             }
@@ -674,7 +676,7 @@ namespace mycaddy_downloader
         }
 
         #region format_device(): Format Disk Drive
-        private bool format_device(string drive_letter, string model_id)
+        private bool format_device(string drive_letter, string model_id, string file_system = "FAT", int cluster_size = 2048)
         {
             bool bReturn = false;
             string err_message = "";
@@ -693,14 +695,7 @@ namespace mycaddy_downloader
 
                 dm.FormatUSBProgress += Dm_FormatUSBProgress;
                 dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
-                if (model_id == "WT_V8")
-                {
-                    bReturn = dm.FormatUSB(drive_letter, "FAT32", false, 2048, model_id);
-                }
-                else
-                {
-                    bReturn = dm.FormatUSB(drive_letter, "FAT", false, 2048, model_id);
-                }
+                bReturn = dm.FormatUSB(drive_letter, file_system, false, cluster_size, model_id);
 
             }
             catch (FormatException e)
@@ -794,7 +789,7 @@ namespace mycaddy_downloader
                 if (cbxUpgradeFormat.IsChecked == true)
                 {
                     await Task.Run(() => {
-                       bFormat = format_device(item.DiskName, model.id);
+                       bFormat = format_device(item.DiskName, model.id, model.fileSystem, model.clusterSize);
                     });
                 }
 
@@ -1015,7 +1010,6 @@ namespace mycaddy_downloader
                 cbbLanguage.SelectedIndex = -1;
                 cbbModels.SelectedIndex = -1;
                 load_manual($"Default.{LanguageResources.Instance.CultureName.Substring(0, 2)}.html");
-
             }
             
         }
@@ -1029,6 +1023,8 @@ namespace mycaddy_downloader
         public Dictionary<string, string> zip { get; set; }
         public Dictionary<string, string> paths { get; set; }
         public long size { get; set; }
+        public string fileSystem { get; set; }
+        public int clusterSize { get; set; }
     }
 
     public class LanguageInfo

@@ -11,7 +11,9 @@
       { "/V8_HOLEMAP": "/holemap/" },
       { "/V8_DB": "/DB/" }
     ],
-    "size": 3951001600
+    "size": 3951001600,
+    "fileSystem": "FAT32",
+    "clusterSize": "2048"
   },
   {
     "name": "Mycaddy WT S Series",
@@ -26,7 +28,9 @@
       { "/S_AUDIO": "/" },
       { "/S_GOLFZONE":  "/" }
     ],
-    "size": 129617920
+    "size": 129617920,
+    "fileSystem": "FAT",
+    "clusterSize": "2048"
   },
   {
     "name": "Mycaddy O2",
@@ -41,7 +45,9 @@
       { "/S_AUDIO": "/" },
       { "/S_GOLFZONE": "/" }
     ],
-    "size": 129617920
+    "size": 129617920,
+    "fileSystem": "FAT",
+    "clusterSize": "2048"
   }
 ]
  
