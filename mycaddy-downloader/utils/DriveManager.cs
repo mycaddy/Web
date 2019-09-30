@@ -48,25 +48,6 @@ namespace mycaddy_downloader.utils
 
         #endregion
 
-        #region FormatDrive
-
-        /// <summary>
-        /// Format a drive using the best available method
-        /// </summary>
-        /// <param name="driveLetter">drive letter. Example : 'A', 'B', 'C', 'D', ..., 'Z'.</param>
-        /// <param name="label">label for the drive</param>
-        /// <param name="fileSystem">file system. Possible values : "FAT", "FAT32", "EXFAT", "NTFS", "UDF".</param>
-        /// <param name="quickFormat">quick formatting?</param>
-        /// <param name="enableCompression">enable drive compression?</param>
-        /// <param name="clusterSize">cluster size (default=null for auto). Possible value depends on the file system : 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, ...</param>
-        /// <returns>true if success, false if failure</returns>
-        public bool FormatDrive(char driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int? clusterSize = 2048)
-        {
-            return FormatDrive_CommandLine(driveLetter, label, fileSystem, quickFormat, enableCompression, clusterSize);
-        }
-
-        #endregion
-
         #region FormatDrive_CommandLine
 
         /// <summary>
@@ -79,19 +60,19 @@ namespace mycaddy_downloader.utils
         /// <param name="enableCompression">enable drive compression?</param>
         /// <param name="clusterSize">cluster size (default=null for auto). Possible value depends on the file system : 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, ...</param>
         /// <returns>true if success, false if failure</returns>
-        public bool FormatDrive_CommandLine(char driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int? clusterSize = 2048)
+        public bool FormatDrive_CommandLine(string driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int? clusterSize = 2048)
         {
             #region args check
 
-            if (!Char.IsLetter(driveLetter) ||
-                !IsFileSystemValid(fileSystem))
+            if (!IsFileSystemValid(fileSystem))
             {
                 return false;
             }
 
             #endregion
             bool success = false;
-            string drive = driveLetter + ":";
+            // string drive = driveLetter + ":";
+            string drive = driveLetter;
             try
             {
                 var di = new DriveInfo(drive);
@@ -109,6 +90,9 @@ namespace mycaddy_downloader.utils
                 psi.CreateNoWindow = true;
                 psi.RedirectStandardOutput = true;
                 psi.RedirectStandardInput = true;
+                
+                
+
                 var formatProcess = Process.Start(psi);
                 var swStandardInput = formatProcess.StandardInput;
                 swStandardInput.WriteLine();
@@ -117,6 +101,76 @@ namespace mycaddy_downloader.utils
             }
             catch (Exception) { }
             return success;
+        }
+
+        #endregion
+
+        #region FormatDrive_CommandLine Async
+        private bool formatEventHandled;
+        public bool FormatDrive_CommandLineAsync(string driveLetter, string label = "", string fileSystem = "FAT", bool quickFormat = false, bool enableCompression = false, int? clusterSize = 2048)
+        {
+            #region args check
+
+            if (!IsFileSystemValid(fileSystem))
+            {
+                return false;
+            }
+
+            #endregion
+            bool success = false;
+            // string drive = driveLetter + ":";
+            string drive = driveLetter;
+            formatEventHandled = false;
+
+            try
+            {
+                
+
+                var formatProcess = new Process();
+ 
+                var psi = new ProcessStartInfo();
+                psi.FileName = "format.com";
+                psi.WorkingDirectory = Environment.SystemDirectory;
+                psi.Arguments = "/FS:" + fileSystem +
+                                             " /Y" +
+                                             " /V:" + label +
+                                             (quickFormat ? " /Q" : "") +
+                                             ((fileSystem == "NTFS" && enableCompression) ? " /C" : "") +
+                                             (clusterSize.HasValue ? " /A:" + clusterSize.Value : "") +
+                                             " " + drive;
+                psi.UseShellExecute = false;
+                psi.CreateNoWindow = true;
+                psi.RedirectStandardOutput = true;
+                psi.RedirectStandardInput = true;
+
+                formatProcess.StartInfo = psi;
+                formatProcess.EnableRaisingEvents = true;
+                formatProcess.Exited += (sender, args) =>
+                {
+                    formatEventHandled = true;
+                    OnFormatDriveCompleted(EventArgs.Empty);
+                };
+                formatProcess.Start();
+                /*
+                var swStandardInput = formatProcess.StandardInput;
+                swStandardInput.WriteLine();
+                formatProcess.WaitForExit();
+
+                success = true;
+                */
+            }
+            catch (Exception e) { throw new Exception(e.Message); }
+            return success;
+        }
+
+        public event EventHandler FormatDriveCompleted;
+        protected virtual void OnFormatDriveCompleted(EventArgs e)
+        {
+            EventHandler handler = FormatDriveCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         #endregion
@@ -376,7 +430,7 @@ namespace mycaddy_downloader.utils
                     };
 
                     vi.InvokeMethod(watcher, "Format", new object[] { fileSystem, quickFormat, clusterSize, label, enableCompression });
-
+                    
                     while (!completed) { System.Threading.Thread.Sleep(1000); }
 
 

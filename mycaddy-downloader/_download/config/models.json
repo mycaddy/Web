@@ -13,7 +13,8 @@
     ],
     "size": 3951001600,
     "fileSystem": "FAT32",
-    "clusterSize": "2048"
+    "clusterSize": "2048",
+    "quickFormat": true
   },
   {
     "name": "Mycaddy WT S Series",
@@ -30,7 +31,8 @@
     ],
     "size": 129617920,
     "fileSystem": "FAT",
-    "clusterSize": "2048"
+    "clusterSize": "2048",
+    "quickFormat": false
   },
   {
     "name": "Mycaddy O2",
@@ -47,7 +49,8 @@
     ],
     "size": 129617920,
     "fileSystem": "FAT",
-    "clusterSize": "2048"
+    "clusterSize": "2048",
+    "quickFormat": false
   }
 ]
  

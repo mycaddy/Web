@@ -261,6 +261,7 @@ namespace mycaddy_downloader
                     info.size = item.size;
                     info.fileSystem = item.fileSystem;
                     info.clusterSize = item.clusterSize;
+                    info.quickFormat = item.quickFormat;
                     modelList.Add(info);
                 }
             }
@@ -676,7 +677,7 @@ namespace mycaddy_downloader
         }
 
         #region format_device(): Format Disk Drive
-        private bool format_device(string drive_letter, string model_id, string file_system = "FAT", int cluster_size = 2048)
+        private bool format_device(string drive_letter, string model_id, string file_system = "FAT", bool quick_format = false, int cluster_size = 2048)
         {
             bool bReturn = false;
             string err_message = "";
@@ -691,17 +692,20 @@ namespace mycaddy_downloader
             try
             {
                 DriveManager dm = new DriveManager();
-                // bReturn = dm.FormatDrive(char.Parse(drive_letter.Replace(":","")));
 
+                
                 dm.FormatUSBProgress += Dm_FormatUSBProgress;
                 dm.FormatUSBCompleted += Dm_FormatUSBCompleted;
-                bReturn = dm.FormatUSB(drive_letter, file_system, false, cluster_size, model_id);
+                bReturn = dm.FormatUSB(drive_letter, file_system, quick_format, cluster_size, model_id);
 
+                /*
+                dm.FormatDriveCompleted += Dm_FormatUSBCompleted;
+                bReturn = dm.FormatDrive_CommandLine(drive_letter, model_id, file_system, quick_format, false, cluster_size);
+                */
             }
             catch (FormatException e)
             {
                 err_message = e.Message;
-                
             }
             catch (IOException e)
             {
@@ -789,11 +793,12 @@ namespace mycaddy_downloader
                 if (cbxUpgradeFormat.IsChecked == true)
                 {
                     await Task.Run(() => {
-                       bFormat = format_device(item.DiskName, model.id, model.fileSystem, model.clusterSize);
+                       bFormat = format_device(item.DiskName, model.id, model.fileSystem, model.quickFormat, model.clusterSize);
                     });
                 }
 
                 // Check Drive size
+                /*
                 DriveInfo drive_info = new DriveInfo(item.DiskName);
                 if (model.size != drive_info.TotalSize)
                 {
@@ -803,7 +808,7 @@ namespace mycaddy_downloader
                         prgbUpgradeText.Text = "Upgrade Fail: Invalid disk drive size! retry Format";
                     });
                 }
-
+                */
 
                 await Task.Run(() => {
                     upgrade_device(item.DiskName, model, lan);
@@ -1025,6 +1030,7 @@ namespace mycaddy_downloader
         public long size { get; set; }
         public string fileSystem { get; set; }
         public int clusterSize { get; set; }
+        public bool quickFormat { get; set; }
     }
 
     public class LanguageInfo
