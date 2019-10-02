@@ -1,13 +1,12 @@
 [
   {
-    "name": "Mycaddy V8 V9",
+    "name": "Mycaddy V8",
     "id": "WT_V8",
     "zip": [
       { "ALL": "WT_V8.zip" } 
     ], 
     "paths": [
       { "/Rofs.bin": "/Rofs.bin" },
-      { "/MYCADDY.bin": "/MYCADDY.bin" },
       { "/V8_GOLFZONE": "/dat/" },
       { "/V8_HOLEMAP": "/holemap/" },
       { "/V8_DB": "/DB/" }
@@ -18,7 +17,7 @@
     "quickFormat": true
   },
   {
-    "name": "Mycaddy WT S3",
+    "name": "Mycaddy WT S Series",
     "id":  "WT_S3",
     "zip": [
       { "ko-KR": "WT_S.KOR.zip" },
