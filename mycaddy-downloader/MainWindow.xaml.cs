@@ -597,6 +597,8 @@ namespace mycaddy_downloader
         private void download_directory_sftp(SftpClient client, string source, string destination)
         {
 
+            cleanup_directory(new DirectoryInfo(destination));
+
             if (!Directory.Exists(destination))
             {
                 Directory.CreateDirectory(destination);
@@ -618,6 +620,19 @@ namespace mycaddy_downloader
                     var dir = Directory.CreateDirectory(System.IO.Path.Combine(destination, file.Name));
                     download_directory_sftp(client, file.FullName, dir.FullName);
                 }
+            }
+        }
+
+        private void cleanup_directory(DirectoryInfo directoryInfo)
+        {
+            foreach (FileInfo file in directoryInfo.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subfolder in directoryInfo.GetDirectories())
+            {
+                cleanup_directory(subfolder);
             }
         }
 
