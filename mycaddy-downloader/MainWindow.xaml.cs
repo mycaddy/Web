@@ -403,6 +403,7 @@ namespace mycaddy_downloader
 
             if (download_file != "")
             {
+                cleanup_process(download_file);
                 download_process(download_file);
             }
             else
@@ -410,6 +411,22 @@ namespace mycaddy_downloader
                 MessageBox.Show("Select Language");
             }
         }
+        private void cleanup_process(string download_file)
+        {
+
+            string sFilePath = $@"{DOWNLOAD_PATH}/{download_file}";
+            if (File.Exists(sFilePath))
+            {
+                File.Delete(sFilePath);
+            }
+
+            string sExtractPath = $@"{DOWNLOAD_PATH}\{Path.GetFileNameWithoutExtension(download_file)}"; 
+            if (Directory.Exists(sExtractPath))
+            {
+                Directory.Delete(sExtractPath, true);
+            }
+        }
+
 
         private async void download_process(string download_file)
         {
@@ -417,6 +434,7 @@ namespace mycaddy_downloader
             var download_task = Task.Run(() =>
             {
                 // https://www.meziantou.net/performance-string-concatenation-vs-string-format-vs-interpolated-string.htm
+
                 download_sftp($"./mycaddy/{download_file}", $@"{DOWNLOAD_PATH}/{download_file}");
             });
             await download_task;
@@ -533,6 +551,7 @@ namespace mycaddy_downloader
             stopWatch.Start();
 
 
+            // remove previus download files
             SftpClient sftp = new SftpClient(Constants.SFTP_ADDR, Constants.SFTP_ID, Constants.SFTP_PWD);
 
             try
@@ -597,11 +616,13 @@ namespace mycaddy_downloader
         private void download_directory_sftp(SftpClient client, string source, string destination)
         {
 
-            cleanup_directory(new DirectoryInfo(destination));
-
             if (!Directory.Exists(destination))
             {
                 Directory.CreateDirectory(destination);
+            }
+            else
+            {
+                cleanup_directory(new DirectoryInfo(destination));
             }
 
             var files = client.ListDirectory(source);
@@ -648,6 +669,8 @@ namespace mycaddy_downloader
         #region extract_zipfile(): Extract zip file
         private void extract_zipfile(string local_path)
         {
+
+
             using (ZipFile zip = ZipFile.Read(local_path))
             {
                

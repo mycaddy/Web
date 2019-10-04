@@ -57,6 +57,16 @@ Section "Program" SEC_PROGRAM
 
 SectionEnd
 
+Section "Config" SEC_CONFIG
+
+  SetOutPath "$APPDATA\mycaddy"
+
+  SetOverwrite on
+
+  File /r "..\..\_download"
+
+SectionEnd
+
 Section "Visual C++ Redistributable Library" SEC_CPP_REDIST
 
   SetOutPath "$TEMP"
@@ -68,6 +78,7 @@ Section "Visual C++ Redistributable Library" SEC_CPP_REDIST
   ;Call Installvc_redist.x86
 
 SectionEnd
+
 
 Section "Uninstall"
 
@@ -93,6 +104,7 @@ Function .onInit
 
   ; define mandatory sections
   SectionSetFlags ${SEC_PROGRAM} 17
+  SectionSetFlags ${SEC_CONFIG} 17
   SectionSetFlags ${SEC_CPP_REDIST} 17
   
 FunctionEnd
