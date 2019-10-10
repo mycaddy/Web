@@ -15,7 +15,8 @@
     "size": 3951001600,
     "fileSystem": "FAT32",
     "clusterSize": "2048",
-    "quickFormat": true
+    "quickFormat": true,
+    "formatDefault": true
   },
   {
     "name": "WT S3",
@@ -33,7 +34,8 @@
     "size": 129617920,
     "fileSystem": "FAT",
     "clusterSize": "2048",
-    "quickFormat": false
+    "quickFormat": false,
+    "formatDefault": false
   },
   {
     "name": "WT O2",
@@ -51,7 +53,8 @@
     "size": 129617920,
     "fileSystem": "FAT",
     "clusterSize": "2048",
-    "quickFormat": false
+    "quickFormat": false,
+    "formatDefault": false
   }
 ]
  

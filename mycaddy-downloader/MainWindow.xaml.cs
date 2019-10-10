@@ -262,6 +262,7 @@ namespace mycaddy_downloader
                     info.fileSystem = item.fileSystem;
                     info.clusterSize = item.clusterSize;
                     info.quickFormat = item.quickFormat;
+                    info.formatDefault = item.formatDefault;
                     modelList.Add(info);
                 }
             }
@@ -318,6 +319,8 @@ namespace mycaddy_downloader
             if (item != null)
             {
                 dispatch_languageList(item);
+
+                cbxUpgradeFormat.IsChecked = item.formatDefault;
 
                 load_manual($"{item.id}.{LanguageResources.Instance.CultureName.Substring(0, 2)}.html");
             }
@@ -1069,6 +1072,8 @@ namespace mycaddy_downloader
         public string fileSystem { get; set; }
         public int clusterSize { get; set; }
         public bool quickFormat { get; set; }
+        public bool formatDefault { get; set; }
+           
     }
 
     public class LanguageInfo
