@@ -6,3 +6,4 @@ D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.pdb
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Debug\Newtonsoft.Json.dll
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\bin\Debug\Newtonsoft.Json.xml
 D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.csproj.CopyComplete
+D:\Dev\Projects\Mycaddy\mycaddy-i18n\obj\Debug\mycaddy-i18n.csprojAssemblyReference.cache
