@@ -198,6 +198,14 @@ namespace mycaddy_downloader
                 {
                     usbList.Add(item);
                 }
+
+                list = usbDetector.GetUSBDeviceList("VID_1A2C&PID_4C5E");
+                // List<USBDeviceInfo> list = usbDetector.GetUSBDeviceList();
+                foreach (var item in list)
+                {
+                    usbList.Add(item);
+                }
+
             });
 
             if (usbList.Count > 0)
