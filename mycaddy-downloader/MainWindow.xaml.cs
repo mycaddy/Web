@@ -199,7 +199,7 @@ namespace mycaddy_downloader
                     usbList.Add(item);
                 }
 
-                list = usbDetector.GetUSBDeviceList("VID_1A2C&PID_4C5E");
+                list = usbDetector.GetUSBDeviceList("VID_0483&PID_572A");
                 // List<USBDeviceInfo> list = usbDetector.GetUSBDeviceList();
                 foreach (var item in list)
                 {
